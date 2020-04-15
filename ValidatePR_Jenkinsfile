@@ -1,0 +1,7 @@
+@Library(value="service-builder-shared-library@master", changelog=false) _
+
+simpleValidatePR {
+    containerImages = [:]
+    containerImages["builder"] = [name:"karhoo-android",tag:"0.1.0"]
+    makeTargets = []
+}
