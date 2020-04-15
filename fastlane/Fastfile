@@ -1,0 +1,39 @@
+FASTLANE_HIDE_CHANGELOG = true
+FASTLANE_SKIP_UPDATE_CHECK = true
+fastlane_version "2.62.1"
+
+default_platform :android
+
+platform :android do
+  before_all do
+    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+    gradle(task: "testDebugUnitTestCoverage")
+    slack(message: "*Karhoo Android* Passed Unit Test for SDK")
+  end
+
+  desc "New Build"
+  lane :beta do
+    gradle(task: "assemble")
+    gradle(task: "install")
+  end
+
+
+  after_all do |lane|
+    slack(
+      message: "*Karhoo SDK* has passed unit test and has been installed"
+    )
+  end
+
+  error do |lane, exception|
+    slack(
+      message: exception.message,
+      success: false
+    )
+  end
+end
+
