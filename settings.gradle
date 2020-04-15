@@ -1,0 +1,3 @@
+include ':sdk', ':sdktest'
+rootProject.name = 'karhoo-sdk'
+

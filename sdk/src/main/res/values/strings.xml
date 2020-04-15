@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">sdk</string>
+    <string name="connection">Username-Password-Authentication</string>
+    <string name="prod_service">api.karhoo.net</string>
+</resources>
