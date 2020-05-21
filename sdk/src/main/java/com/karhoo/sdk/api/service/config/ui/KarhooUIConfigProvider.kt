@@ -22,7 +22,11 @@ class KarhooUIConfigProvider : UIConfigProvider {
 
         val uiSettings = UISettings(
                 mapOf(
-                        "a1013897-132a-456c-9be2-636979095ad9" to UISetting(
+                        "ed5ae432-1ff7-4d69-a4a6-2d4a65c81b0c" to UISetting(
+                                mapOf(
+                                        "additionalFeedbackView" to UIConfig(false),
+                                        "addressMapOptions" to UIConfig(false))),
+                        "a1013897-132a-456c-9be2-6979095ad9" to UISetting(
                                 mapOf(
                                         "additionalFeedbackView" to UIConfig(false),
                                         "addressMapOptions" to UIConfig(false))),

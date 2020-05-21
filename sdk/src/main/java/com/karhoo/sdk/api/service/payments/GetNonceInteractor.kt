@@ -38,8 +38,7 @@ internal class GetNonceInteractor @Inject constructor(credentialsManager: Creden
     }
 
     private suspend fun getNonceAndSaveCard(nonceRequest: NonceRequest): Resource<PaymentsNonce> {
-        val nonce = apiTemplate.nonce(nonceRequest).await()
-        return when (nonce) {
+        return when (val nonce = apiTemplate.nonce(nonceRequest).await()) {
             is Resource.Success -> {
                 savePaymentInfo(SavedPaymentInfo(nonce.data.lastFour, nonce.data.cardType))
                 nonce

@@ -1,7 +1,9 @@
 package com.karhoo.sdk.api.service.trips
 
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
@@ -17,11 +19,16 @@ internal class MonitorTripInteractor @Inject constructor(credentialsManager: Cre
                                                          context: CoroutineContext = Main)
     : BasePollCallInteractor<TripInfo>(true, credentialsManager, apiTemplate, context) {
 
-    internal var tripId: String? = null
+    internal var tripIdentifier: String? = null
 
     override fun createRequest(): Deferred<Resource<TripInfo>> {
-        tripId?.let { tripId ->
-            return apiTemplate.tripDetails(tripId)
+        tripIdentifier?.let { tripIdentifier ->
+            return if (KarhooSDKConfigurationProvider.configuration.authenticationMethod() is
+                            AuthenticationMethod.Guest) {
+                apiTemplate.guestTripDetails(tripIdentifier)
+            } else {
+                apiTemplate.tripDetails(tripIdentifier)
+            }
         } ?: run {
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }

@@ -69,7 +69,7 @@ class PaymentNonceInteractorTest {
                     is Resource.Success -> paymentsNonce = it.data
                 }
             }
-            delay(10)
+            delay(20)
         }
 
         assertEquals(paymentsNonce!!, paymentsNonceExpected)

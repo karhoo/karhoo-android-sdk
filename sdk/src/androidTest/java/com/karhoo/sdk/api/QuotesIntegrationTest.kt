@@ -15,7 +15,6 @@ import com.karhoo.sdk.api.network.observable.Observer
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ResponseUtils
-import com.karhoo.sdk.api.util.ServerRobot
 import com.karhoo.sdk.api.util.ServerRobot.Companion.AVAILABILITIES
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
@@ -48,7 +47,7 @@ class QuotesIntegrationTest {
     @Before
     fun setUp() {
         serverRobot {
-            authRefreshResponse(code = HTTP_OK, response = ServerRobot.TOKEN)
+            successfulToken()
         }
     }
 

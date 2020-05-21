@@ -1,13 +1,17 @@
 package com.karhoo.sdk.api.service.trips
 
+import android.content.Context
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.CancellationReason
 import com.karhoo.sdk.api.network.adapter.Void
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.CancellationRequest
 import com.karhoo.sdk.api.network.request.TripCancellation
 import com.karhoo.sdk.api.network.response.Resource
+import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
@@ -29,8 +33,8 @@ class CancelTripInteractorTest {
 
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
+    private val applicationContext: Context = mock()
     private val context: CoroutineContext = Unconfined
-    private val tripCancellation = TripCancellation(TRIP_ID)
 
     private lateinit var interactor: CancelTripInteractor
 
@@ -47,9 +51,42 @@ class CancelTripInteractorTest {
      */
     @Test
     fun `cancelling a valid trip success`() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
+                                                                                   applicationContext,
+                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
+
         whenever(apiTemplate.cancel(TRIP_ID, CancellationRequest(CancellationReason.OTHER_USER_REASON)))
                 .thenReturn(CompletableDeferred(Resource.Success(Void())))
-        interactor.tripCancellation = tripCancellation
+        interactor.tripCancellation = TripCancellation(TRIP_ID)
+
+        var returnedCancelResponse: Void? = null
+        runBlocking {
+            interactor.execute { result ->
+                when (result) {
+                    is Resource.Success -> returnedCancelResponse = result.data
+                    is Resource.Failure -> fail()
+                }
+            }
+        }
+
+        assertNotNull(returnedCancelResponse)
+    }
+
+    /**
+     * Given:   A valid trip id
+     * When:    When requesting to cancel to a trip
+     * And:     It is for a guest booking
+     * Then:    The trip should be cancelled
+     */
+    @Test
+    fun `cancelling a valid guest booking trip success`() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
+                                                                                   applicationContext,
+                                                                                   authenticationMethod = AuthenticationMethod.Guest("identifier", "referer", "organisationId")))
+        whenever(apiTemplate.cancelGuestBooking(TRIP_ID, CancellationRequest(CancellationReason
+                                                                      .OTHER_USER_REASON)))
+                .thenReturn(CompletableDeferred(Resource.Success(Void())))
+        interactor.tripCancellation = TripCancellation(TRIP_ID)
 
         var returnedCancelResponse: Void? = null
         runBlocking {

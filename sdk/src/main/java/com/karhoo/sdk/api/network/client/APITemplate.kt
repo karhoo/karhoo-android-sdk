@@ -15,6 +15,7 @@ import com.karhoo.sdk.api.model.TripList
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicles
+import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AvailabilityRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
@@ -59,10 +60,14 @@ interface APITemplate {
         const val QUOTES_METHOD = "/v1/quotes/{id}"
         const val BOOKING_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
+        const val GUEST_BOOKING_DETAILS_METHOD = "/v1/bookings/follow/{id}"
         const val BOOKING_STATUS_METHOD = "/v1/bookings/{id}/status"
+        const val GUEST_BOOKING_STATUS_METHOD = "/v1/bookings/follow/{id}/status"
         const val TRACK_DRIVER_METHOD = "/v1/bookings/{id}/track"
+        const val GUEST_BOOKING_TRACK_DRIVER_METHOD = "/v1/bookings/follow/{id}/track"
         const val BOOKING_HISTORY_METHOD = "/v1/bookings/search"
         const val CANCEL_BOOKING_METHOD = "/v1/bookings/{id}/cancel"
+        const val CANCEL_GUEST_BOOKING_METHOD = "/v1/bookings/follow/{id}/cancel"
         const val SDK_INITIALISER_METHOD = "/v2/payments/payment-methods/braintree/client-tokens"
         const val ADD_CARD_METHOD = "/v2/payments/payment-methods/braintree/add-payment-details"
         const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-nonce"
@@ -83,6 +88,7 @@ interface APITemplate {
         private fun authHost() = EnvironmentDetails.current().authHost
     }
 
+    @NoAuthorisationHeader
     @POST(TOKEN_METHOD)
     fun login(@Body userLogin: UserLogin): Deferred<Resource<Credentials>>
 
@@ -125,17 +131,30 @@ interface APITemplate {
     @GET(BOOKING_DETAILS_METHOD)
     fun tripDetails(@Path(identifierId) id: String): Deferred<Resource<TripInfo>>
 
+    @GET(GUEST_BOOKING_DETAILS_METHOD)
+    fun guestTripDetails(@Path(identifierId) id: String): Deferred<Resource<TripInfo>>
+
     @GET(BOOKING_STATUS_METHOD)
     fun status(@Path(identifierId) tripId: String): Deferred<Resource<TripState>>
 
+    @GET(GUEST_BOOKING_STATUS_METHOD)
+    fun guestBookingStatus(@Path(identifierId) tripIdentifier: String): Deferred<Resource<TripState>>
+
     @GET(TRACK_DRIVER_METHOD)
-    fun trackDriver(@Path(identifierId) tripId: String): Deferred<Resource<DriverTrackingInfo>>
+    fun trackDriver(@Path(identifierId) tripIdentifierId: String): Deferred<Resource<DriverTrackingInfo>>
+
+    @GET(GUEST_BOOKING_TRACK_DRIVER_METHOD)
+    fun guestBookingTrackDriver(@Path(identifierId) tripIdentifier: String):
+            Deferred<Resource<DriverTrackingInfo>>
 
     @POST(BOOKING_HISTORY_METHOD)
     fun tripHistory(@Body tripHistoryRequest: TripSearch): Deferred<Resource<TripList>>
 
     @POST(CANCEL_BOOKING_METHOD)
     fun cancel(@Path(identifierId) tripId: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
+
+    @POST(CANCEL_GUEST_BOOKING_METHOD)
+    fun cancelGuestBooking(@Path(identifierId) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
 
     @POST(SDK_INITIALISER_METHOD)
     fun sdkInitToken(@Query(identifierOrg) organisationId: String, @Query(identifierCurrency) currency: String): Deferred<Resource<BraintreeSDKToken>>

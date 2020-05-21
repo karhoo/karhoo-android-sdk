@@ -4,11 +4,13 @@ import com.karhoo.sdk.api.EnvironmentDetails
 import com.karhoo.sdk.api.KarhooApi
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.model.AuthenticationMethod
+import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.header.Headers
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
+import retrofit2.Invocation
 import java.io.IOException
 
 class RequestInterceptor(private val headers: Headers) : Interceptor {
@@ -21,8 +23,8 @@ class RequestInterceptor(private val headers: Headers) : Interceptor {
                 .addHeader("Content-Type", headers.contentType)
 
         when (val config = KarhooSDKConfigurationProvider.configuration.authenticationMethod()) {
-            is AuthenticationMethod.TokenExchange -> updatedRequestBuilder.addHeader("authorization", "Bearer " + headers.authenticationToken)
-            is AuthenticationMethod.KarhooUser -> updatedRequestBuilder.addHeader("authorization", "Bearer " + headers.authenticationToken)
+            is AuthenticationMethod.TokenExchange -> addAuthorisationHeader(updatedRequestBuilder, request)
+            is AuthenticationMethod.KarhooUser -> addAuthorisationHeader(updatedRequestBuilder, request)
             is AuthenticationMethod.Guest -> {
                 updatedRequestBuilder.addHeader("identifier", config.identifier)
                 updatedRequestBuilder.addHeader("referer", config.referer)
@@ -39,6 +41,14 @@ class RequestInterceptor(private val headers: Headers) : Interceptor {
         }
 
         return chain.proceed(updatedRequestBuilder.build())
+    }
+
+    private fun addAuthorisationHeader(updatedRequestBuilder: Request.Builder, request: Request) {
+        val invocation = request.tag(Invocation::class.java)
+        val noAuthorisation = invocation?.method()?.getAnnotation(NoAuthorisationHeader::class.java)
+        if (noAuthorisation == null) {
+            updatedRequestBuilder.addHeader("authorization", "Bearer " + headers.authenticationToken)
+        }
     }
 
     private fun updateBaseUrl(request: Request, updatedRequestBuilder: Request.Builder) {

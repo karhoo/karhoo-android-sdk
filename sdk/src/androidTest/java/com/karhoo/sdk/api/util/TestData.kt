@@ -74,7 +74,8 @@ class TestData {
 
         val TRIP_SEARCH = TripSearch()
 
-        val CANCEL = TripCancellation(tripId = "1234", reason = CancellationReason.OTHER_USER_REASON)
+        val CANCEL = TripCancellation(tripIdentifier = "1234", reason = CancellationReason
+                .OTHER_USER_REASON)
 
         val QUOTE_SEARCH = QuotesSearch(origin = LocationInfo(placeId = "123",
                 position = Position(1.0, -1.0),
