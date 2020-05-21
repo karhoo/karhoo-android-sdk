@@ -40,6 +40,9 @@ class CancelTripInteractorTest {
 
     @Before
     fun setUp() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
+                                                                                   applicationContext,
+                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = CancelTripInteractor(credentialsManager, apiTemplate, context)
     }
@@ -51,10 +54,6 @@ class CancelTripInteractorTest {
      */
     @Test
     fun `cancelling a valid trip success`() {
-        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
-                                                                                   applicationContext,
-                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
-
         whenever(apiTemplate.cancel(TRIP_ID, CancellationRequest(CancellationReason.OTHER_USER_REASON)))
                 .thenReturn(CompletableDeferred(Resource.Success(Void())))
         interactor.tripCancellation = TripCancellation(TRIP_ID)
