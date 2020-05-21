@@ -1,11 +1,15 @@
 package com.karhoo.sdk.api.service.trips
 
+import android.content.Context
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.FleetInfo
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
+import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
@@ -27,6 +31,7 @@ class MonitorTripInteractorTest {
 
     private val apiTemplate: APITemplate = mock()
     private val credentialsManager: CredentialsManager = mock()
+    private val applicationContext: Context = mock()
     private val context: CoroutineContext = Unconfined
 
     private val fleetInfo: FleetInfo = FleetInfo(
@@ -37,7 +42,7 @@ class MonitorTripInteractorTest {
             phoneNumber = PHONE_NUMBER
                                                 )
     private val tripInfo: TripInfo = TripInfo(
-            tripId = TRIP_ID,
+            tripId = TRIP_IDENTIFIER,
             fleetInfo = fleetInfo
                                              )
 
@@ -45,8 +50,40 @@ class MonitorTripInteractorTest {
 
     @Before
     fun setUp() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
+                                                                                   applicationContext,
+                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = MonitorTripInteractor(credentialsManager, apiTemplate, context)
+    }
+
+    /**
+     * Given:   A valid trip id
+     * When:    When requesting to listen to a trip
+     * And:
+     * Then:    The trip should be updated through the observer with any changes
+     */
+    @Test
+    fun `listening to a guest booking trip returns updates`() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
+                                                                                   applicationContext,
+                                                                                   authenticationMethod = AuthenticationMethod.Guest("identifier", "referer", "organisationId")))
+        whenever(apiTemplate.guestTripDetails(anyString()))
+                .thenReturn(CompletableDeferred(Resource.Success(tripInfo)))
+
+        interactor.tripIdentifier = TRIP_IDENTIFIER
+        var returnedTripId: String? = null
+        runBlocking {
+            interactor.execute { result ->
+                when (result) {
+                    is Resource.Success -> returnedTripId = result.data.tripId
+                    is Resource.Failure -> fail()
+                }
+            }
+            delay(5)
+        }
+
+        assertEquals(TRIP_IDENTIFIER, returnedTripId)
     }
 
     /**
@@ -59,7 +96,7 @@ class MonitorTripInteractorTest {
         whenever(apiTemplate.tripDetails(anyString()))
                 .thenReturn(CompletableDeferred(Resource.Success(tripInfo)))
 
-        interactor.tripId = TRIP_ID
+        interactor.tripIdentifier = TRIP_IDENTIFIER
         var returnedTripId: String? = null
         runBlocking {
             interactor.execute { result ->
@@ -71,7 +108,7 @@ class MonitorTripInteractorTest {
             delay(5)
         }
 
-        assertEquals(TRIP_ID, returnedTripId)
+        assertEquals(TRIP_IDENTIFIER, returnedTripId)
     }
 
     /**
@@ -80,11 +117,11 @@ class MonitorTripInteractorTest {
      * Then:    Null values should be taken into consideration
      */
     @Test
-    fun `null values from trip dont throw NPE`() {
+    fun `null values from trip do not throw NPE`() {
         whenever(apiTemplate.tripDetails(anyString()))
                 .thenReturn(CompletableDeferred(Resource.Success(tripInfo)))
 
-        interactor.tripId = TRIP_ID
+        interactor.tripIdentifier = TRIP_IDENTIFIER
         var returnedFleetInfo: FleetInfo? = null
         runBlocking {
             interactor.execute { result ->
@@ -124,7 +161,7 @@ class MonitorTripInteractorTest {
     }
 
     companion object {
-        private const val TRIP_ID = "1234"
+        private const val TRIP_IDENTIFIER = "1234"
         private const val FLEET_ID = "John's cabs"
         private const val DESCRIPTION = "Cars"
         private const val LOGO_URL = "www.google.com"

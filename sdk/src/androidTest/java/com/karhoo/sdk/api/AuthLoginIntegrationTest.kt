@@ -43,6 +43,9 @@ class AuthLoginIntegrationTest {
 
     @After
     fun tearDown() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = TestSDKConfig(context =
+                                                                               InstrumentationRegistry.getInstrumentation().context,
+                                                                               authenticationMethod = AuthenticationMethod.KarhooUser()))
         wireMockRule.resetAll()
     }
 

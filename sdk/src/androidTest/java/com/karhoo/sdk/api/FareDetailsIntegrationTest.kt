@@ -5,7 +5,6 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot
 import com.karhoo.sdk.api.util.ServerRobot.Companion.BOOKING_ID
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.FARE
@@ -22,7 +21,6 @@ import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.net.HttpURLConnection
 import java.net.HttpURLConnection.HTTP_CREATED
 import java.net.HttpURLConnection.HTTP_OK
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
@@ -39,8 +37,7 @@ class FareDetailsIntegrationTest {
 
     fun setUp() {
         serverRobot {
-            authTokenResponse(code = HTTP_OK, response = TOKEN,
-                              header = Pair("accept", "application/json"))
+            successfulToken()
             authUserResponse(code = HTTP_OK, response = USER_INFO)
             authRefreshResponse(code = HTTP_OK, response = TOKEN)
         }

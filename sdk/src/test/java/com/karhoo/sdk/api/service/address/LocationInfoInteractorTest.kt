@@ -30,8 +30,8 @@ class LocationInfoInteractorTest {
 
     internal var credentialsManager: CredentialsManager = mock()
     internal var apiTemplate: APITemplate = mock()
-    internal var context: CoroutineContext = Unconfined
     private val applicationContext: Context = mock()
+    internal var context: CoroutineContext = Unconfined
 
     private lateinit var interactor: LocationInfoInteractor
 

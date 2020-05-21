@@ -1,10 +1,14 @@
 package com.karhoo.sdk.api.service.trips
 
+import android.content.Context
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
+import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -24,12 +28,16 @@ class TripStateInteractorTest {
 
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
+    private val applicationContext: Context = mock()
     private val context: CoroutineContext = Unconfined
 
     private lateinit var interactor: TripStateInteractor
 
     @Before
     fun setUp() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
+                                                                                   applicationContext,
+                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = TripStateInteractor(credentialsManager, apiTemplate, context)
     }
@@ -41,7 +49,7 @@ class TripStateInteractorTest {
      **/
     @Test
     fun `requesting a valid trip status calls the status endpoint`() {
-        interactor.tripId = TRIP_ID
+        interactor.tripIdentifier = TRIP_ID
         runBlocking {
             interactor.execute { }
         }

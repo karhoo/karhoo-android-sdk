@@ -1,10 +1,12 @@
 package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot
+import com.karhoo.sdk.api.testrunner.TestSDKConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
@@ -18,7 +20,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.net.HttpURLConnection
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_NO_CONTENT
 import java.util.concurrent.CountDownLatch
@@ -35,8 +36,11 @@ class CancelIntegrationTest {
 
     @Before
     fun setUp() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = TestSDKConfig(context =
+                                                                               InstrumentationRegistry.getInstrumentation().context,
+                                                                               authenticationMethod = AuthenticationMethod.KarhooUser()))
         serverRobot {
-            authRefreshResponse(code = HttpURLConnection.HTTP_OK, response = ServerRobot.TOKEN)
+            successfulToken()
         }
     }
 
@@ -47,13 +51,43 @@ class CancelIntegrationTest {
 
     /**
      * Given:   Cancel trip is requested
+     * When:    It is a guest booking
+     * And:     Successful response has been returned
+     * Then:    The response payload should be valid
+     **/
+    @Test
+    fun cancelGuestBookingTripSuccess() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = TestSDKConfig(context =
+                                                                               InstrumentationRegistry.getInstrumentation().context,
+                                                                               authenticationMethod = AuthenticationMethod.Guest("identifier", "referer", "organisationId")))
+        serverRobot {
+            cancelGuestBookingResponse(code = HTTP_NO_CONTENT, response = EMPTY, trip = TRIP_IDENTIFIER)
+        }
+
+        var result: Void? = null
+
+        KarhooApi.tripService.cancel(TestData.CANCEL).execute {
+            when (it) {
+                is Resource.Success -> {
+                    result = it.data
+                    latch.countDown()
+                }
+            }
+        }
+
+        latch.await(2, TimeUnit.SECONDS)
+        assertThat(result).isNotNull
+    }
+
+    /**
+     * Given:   Cancel trip is requested
      * When:    Successful response has been returned
      * Then:    The response payload should be valid
      **/
     @Test
     fun cancelTripSuccess() {
         serverRobot {
-            cancelResponse(code = HTTP_NO_CONTENT, response = EMPTY, trip = TRIP_ID)
+            cancelResponse(code = HTTP_NO_CONTENT, response = EMPTY, trip = TRIP_IDENTIFIER)
         }
 
         var result: Void? = null
@@ -79,7 +113,7 @@ class CancelIntegrationTest {
     @Test
     fun invalidDataWhenRequestingCancellationReturnsSuccessfully() {
         serverRobot {
-            cancelResponse(code = HTTP_NO_CONTENT, response = INVALID_DATA, trip = TRIP_ID)
+            cancelResponse(code = HTTP_NO_CONTENT, response = INVALID_DATA, trip = TRIP_IDENTIFIER)
         }
 
         var result: Void? = null
@@ -105,7 +139,7 @@ class CancelIntegrationTest {
     @Test
     fun badJsonSuccessReturnsBlankResult() {
         serverRobot {
-            cancelResponse(code = HTTP_NO_CONTENT, response = INVALID_JSON, trip = TRIP_ID)
+            cancelResponse(code = HTTP_NO_CONTENT, response = INVALID_JSON, trip = TRIP_IDENTIFIER)
         }
 
         var result: Void? = null
@@ -131,7 +165,7 @@ class CancelIntegrationTest {
     @Test
     fun blankBodyReturnsDefaultObject() {
         serverRobot {
-            cancelResponse(code = HTTP_NO_CONTENT, response = NO_BODY, trip = TRIP_ID)
+            cancelResponse(code = HTTP_NO_CONTENT, response = NO_BODY, trip = TRIP_IDENTIFIER)
         }
 
         var result: Void? = null
@@ -157,7 +191,7 @@ class CancelIntegrationTest {
     @Test
     fun errorResponseGetsParsedIntoKarhooError() {
         serverRobot {
-            cancelResponse(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR, trip = TRIP_ID)
+            cancelResponse(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR, trip = TRIP_IDENTIFIER)
         }
 
         var result: KarhooError? = null
@@ -183,7 +217,7 @@ class CancelIntegrationTest {
     @Test
     fun errorResponseWithNoBodyGetsParsedIntoKarhooError() {
         serverRobot {
-            cancelResponse(code = HTTP_BAD_REQUEST, response = NO_BODY, trip = TRIP_ID)
+            cancelResponse(code = HTTP_BAD_REQUEST, response = NO_BODY, trip = TRIP_IDENTIFIER)
         }
 
         var result: KarhooError? = null
@@ -209,7 +243,7 @@ class CancelIntegrationTest {
     @Test
     fun errorResponseWithEmptyBodyGetsParsedIntoKarhooError() {
         serverRobot {
-            cancelResponse(code = HTTP_BAD_REQUEST, response = EMPTY, trip = TRIP_ID)
+            cancelResponse(code = HTTP_BAD_REQUEST, response = EMPTY, trip = TRIP_IDENTIFIER)
         }
 
         var result: KarhooError? = null
@@ -235,7 +269,7 @@ class CancelIntegrationTest {
     @Test
     fun errorResponseWithInvalidJsonGetsParsedIntoKarhooError() {
         serverRobot {
-            cancelResponse(code = HTTP_BAD_REQUEST, response = INVALID_JSON, trip = TRIP_ID)
+            cancelResponse(code = HTTP_BAD_REQUEST, response = INVALID_JSON, trip = TRIP_IDENTIFIER)
         }
 
         var result: KarhooError? = null
@@ -261,7 +295,7 @@ class CancelIntegrationTest {
     @Test
     fun errorResponseWithInvalidDataGetsParsedIntoKarhooError() {
         serverRobot {
-            cancelResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, trip = TRIP_ID)
+            cancelResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, trip = TRIP_IDENTIFIER)
         }
 
         var result: KarhooError? = null
@@ -287,7 +321,7 @@ class CancelIntegrationTest {
     @Test
     fun timeoutErrorReturnedWhenResponseTakesTooLong() {
         serverRobot {
-            cancelResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, trip = TRIP_ID, delayInMillis = 2000)
+            cancelResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, trip = TRIP_IDENTIFIER, delayInMillis = 2000)
         }
 
         var result: KarhooError? = null
@@ -306,7 +340,7 @@ class CancelIntegrationTest {
     }
 
     companion object {
-        const val TRIP_ID = "1234"
+        const val TRIP_IDENTIFIER = "1234"
     }
 
 }

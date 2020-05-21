@@ -1,7 +1,9 @@
 package com.karhoo.sdk.api.service.drivertracking
 
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
@@ -17,11 +19,16 @@ internal class DriverTrackingInteractor @Inject constructor(credentialsManager: 
                                                             private val context: CoroutineContext = Main)
     : BasePollCallInteractor<DriverTrackingInfo>(true, credentialsManager, apiTemplate, context) {
 
-    internal var tripId: String? = null
+    internal var tripIdentifier: String? = null
 
     override fun createRequest(): Deferred<Resource<DriverTrackingInfo>> {
-        tripId?.let { tripId ->
-            return apiTemplate.trackDriver(tripId)
+        tripIdentifier?.let { tripIdentifier ->
+            return if (KarhooSDKConfigurationProvider.configuration.authenticationMethod() is
+                            AuthenticationMethod.Guest) {
+                apiTemplate.guestBookingTrackDriver(tripIdentifier)
+            } else {
+                apiTemplate.trackDriver(tripIdentifier)
+            }
         } ?: run {
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }

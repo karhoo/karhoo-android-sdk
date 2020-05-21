@@ -46,7 +46,7 @@ class DriverTrackingInteractorTest {
     fun `tracking driver returns updates`() {
         whenever(apiTemplate.trackDriver(anyString()))
                 .thenReturn(CompletableDeferred(Resource.Success(data = createDriver())))
-        interactor.tripId = "1234"
+        interactor.tripIdentifier = "1234"
 
         var driverTrackingInfo: DriverTrackingInfo? = null
         interactor.execute { result ->
