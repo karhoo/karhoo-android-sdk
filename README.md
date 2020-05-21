@@ -1,6 +1,7 @@
 # Network SDK
 
 ![](https://github.com/karhoo/karhoo-android-sdk/workflows/Develop%20Branch%20CI/badge.svg)
+![](https://github.com/karhoo/karhoo-android-sdk/workflows/Master%20Branch%20CI/badge.svg)
 
 Welcome to the Karhoo Network SDK of Android.
 
