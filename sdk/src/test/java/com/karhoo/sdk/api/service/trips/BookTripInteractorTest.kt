@@ -1,7 +1,10 @@
 package com.karhoo.sdk.api.service.trips
 
+import android.content.Context
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.FlightDetails
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -9,6 +12,7 @@ import com.karhoo.sdk.api.network.request.PassengerDetails
 import com.karhoo.sdk.api.network.request.Passengers
 import com.karhoo.sdk.api.network.request.TripBooking
 import com.karhoo.sdk.api.network.response.Resource
+import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -30,6 +34,7 @@ class BookTripInteractorTest {
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
     private val context: CoroutineContext = Unconfined
+    private val applicationContext: Context = mock()
 
     private lateinit var interactor: BookTripInteractor
 
@@ -48,6 +53,9 @@ class BookTripInteractorTest {
 
     @Before
     fun setUp() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
+                                                                                   applicationContext,
+                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = BookTripInteractor(credentialsManager, apiTemplate, context)
     }
