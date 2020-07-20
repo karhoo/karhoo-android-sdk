@@ -6,7 +6,6 @@ import com.karhoo.sdk.api.model.UIConfig
 import com.karhoo.sdk.api.network.request.UIConfigRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot.Companion.TOKEN
 import com.karhoo.sdk.api.util.TestData.Companion.USER_INFO
 import com.karhoo.sdk.api.util.preferences
 import com.karhoo.sdk.api.util.serverRobot
@@ -16,7 +15,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.net.HttpURLConnection.HTTP_OK
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -31,7 +29,7 @@ class ConfigIntegrationTests {
     @Before
     fun setUp() {
         serverRobot {
-            authRefreshResponse(code = HTTP_OK, response = TOKEN)
+            successfulToken()
         }
     }
 

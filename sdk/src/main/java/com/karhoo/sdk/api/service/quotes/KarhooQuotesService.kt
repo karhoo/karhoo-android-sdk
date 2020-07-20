@@ -11,6 +11,7 @@ import javax.inject.Inject
 class KarhooQuotesService : QuotesService {
 
     @Inject
+    @Deprecated("Availabilities endpoint is deprecated")
     internal lateinit var availabilityService: AvailabilityService
 
     @Inject

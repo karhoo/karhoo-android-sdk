@@ -5,20 +5,17 @@ import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.datastore.user.UserStore
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
-import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class KarhooAuthServiceTest {
 
+    // Needed for InjectMocks
     private val credentialsManager: CredentialsManager = mock()
     private val userManager: UserManager = mock()
     private val apiTemplate: APITemplate = mock()

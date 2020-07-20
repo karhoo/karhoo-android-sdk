@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
+@Deprecated("Availabilities endpoint is deprecated")
 internal class AvailabilityInteractor @Inject constructor(credentialsManager: CredentialsManager,
                                                           private val apiTemplate: APITemplate,
                                                           val context: CoroutineContext = Main)

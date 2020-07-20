@@ -1,48 +1,32 @@
 package com.karhoo.sdk.api.service.payments
 
-import android.content.Context
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
-import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.PaymentsNonce
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.Payer
 import com.karhoo.sdk.api.network.response.Resource
-import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class PaymentNonceInteractorTest {
+class PaymentNonceInteractorTest : BaseKarhooUserInteractorTest() {
 
-    private val credentialsManager: CredentialsManager = mock()
-    private val apiTemplate: APITemplate = mock()
     private val userManager: UserManager = mock()
-    private val context: CoroutineContext = Unconfined
-    private val applicationContext: Context = mock()
 
     private lateinit var interactor: PaymentNonceInteractor
 
     @Before
-    fun setUp() {
-        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
-                                                                                   applicationContext,
-                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
+    override fun setUp() {
+        super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = PaymentNonceInteractor(credentialsManager, apiTemplate, userManager, context)
     }
@@ -69,7 +53,7 @@ class PaymentNonceInteractorTest {
                     is Resource.Success -> paymentsNonce = it.data
                 }
             }
-            delay(10)
+            delay(20)
         }
 
         assertEquals(paymentsNonce!!, paymentsNonceExpected)

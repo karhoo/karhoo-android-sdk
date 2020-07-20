@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class KarhooAvailabilityServiceTest {
 
     private var quotesSearch: QuotesSearch = mock()
+    // Needed for InjectMocks
     private var availabilityInteractor: AvailabilityInteractor = mock()
 
     @InjectMocks

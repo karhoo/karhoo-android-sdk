@@ -2,17 +2,16 @@ package com.karhoo.sdk.api.service.user
 
 import com.karhoo.sdk.analytics.Analytics
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.Organisation
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.InteractorContants
 import com.karhoo.sdk.api.service.payments.PaymentsService
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.karhoo.sdk.call.Call
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.atLeastOnce
@@ -22,7 +21,6 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -30,23 +28,15 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
 import org.mockito.Captor
-import org.mockito.junit.MockitoJUnitRunner
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class UserLoginInteractorTest {
+class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
 
     private var userManager: UserManager = mock()
-    private var credentialsManager: CredentialsManager = mock()
     private var analytics: Analytics = mock()
-    private var apiTemplate: APITemplate = mock()
     private var paymentService: PaymentsService = mock()
     private var paymentsCall: Call<PaymentsNonce> = mock()
-
-    private val context: CoroutineContext = Unconfined
 
     @Captor
     private lateinit var credentialsCaptor: ArgumentCaptor<Credentials>
@@ -83,7 +73,8 @@ class UserLoginInteractorTest {
     private val credentials = Credentials(accessToken = "123456", refreshToken = "zxy", expiresIn = 1L)
 
     @Before
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
         interactor = UserLoginInteractor(credentialsManager, userManager, apiTemplate, analytics, paymentService, context)
     }
 

@@ -17,6 +17,8 @@ import org.mockito.junit.MockitoJUnitRunner
 class UserStoreTest {
 
     private var userManager: UserManager = mock()
+
+    // Needed for InjectMocks
     private var credentialsManager: CredentialsManager = mock()
 
     @InjectMocks
@@ -58,10 +60,11 @@ class UserStoreTest {
     @Test
     fun `removing set user returns the saved user to null`() {
         doNothing().whenever(userManager).deleteUser()
-        whenever(userManager.user).thenReturn(createUser("", "", "", ""))
+        val userInfo = createUser("", "", "", "")
+        whenever(userManager.user).thenReturn(userInfo)
         val user = userStore.currentUser
         userStore.removeCurrentUser()
-        Assert.assertEquals(user, createUser("", "", "", ""))
+        Assert.assertEquals(user, userInfo)
     }
 
     /**

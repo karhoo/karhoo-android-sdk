@@ -74,7 +74,8 @@ class TestData {
 
         val TRIP_SEARCH = TripSearch()
 
-        val CANCEL = TripCancellation(tripId = "1234", reason = CancellationReason.OTHER_USER_REASON)
+        val CANCEL = TripCancellation(tripIdentifier = "1234", reason = CancellationReason
+                .OTHER_USER_REASON)
 
         val QUOTE_SEARCH = QuotesSearch(origin = LocationInfo(placeId = "123",
                 position = Position(1.0, -1.0),
@@ -159,8 +160,8 @@ class TestData {
         val FLEET_INFO = FleetInfo(
                 fleetId = "some fleet id",
                 name = "some fleet name",
-                phoneNumber = "some phone number",
                 email = "dispatch-co@karhoo.com",
+                phoneNumber = "some phone number",
                 description = "some description",
                 logoUrl = "some logo url",
                 termsConditionsUrl = "some terms and conditions")

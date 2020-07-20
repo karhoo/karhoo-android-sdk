@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Passengers(@SerializedName("additional_passengers") private val additionalPassengers: Int,
-                      @SerializedName("passenger_details") private val passengerDetails: List<PassengerDetails>?)
+data class Passengers(@SerializedName("additional_passengers") val additionalPassengers: Int,
+                      @SerializedName("passenger_details") val passengerDetails: List<PassengerDetails>?)
     : Parcelable
 
 @Parcelize
-data class PassengerDetails(@SerializedName("first_name") private var firstName: String? = null,
-                            @SerializedName("last_name") private var lastName: String? = null,
-                            @SerializedName("email") private var email: String? = null,
-                            @SerializedName("phone_number") private var phoneNumber: String? = null,
-                            @SerializedName("locale") private var locale: String? = null)
+data class PassengerDetails(@SerializedName("first_name") var firstName: String? = null,
+                            @SerializedName("last_name") var lastName: String? = null,
+                            @SerializedName("email") var email: String? = null,
+                            @SerializedName("phone_number") var phoneNumber: String? = null,
+                            @SerializedName("locale") var locale: String? = null)
     : Parcelable

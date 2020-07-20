@@ -1,13 +1,10 @@
 package com.karhoo.sdk.api.service.user
 
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
-import com.nhaarman.mockitokotlin2.mock
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
@@ -15,14 +12,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
-import kotlin.coroutines.CoroutineContext
 
 @RunWith(MockitoJUnitRunner::class)
-class UserDetailsInteractorTest {
+class UserDetailsInteractorTest : BaseKarhooUserInteractorTest() {
 
-    private var apiTemplate: APITemplate = mock()
-    private var credentialsManager: CredentialsManager = mock()
-    private val context: CoroutineContext = Unconfined
     private val userInfo = UserInfo("John",
                                     "Smith",
                                     "name@email.com",
@@ -35,7 +28,8 @@ class UserDetailsInteractorTest {
     private lateinit var interactor: UserDetailsInteractor
 
     @Before
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = UserDetailsInteractor(apiTemplate, credentialsManager, context)
     }

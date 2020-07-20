@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class KarhooPaymentsServiceTest {
 
+    // Needed for InjectMocks
     private val userManager: UserManager = mock()
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()

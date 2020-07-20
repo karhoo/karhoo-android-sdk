@@ -1,24 +1,18 @@
 package com.karhoo.sdk.api.service.config
 
-import android.content.Context
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
-import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.Organisation
 import com.karhoo.sdk.api.model.UIConfig
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.UIConfigRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.config.ui.UIConfigProvider
-import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -27,22 +21,13 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class UIConfigInteractorTest {
+class UIConfigInteractorTest : BaseKarhooUserInteractorTest() {
 
-    private val credentialsManager: CredentialsManager = mock()
-    private val apiTemplate: APITemplate = mock()
     private val uiConfigProvider: UIConfigProvider = mock()
     private val userManager: UserManager = mock()
     private val userInfo: UserInfo = mock()
     private val organisation: Organisation = mock()
-    private val applicationContext: Context = mock()
-
-    private val context: CoroutineContext = Dispatchers.Unconfined
 
     private val uiConfigRequest = UIConfigRequest("viewId")
     private val uiConfig = UIConfig(true)
@@ -50,10 +35,8 @@ class UIConfigInteractorTest {
     private lateinit var uiConfigInteractor: UIConfigInteractor
 
     @Before
-    fun setUp() {
-        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
-                                                                                   applicationContext,
-                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
+    override fun setUp() {
+        super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
         uiConfigInteractor = UIConfigInteractor(credentialsManager, apiTemplate, uiConfigProvider, userManager, context)
     }
