@@ -1,19 +1,16 @@
 package com.karhoo.sdk.api.service.user
 
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.network.response.Resource
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.atLeastOnce
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -21,12 +18,8 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class UserRegisterInteractorTest {
+class UserRegisterInteractorTest : BaseKarhooUserInteractorTest() {
 
     private val userRegistration = UserRegistration(
             firstName = "John",
@@ -34,12 +27,7 @@ class UserRegisterInteractorTest {
             phoneNumber = "12345678",
             email = "name@email.com",
             password = "Password123",
-            locale = "Meh"
-                                                   )
-
-    private var apiTemplate: APITemplate = mock()
-    private var credentialsManager: CredentialsManager = mock()
-    private val context: CoroutineContext = Unconfined
+            locale = "Meh")
 
     private lateinit var userRegisterInteractor: UserRegisterInteractor
 
@@ -59,7 +47,8 @@ class UserRegisterInteractorTest {
                 organisations = mutableListOf())
 
     @Before
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
         userRegisterInteractor = UserRegisterInteractor(credentialsManager, apiTemplate, context)
     }
 

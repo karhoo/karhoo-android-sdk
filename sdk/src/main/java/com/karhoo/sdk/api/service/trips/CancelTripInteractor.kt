@@ -1,7 +1,9 @@
 package com.karhoo.sdk.api.service.trips
 
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.CancellationRequest
 import com.karhoo.sdk.api.network.request.TripCancellation
@@ -22,7 +24,12 @@ internal class CancelTripInteractor @Inject constructor(credentialsManager: Cred
 
     override fun createRequest(): Deferred<Resource<Void>> {
         tripCancellation?.let {
-            return apiTemplate.cancel(it.tripId, CancellationRequest(reason = it.reason))
+            return if (KarhooSDKConfigurationProvider.configuration.authenticationMethod() is
+                            AuthenticationMethod.Guest) {
+                apiTemplate.cancelGuestBooking(it.tripIdentifier, CancellationRequest(reason = it.reason))
+            } else {
+                apiTemplate.cancel(it.tripIdentifier, CancellationRequest(reason = it.reason))
+            }
         } ?: run {
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }

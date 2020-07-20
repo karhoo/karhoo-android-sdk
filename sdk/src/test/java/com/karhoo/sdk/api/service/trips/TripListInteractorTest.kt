@@ -1,21 +1,15 @@
 package com.karhoo.sdk.api.service.trips
 
-import android.content.Context
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.TripSearch
 import com.karhoo.sdk.api.network.response.Resource
-import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -24,18 +18,10 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class TripListInteractorTest {
+class TripListInteractorTest : BaseKarhooUserInteractorTest() {
 
-    private var credentialsManager: CredentialsManager = mock()
-    private var apiTemplate: APITemplate = mock()
     private var tripDetails: TripInfo = mock()
-    private val context: CoroutineContext = Unconfined
-    private val applicationContext: Context = mock()
 
     private var trips: List<TripInfo> = listOf(tripDetails)
     private var emptyTripList = TripList()
@@ -46,10 +32,8 @@ class TripListInteractorTest {
     private lateinit var interactor: TripListInteractor
 
     @Before
-    fun setUp() {
-        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
-                                                                                   applicationContext,
-                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
+    override fun setUp() {
+        super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = TripListInteractor(credentialsManager, apiTemplate, context)
     }

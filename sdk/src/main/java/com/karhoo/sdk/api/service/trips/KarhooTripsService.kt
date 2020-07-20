@@ -23,8 +23,8 @@ class KarhooTripsService : TripsService {
         this.tripBooking = tripBooking
     }
 
-    override fun trackTrip(tripId: String): PollCall<TripInfo> = MonitorTripInteractor(credentialsManager, apiTemplate).apply {
-        this.tripId = tripId
+    override fun trackTrip(tripIdentifier: String): PollCall<TripInfo> = MonitorTripInteractor(credentialsManager, apiTemplate).apply {
+        this.tripIdentifier = tripIdentifier
     }
 
     override fun cancel(tripCancellation: TripCancellation): Call<Void> = CancelTripInteractor(credentialsManager, apiTemplate).apply {
@@ -36,6 +36,6 @@ class KarhooTripsService : TripsService {
     }
 
     override fun status(tripId: String): PollCall<TripState> = TripStateInteractor(credentialsManager, apiTemplate).apply {
-        this.tripId = tripId
+        this.tripIdentifier = tripId
     }
 }

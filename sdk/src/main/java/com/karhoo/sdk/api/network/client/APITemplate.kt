@@ -15,6 +15,8 @@ import com.karhoo.sdk.api.model.TripList
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicles
+import com.karhoo.sdk.api.model.VehiclesV2
+import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AvailabilityRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
@@ -22,6 +24,7 @@ import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
 import com.karhoo.sdk.api.network.request.QuotesRequest
+import com.karhoo.sdk.api.network.request.QuotesV2Request
 import com.karhoo.sdk.api.network.request.RefreshTokenRequest
 import com.karhoo.sdk.api.network.request.ResetPasswordRequest
 import com.karhoo.sdk.api.network.request.TripBooking
@@ -54,18 +57,25 @@ interface APITemplate {
         const val ADDRESS_AUTOCOMPLETE_METHOD = "/v1/locations/address-autocomplete"
         const val PLACE_DETAILS_METHOD = "/v1/locations/place-details"
         const val REVERSE_GEO_METHOD = "/v1/locations/reverse-geocode"
+        @Deprecated("Availabilities endpoint is deprecated")
         const val AVAILABILITY_METHOD = "/v1/quotes/availability"
         const val QUOTE_REQUEST_METHOD = "/v1/quotes"
         const val QUOTES_METHOD = "/v1/quotes/{id}"
+        const val QUOTES_V2_REQUEST_METHOD = "/v2/quotes"
+        const val QUOTE_V2_METHOD = "/v2/quotes/{id}"
         const val BOOKING_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
+        const val GUEST_BOOKING_DETAILS_METHOD = "/v1/bookings/follow/{id}"
         const val BOOKING_STATUS_METHOD = "/v1/bookings/{id}/status"
+        const val GUEST_BOOKING_STATUS_METHOD = "/v1/bookings/follow/{id}/status"
         const val TRACK_DRIVER_METHOD = "/v1/bookings/{id}/track"
+        const val GUEST_BOOKING_TRACK_DRIVER_METHOD = "/v1/bookings/follow/{id}/track"
         const val BOOKING_HISTORY_METHOD = "/v1/bookings/search"
         const val CANCEL_BOOKING_METHOD = "/v1/bookings/{id}/cancel"
+        const val CANCEL_GUEST_BOOKING_METHOD = "/v1/bookings/follow/{id}/cancel"
         const val SDK_INITIALISER_METHOD = "/v2/payments/payment-methods/braintree/client-tokens"
         const val ADD_CARD_METHOD = "/v2/payments/payment-methods/braintree/add-payment-details"
-        const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-nonce"
+        const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-payment-method"
         const val FARE_DETAILS = "/v1/fares/trip/{id}"
 
         const val AUTH_TOKEN_METHOD = "/karhoo/anonymous/token-exchange"
@@ -83,6 +93,7 @@ interface APITemplate {
         private fun authHost() = EnvironmentDetails.current().authHost
     }
 
+    @NoAuthorisationHeader
     @POST(TOKEN_METHOD)
     fun login(@Body userLogin: UserLogin): Deferred<Resource<Credentials>>
 
@@ -111,6 +122,7 @@ interface APITemplate {
     fun reverseGeocode(@Query(identifierLatitude) latitude: Double, @Query(identifierLongitude) longitude: Double): Deferred<Resource<LocationInfo>>
 
     @POST(AVAILABILITY_METHOD)
+    @Deprecated("Availabilities endpoint is deprecated")
     fun availabilities(@Body availabilityRequest: AvailabilityRequest): Deferred<Resource<Categories>>
 
     @POST(QUOTE_REQUEST_METHOD)
@@ -119,23 +131,42 @@ interface APITemplate {
     @GET(QUOTES_METHOD)
     fun quotes(@Path(identifierId) id: String): Deferred<Resource<Vehicles>>
 
+    @POST(QUOTES_V2_REQUEST_METHOD)
+    fun quotesv2(@Body quotesV2Request: QuotesV2Request): Deferred<Resource<QuoteId>>
+
+    @GET(QUOTE_V2_METHOD)
+    fun quotesv2(@Path(identifierId) id: String): Deferred<Resource<VehiclesV2>>
+
     @POST(BOOKING_METHOD)
     fun book(@Body tripBooking: TripBooking): Deferred<Resource<TripInfo>>
 
     @GET(BOOKING_DETAILS_METHOD)
     fun tripDetails(@Path(identifierId) id: String): Deferred<Resource<TripInfo>>
 
+    @GET(GUEST_BOOKING_DETAILS_METHOD)
+    fun guestTripDetails(@Path(identifierId) id: String): Deferred<Resource<TripInfo>>
+
     @GET(BOOKING_STATUS_METHOD)
     fun status(@Path(identifierId) tripId: String): Deferred<Resource<TripState>>
 
+    @GET(GUEST_BOOKING_STATUS_METHOD)
+    fun guestBookingStatus(@Path(identifierId) tripIdentifier: String): Deferred<Resource<TripState>>
+
     @GET(TRACK_DRIVER_METHOD)
-    fun trackDriver(@Path(identifierId) tripId: String): Deferred<Resource<DriverTrackingInfo>>
+    fun trackDriver(@Path(identifierId) tripIdentifierId: String): Deferred<Resource<DriverTrackingInfo>>
+
+    @GET(GUEST_BOOKING_TRACK_DRIVER_METHOD)
+    fun guestBookingTrackDriver(@Path(identifierId) tripIdentifier: String):
+            Deferred<Resource<DriverTrackingInfo>>
 
     @POST(BOOKING_HISTORY_METHOD)
     fun tripHistory(@Body tripHistoryRequest: TripSearch): Deferred<Resource<TripList>>
 
     @POST(CANCEL_BOOKING_METHOD)
     fun cancel(@Path(identifierId) tripId: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
+
+    @POST(CANCEL_GUEST_BOOKING_METHOD)
+    fun cancelGuestBooking(@Path(identifierId) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
 
     @POST(SDK_INITIALISER_METHOD)
     fun sdkInitToken(@Query(identifierOrg) organisationId: String, @Query(identifierCurrency) currency: String): Deferred<Resource<BraintreeSDKToken>>

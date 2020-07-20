@@ -2,32 +2,26 @@ package com.karhoo.sdk.api.service.user
 
 import com.karhoo.sdk.analytics.Analytics
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.response.Resource
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class UserDetailsUpdateIntegrationTest {
+class UserDetailsUpdateIntegrationTest : BaseKarhooUserInteractorTest() {
 
     private val userId = "1234"
 
@@ -51,16 +45,14 @@ class UserDetailsUpdateIntegrationTest {
 
     private val analytics: Analytics = mock()
     private val userManager: UserManager = mock()
-    private val apiTemplate: APITemplate = mock()
-    private val credentialsManager: CredentialsManager = mock()
-    private val context: CoroutineContext = Unconfined
 
     private lateinit var interactor: UserDetailsUpdateInteractor
 
     private val latch = CountDownLatch(1)
 
     @Before
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = UserDetailsUpdateInteractor(credentialsManager, apiTemplate, analytics, userManager, context)
     }

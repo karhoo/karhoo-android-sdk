@@ -32,18 +32,16 @@ class Payloader internal constructor(builder: Builder) {
         }
     }
 
+    internal fun setGuestMode(isGuestMode: Boolean) {
+        payload[GUEST_MODE] = isGuestMode
+    }
+
     class Builder private constructor() {
 
         val payload: MutableMap<String, Any> = HashMap()
 
         fun addUserDetails(user: UserInfo): Builder {
             payload[USER_ID] = user.userId
-            return this
-        }
-
-        fun addSessionIDs(deviceId: String, sessionId: String): Builder {
-            payload[PERM_ID] = deviceId
-            payload[SESSION_ID] = sessionId
             return this
         }
 
@@ -113,13 +111,6 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
-        fun addressesSuggested(locationDetailsList: List<LocationInfo>): Builder {
-            for (i in 1..locationDetailsList.size) {
-                payload[PREVIOUS_ADDRESS + i] = locationDetailsList[i].displayAddress
-            }
-            return this
-        }
-
         fun reverseGeoResponse(locationInfo: LocationInfo): Builder {
             if (locationInfo.position != null) {
                 payload[PICKUP_LAT] = locationInfo.position.latitude
@@ -154,11 +145,6 @@ class Payloader internal constructor(builder: Builder) {
 
         fun tripId(tripId: String?): Builder {
             payload[TRIP_ID] = tripId.orEmpty()
-            return this
-        }
-
-        fun userManualPickup(displayAddress: String?): Builder {
-            payload[USER_MANUAL_PICKUP_ADDRESS] = displayAddress.orEmpty()
             return this
         }
 
@@ -221,5 +207,6 @@ class Payloader internal constructor(builder: Builder) {
         private const val ADDITIONAL_FEEDBACK = "additional_feedback"
         private const val REQUEST_ERROR = "request_error"
         private const val REQUEST_URL = "request_url"
+        private const val GUEST_MODE = "guest_mode"
     }
 }

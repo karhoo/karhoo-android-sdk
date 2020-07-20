@@ -25,5 +25,19 @@ enum class TripStatus constructor(val value: String) {
     @SerializedName("KARHOO_CANCELLED")
     CANCELLED_BY_KARHOO("KARHOO_CANCELLED"),
     @SerializedName("INCOMPLETE")
-    INCOMPLETE("INCOMPLETE")
+    INCOMPLETE("INCOMPLETE");
+
+    companion object {
+        fun tripEnded(tripState: TripStatus?): Boolean {
+            return when (tripState) {
+                COMPLETED,
+                CANCELLED_BY_USER,
+                CANCELLED_BY_DISPATCH,
+                NO_DRIVERS,
+                CANCELLED_BY_KARHOO ->
+                    true
+                else -> false
+            }
+        }
+    }
 }

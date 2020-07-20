@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class KarhooDriverTrackingServiceTest {
 
+    // Needed for InjectMocks
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
 

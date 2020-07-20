@@ -10,7 +10,6 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
-import com.karhoo.sdk.api.util.ServerRobot.Companion.TOKEN
 import com.karhoo.sdk.api.util.ServerRobot.Companion.TRIP_REQUESTED_DETAILS
 import com.karhoo.sdk.api.util.TestData
 import com.karhoo.sdk.api.util.serverRobot
@@ -22,7 +21,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_CREATED
-import java.net.HttpURLConnection.HTTP_OK
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -37,7 +35,7 @@ class BookIntegrationTest {
     @Before
     fun setUp() {
         serverRobot {
-            authRefreshResponse(code = HTTP_OK, response = TOKEN)
+            successfulToken()
         }
     }
 
