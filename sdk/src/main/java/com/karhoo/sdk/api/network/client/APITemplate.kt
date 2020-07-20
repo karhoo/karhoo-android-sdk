@@ -77,12 +77,10 @@ interface APITemplate {
         const val ADD_CARD_METHOD = "/v2/payments/payment-methods/braintree/add-payment-details"
         const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-payment-method"
         const val FARE_DETAILS = "/v1/fares/trip/{id}"
-
         const val AUTH_TOKEN_METHOD = "/karhoo/anonymous/token-exchange"
         const val AUTH_REVOKE_METHOD = "/oauth/v2/revoke"
         const val AUTH_USER_INFO_METHOD = "/oauth/v2/userinfo"
         const val AUTH_REFRESH_METHOD = "/oauth/v2/token"
-
         const val identifierId = "id"
         const val identifierLatitude = "latitude"
         const val identifierLongitude = "longitude"
