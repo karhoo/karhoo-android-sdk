@@ -81,11 +81,11 @@ interface APITemplate {
         const val AUTH_REVOKE_METHOD = "/oauth/v2/revoke"
         const val AUTH_USER_INFO_METHOD = "/oauth/v2/userinfo"
         const val AUTH_REFRESH_METHOD = "/oauth/v2/token"
-        const val identifierId = "id"
-        const val identifierLatitude = "latitude"
-        const val identifierLongitude = "longitude"
-        const val identifierOrg = "organisation_id"
-        const val identifierCurrency = "currency"
+        const val IDENTIFIER_ID = "id"
+        const val IDENTIFIER_LATITUDE = "latitude"
+        const val IDENTIFIER_LONGITUDE = "longitude"
+        const val IDENTIFIER_ORG = "organisation_id"
+        const val IDENTIFIER_CURRENCY = "currency"
 
         private fun authHost() = EnvironmentDetails.current().authHost
     }
@@ -107,7 +107,7 @@ interface APITemplate {
     fun userProfile(): Deferred<Resource<UserInfo>>
 
     @PUT(USER_PROFILE_UPDATE_METHOD)
-    fun userProfileUpdate(@Path(identifierId) userId: String, @Body usersDetailsUpdateRequestRequest: UserDetailsUpdateRequest): Deferred<Resource<UserInfo>>
+    fun userProfileUpdate(@Path(IDENTIFIER_ID) userId: String, @Body usersDetailsUpdateRequestRequest: UserDetailsUpdateRequest): Deferred<Resource<UserInfo>>
 
     @POST(ADDRESS_AUTOCOMPLETE_METHOD)
     fun placeSearch(@Body placeSearch: PlaceSearch): Deferred<Resource<Places>>
@@ -116,7 +116,7 @@ interface APITemplate {
     fun locationInfo(@Body locationInfoRequest: LocationInfoRequest): Deferred<Resource<LocationInfo>>
 
     @GET(REVERSE_GEO_METHOD)
-    fun reverseGeocode(@Query(identifierLatitude) latitude: Double, @Query(identifierLongitude) longitude: Double): Deferred<Resource<LocationInfo>>
+    fun reverseGeocode(@Query(IDENTIFIER_LATITUDE) latitude: Double, @Query(IDENTIFIER_LONGITUDE) longitude: Double): Deferred<Resource<LocationInfo>>
 
     @POST(AVAILABILITY_METHOD)
     @Deprecated("Availabilities endpoint is deprecated")
@@ -126,47 +126,47 @@ interface APITemplate {
     fun quotes(@Body quotesRequest: QuotesRequest): Deferred<Resource<QuoteId>>
 
     @GET(QUOTES_METHOD)
-    fun quotes(@Path(identifierId) id: String): Deferred<Resource<Vehicles>>
+    fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
 
     @POST(QUOTES_V2_REQUEST_METHOD)
     fun quotesv2(@Body quotesV2Request: QuotesV2Request): Deferred<Resource<QuoteId>>
 
     @GET(QUOTE_V2_METHOD)
-    fun quotesv2(@Path(identifierId) id: String): Deferred<Resource<VehiclesV2>>
+    fun quotesv2(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<VehiclesV2>>
 
     @POST(BOOKING_METHOD)
     fun book(@Body tripBooking: TripBooking): Deferred<Resource<TripInfo>>
 
     @GET(BOOKING_DETAILS_METHOD)
-    fun tripDetails(@Path(identifierId) id: String): Deferred<Resource<TripInfo>>
+    fun tripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>
 
     @GET(GUEST_BOOKING_DETAILS_METHOD)
-    fun guestTripDetails(@Path(identifierId) id: String): Deferred<Resource<TripInfo>>
+    fun guestTripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>
 
     @GET(BOOKING_STATUS_METHOD)
-    fun status(@Path(identifierId) tripId: String): Deferred<Resource<TripState>>
+    fun status(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<TripState>>
 
     @GET(GUEST_BOOKING_STATUS_METHOD)
-    fun guestBookingStatus(@Path(identifierId) tripIdentifier: String): Deferred<Resource<TripState>>
+    fun guestBookingStatus(@Path(IDENTIFIER_ID) tripIdentifier: String): Deferred<Resource<TripState>>
 
     @GET(TRACK_DRIVER_METHOD)
-    fun trackDriver(@Path(identifierId) tripIdentifierId: String): Deferred<Resource<DriverTrackingInfo>>
+    fun trackDriver(@Path(IDENTIFIER_ID) tripIdentifierId: String): Deferred<Resource<DriverTrackingInfo>>
 
     @GET(GUEST_BOOKING_TRACK_DRIVER_METHOD)
-    fun guestBookingTrackDriver(@Path(identifierId) tripIdentifier: String):
+    fun guestBookingTrackDriver(@Path(IDENTIFIER_ID) tripIdentifier: String):
             Deferred<Resource<DriverTrackingInfo>>
 
     @POST(BOOKING_HISTORY_METHOD)
     fun tripHistory(@Body tripHistoryRequest: TripSearch): Deferred<Resource<TripList>>
 
     @POST(CANCEL_BOOKING_METHOD)
-    fun cancel(@Path(identifierId) tripId: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
+    fun cancel(@Path(IDENTIFIER_ID) tripId: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
 
     @POST(CANCEL_GUEST_BOOKING_METHOD)
-    fun cancelGuestBooking(@Path(identifierId) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
+    fun cancelGuestBooking(@Path(IDENTIFIER_ID) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
 
     @POST(SDK_INITIALISER_METHOD)
-    fun sdkInitToken(@Query(identifierOrg) organisationId: String, @Query(identifierCurrency) currency: String): Deferred<Resource<BraintreeSDKToken>>
+    fun sdkInitToken(@Query(IDENTIFIER_ORG) organisationId: String, @Query(IDENTIFIER_CURRENCY) currency: String): Deferred<Resource<BraintreeSDKToken>>
 
     @POST(ADD_CARD_METHOD)
     fun addPayment(@Body addPaymentRequest: AddPaymentRequest): Deferred<Resource<PaymentsNonce>>
@@ -175,7 +175,7 @@ interface APITemplate {
     fun nonce(@Body nonceRequest: NonceRequest): Deferred<Resource<PaymentsNonce>>
 
     @GET(FARE_DETAILS)
-    fun fareDetails(@Path(identifierId) tripId: String): Deferred<Resource<Fare>>
+    fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
 
     @POST
     @FormUrlEncoded

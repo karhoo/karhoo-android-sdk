@@ -42,7 +42,7 @@ import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicle
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.client.APITemplate.Companion.identifierId
+import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
 import java.util.Date
 
 fun serverRobot(func: ServerRobot.() -> Unit) = ServerRobot().apply { func() }
@@ -182,7 +182,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = endpoint.replace("{$identifierId}", quoteId),
+                endpoint = endpoint.replace("{$IDENTIFIER_ID}", quoteId),
                 delayInMillis = delayInMillis
                        )
     }
@@ -201,7 +201,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.BOOKING_DETAILS_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.BOOKING_DETAILS_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                        )
     }
@@ -210,7 +210,7 @@ class ServerRobot {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.CANCEL_BOOKING_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.CANCEL_BOOKING_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                         )
     }
@@ -219,7 +219,7 @@ class ServerRobot {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.CANCEL_GUEST_BOOKING_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.CANCEL_GUEST_BOOKING_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                         )
     }
@@ -228,7 +228,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.TRACK_DRIVER_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.TRACK_DRIVER_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                        )
     }
@@ -238,7 +238,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.GUEST_BOOKING_TRACK_DRIVER_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.GUEST_BOOKING_TRACK_DRIVER_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                        )
     }
@@ -247,7 +247,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.BOOKING_STATUS_METHOD.replace("{$identifierId}", tripId),
+                endpoint = APITemplate.BOOKING_STATUS_METHOD.replace("{$IDENTIFIER_ID}", tripId),
                 delayInMillis = delayInMillis
                        )
     }
@@ -266,7 +266,7 @@ class ServerRobot {
                 code = code,
                 response = response,
                 delayInMillis = delayInMillis,
-                endpoint = APITemplate.FARE_DETAILS.replace("{$identifierId}", tripId)
+                endpoint = APITemplate.FARE_DETAILS.replace("{$IDENTIFIER_ID}", tripId)
                        )
     }
 
