@@ -84,6 +84,10 @@ publish {
     website = 'https://developer.karhoo.com'
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
 
     kapt "com.google.dagger:dagger-compiler:2.28.3"
