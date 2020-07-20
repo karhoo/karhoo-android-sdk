@@ -82,10 +82,10 @@ interface APITemplate {
         const val AUTH_USER_INFO_METHOD = "/oauth/v2/userinfo"
         const val AUTH_REFRESH_METHOD = "/oauth/v2/token"
         const val IDENTIFIER_ID = "id"
-        const val IDENTIFIER_LATITUDE = "latitude"
+        /*const val IDENTIFIER_LATITUDE = "latitude"
         const val IDENTIFIER_LONGITUDE = "longitude"
         const val IDENTIFIER_ORG = "organisation_id"
-        const val IDENTIFIER_CURRENCY = "currency"
+        const val IDENTIFIER_CURRENCY = "currency"*/
 
         private fun authHost() = EnvironmentDetails.current().authHost
     }
@@ -116,7 +116,7 @@ interface APITemplate {
     fun locationInfo(@Body locationInfoRequest: LocationInfoRequest): Deferred<Resource<LocationInfo>>
 
     @GET(REVERSE_GEO_METHOD)
-    fun reverseGeocode(@Query(IDENTIFIER_LATITUDE) latitude: Double, @Query(IDENTIFIER_LONGITUDE) longitude: Double): Deferred<Resource<LocationInfo>>
+    fun reverseGeocode(@Query("latitude") latitude: Double, @Query("longitude") longitude: Double): Deferred<Resource<LocationInfo>>
 
     @POST(AVAILABILITY_METHOD)
     @Deprecated("Availabilities endpoint is deprecated")
@@ -166,7 +166,8 @@ interface APITemplate {
     fun cancelGuestBooking(@Path(IDENTIFIER_ID) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
 
     @POST(SDK_INITIALISER_METHOD)
-    fun sdkInitToken(@Query(IDENTIFIER_ORG) organisationId: String, @Query(IDENTIFIER_CURRENCY) currency: String): Deferred<Resource<BraintreeSDKToken>>
+    fun sdkInitToken(@Query("organisation_id") organisationId: String, @Query("currency") currency:
+    String): Deferred<Resource<BraintreeSDKToken>>
 
     @POST(ADD_CARD_METHOD)
     fun addPayment(@Body addPaymentRequest: AddPaymentRequest): Deferred<Resource<PaymentsNonce>>
