@@ -85,6 +85,7 @@ publish {
 }
 
 kapt {
+    generateStubs = true
     correctErrorTypes = true
 }
 
