@@ -84,7 +84,6 @@ interface APITemplate {
         const val AUTH_REFRESH_METHOD = "/oauth/v2/token"
 
         const val identifierId = "id"
-        const val identifierClient = "clientId"
         const val identifierLatitude = "latitude"
         const val identifierLongitude = "longitude"
         const val identifierOrg = "organisation_id"
