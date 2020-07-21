@@ -9,6 +9,8 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import com.google.gson.Gson
 import com.karhoo.sdk.api.model.QuoteListV2
+import com.karhoo.sdk.api.model.QuoteSource
+import com.karhoo.sdk.api.model.QuoteType
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.QUOTES_V2_REQUEST_METHOD
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.QUOTES_V2_METHOD
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
@@ -24,6 +26,7 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.K3001_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_ID
+import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_V2
 import com.karhoo.sdk.api.util.ServerRobot.Companion.VEHICLES
 import com.karhoo.sdk.api.util.ServerRobot.Companion.VEHICLES_V2
 import com.karhoo.sdk.api.util.TestData
@@ -104,6 +107,17 @@ class QuotesV2IntegrationTest {
         assertEquals(0, latch.count)
         assertNotNull(result)
         assertEquals(AVAILABILITY.vehicles.classes.size, result?.categories?.size)
+
+        val saloonQuotes = result?.categories?.get("Saloon")
+        assertEquals(VEHICLES_V2.quotes.size, saloonQuotes?.size)
+        assertEquals(QUOTE_V2.id, saloonQuotes?.get(0)?.id)
+        assertEquals(QUOTE_V2.fleet, saloonQuotes?.get(0)?.fleet)
+        assertEquals(QUOTE_V2.quoteSource, saloonQuotes?.get(0)?.quoteSource)
+        assertEquals(QUOTE_V2.quoteType, saloonQuotes?.get(0)?.quoteType)
+        assertEquals("someOtherQuoteId", saloonQuotes?.get(1)?.id)
+        assertEquals("someOtherFleetId", saloonQuotes?.get(1)?.fleet?.fleetId)
+        assertEquals(QuoteSource.FLEET, saloonQuotes?.get(1)?.quoteSource)
+        assertEquals(QuoteType.METERED, saloonQuotes?.get(1)?.quoteType)
     }
 
     /**
@@ -608,7 +622,7 @@ class QuotesV2IntegrationTest {
      * And:     The endpoint was polled the correct number of times
      **/
     @Test
-    fun invalidQuoteDataReturnsGeneralError() {
+    fun invalidQuoteDataReturnsEmptyCategoriesList() {
         val latch = CountDownLatch(4)
 
         serverRobot {
@@ -616,13 +630,13 @@ class QuotesV2IntegrationTest {
             quotesResponse(code = HTTP_OK, response = INVALID_DATA, endpoint = QUOTES_V2_METHOD)
         }
 
-        var error: KarhooError? = null
+        var result: QuoteListV2? = null
 
         val observer = object : Observer<Resource<QuoteListV2>> {
             override fun onValueChanged(value: Resource<QuoteListV2>) {
                 when (value) {
-                    is Resource.Failure -> {
-                        error = value.error
+                    is Resource.Success -> {
+                        result = value.data
                         latch.countDown()
                     }
                 }
@@ -638,7 +652,7 @@ class QuotesV2IntegrationTest {
                     unsubscribe(observer)
                 }
 
-        assertEquals(error, KarhooError.GeneralRequestError)
+        assertEquals(0, result?.categories?.size)
     }
 
     /**

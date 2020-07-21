@@ -460,6 +460,7 @@ class ServerRobot {
                 quotes = listOf(
                         QUOTE_V2,
                         QUOTE_V2.copy(
+                                id = "someOtherQuoteId",
                                 quoteSource = QuoteSource.FLEET,
                                 quoteType = QuoteType.METERED,
                                 fleet = QUOTE_FLEET.copy(fleetId = "someOtherFleetId"),
