@@ -68,8 +68,7 @@ class AuthRevokeInteractorTest {
      */
     @Test
     fun `revoke token Success`() {
-        whenever(apiTemplate.authRevoke(authRevokeParams)).thenReturn(CompletableDeferred(Resource.Success(Void
-                                                                                                           ())))
+        whenever(apiTemplate.authRevoke(authRevokeParams)).thenReturn(CompletableDeferred(Resource.Success(Void())))
         var returnedRevokeResponse: Void? = null
         runBlocking {
             interactor.execute { result ->
@@ -92,8 +91,7 @@ class AuthRevokeInteractorTest {
     fun `revoke token fails`() {
         var shouldBeNull: Void? = null
         var error: KarhooError? = null
-        whenever(apiTemplate.authRevoke(authRevokeParams)).thenReturn(CompletableDeferred(Failure
-                                                                                          (KarhooError.GeneralRequestError)))
+        whenever(apiTemplate.authRevoke(authRevokeParams)).thenReturn(CompletableDeferred(Failure(KarhooError.GeneralRequestError)))
 
         runBlocking {
             interactor.execute { result ->

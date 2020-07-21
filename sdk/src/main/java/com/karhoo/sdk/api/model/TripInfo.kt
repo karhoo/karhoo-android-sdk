@@ -16,6 +16,7 @@ data class TripInfo(@SerializedName("id") val tripId: String = "",
                     @SerializedName("vehicle") val vehicle: Vehicle? = null,
                     @SerializedName("fleet_info") val fleetInfo: FleetInfo? = null,
                     @SerializedName("flight_number") val flightNumber: String? = null,
+                    @SerializedName("follow_code") var followCode: String? = null,
                     @SerializedName("comments") val comments: String? = null,
                     @SerializedName("meeting_point") val meetingPoint: MeetingPoint? = null)
     : Parcelable

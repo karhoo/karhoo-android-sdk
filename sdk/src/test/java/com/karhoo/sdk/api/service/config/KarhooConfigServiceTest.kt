@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class KarhooConfigServiceTest {
 
     private var uiConfigRequest: UIConfigRequest = mock()
+    // Needed for InjectMocks
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
     private val userManager: UserManager = mock()

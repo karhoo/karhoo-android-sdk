@@ -1,7 +1,6 @@
 package com.karhoo.sdk.api.service.trips
 
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.TripBooking
 import com.karhoo.sdk.api.network.request.TripCancellation
@@ -18,8 +17,7 @@ class KarhooTripsServiceTest {
 
     private val tripHistoryRequest: TripSearch = TripSearch()
     private val tripBooking: TripBooking = TripBooking(QUOTE_ID, null, null)
-    private val userInfo: UserInfo = UserInfo()
-
+    // Needed for InjectMocks
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
 

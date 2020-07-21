@@ -14,8 +14,9 @@ class KarhooDriverTrackingService : DriverTrackingService {
     @Inject
     internal lateinit var apiTemplate: APITemplate
 
-    override fun trackDriver(tripId: String): PollCall<DriverTrackingInfo> = DriverTrackingInteractor(credentialsManager, apiTemplate).apply {
-        this.tripId = tripId
+    override fun trackDriver(tripIdentifier: String): PollCall<DriverTrackingInfo> =
+            DriverTrackingInteractor(credentialsManager, apiTemplate).apply {
+        this.tripIdentifier = tripIdentifier
     }
 
 }

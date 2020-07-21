@@ -1,18 +1,15 @@
 package com.karhoo.sdk.api.service.availability
 
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.Categories
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.QuotesSearch
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AvailabilityRequest
 import com.karhoo.sdk.api.network.response.Resource
-import com.nhaarman.mockitokotlin2.mock
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -21,16 +18,9 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 import java.util.Date
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class AvailabilityInteractorTest {
-
-    private val credentialsManager: CredentialsManager = mock()
-    private val apiTemplate: APITemplate = mock()
+class AvailabilityInteractorTest : BaseKarhooUserInteractorTest() {
 
     private val origin = LocationInfo(
             placeId = "123",
@@ -48,12 +38,11 @@ class AvailabilityInteractorTest {
     private val availabilityRequest = AvailabilityRequest(origin.placeId, destination.placeId, dateScheduled)
     private val availabilities = Categories(listOf("cat1", "cat2", "cat3"))
 
-    private val context: CoroutineContext = Unconfined
-
     private lateinit var availabilityInteractor: AvailabilityInteractor
 
     @Before
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
         availabilityInteractor = AvailabilityInteractor(credentialsManager, apiTemplate, context)
     }

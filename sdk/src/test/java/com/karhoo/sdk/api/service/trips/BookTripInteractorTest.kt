@@ -1,35 +1,24 @@
 package com.karhoo.sdk.api.service.trips
 
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.FlightDetails
 import com.karhoo.sdk.api.model.TripInfo
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.PassengerDetails
 import com.karhoo.sdk.api.network.request.Passengers
 import com.karhoo.sdk.api.network.request.TripBooking
 import com.karhoo.sdk.api.network.response.Resource
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class BookTripInteractorTest {
-
-    private val credentialsManager: CredentialsManager = mock()
-    private val apiTemplate: APITemplate = mock()
-    private val context: CoroutineContext = Unconfined
+class BookTripInteractorTest: BaseKarhooUserInteractorTest() {
 
     private lateinit var interactor: BookTripInteractor
 
@@ -47,7 +36,8 @@ class BookTripInteractorTest {
     private val quoteId = "1234"
 
     @Before
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = BookTripInteractor(credentialsManager, apiTemplate, context)
     }

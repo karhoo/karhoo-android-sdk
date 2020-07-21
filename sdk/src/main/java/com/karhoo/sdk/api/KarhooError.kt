@@ -245,6 +245,31 @@ enum class KarhooError(var code: String,
                          "Could not authenticate",
                          "Could not authenticate"),
 
+    @SerializedName("KP001")
+    CouldNotFindCustomer("KP001",
+                        "Failed to find customer in braintree",
+                        "Failed to find customer in braintree"),
+
+    @SerializedName("KP002")
+    CouldNotInitailizeClient("KP002",
+                         "Failed to initialise client for organisation",
+                         "Failed to initialise client for organisation"),
+
+    @SerializedName("KP003")
+    CouldNotFindDefaultPayment("KP003",
+                         "Failed to find default payment method",
+                         "Failed to find default payment method"),
+
+    @SerializedName("KP004")
+    CouldNotFindDefaultCard("KP004",
+                         "Failed to find default credit card",
+                         "Failed to find default credit card"),
+
+    @SerializedName("KP005")
+    FailedToGenerateNonce("KP005",
+                         "Failed to generate nonce",
+                         "Failed to generate nonce"),
+
     @SerializedName("Q0001")
     OriginAndDestinationIdentical("Q0001",
                                   "Origin and destination cannot be the same.",
@@ -257,8 +282,8 @@ enum class KarhooError(var code: String,
 
     @SerializedName("P0002")
     FailedToCallMoneyService("P0002",
-                             "Failed calling money service.",
-                             "Failed calling money service.");
+                             "Failed calling payment service.",
+                             "Failed calling payment service.");
 
     companion object {
         fun fromThrowable(t: Throwable?): KarhooError {

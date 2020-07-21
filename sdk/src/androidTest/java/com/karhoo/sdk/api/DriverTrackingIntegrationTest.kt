@@ -1,23 +1,26 @@
 package com.karhoo.sdk.api
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.network.observable.Observer
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
+import com.karhoo.sdk.api.testrunner.TestSDKConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.BOOKING_ID
 import com.karhoo.sdk.api.util.ServerRobot.Companion.DRIVER_TRACKING
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
-import com.karhoo.sdk.api.util.ServerRobot.Companion.TOKEN
-import com.karhoo.sdk.api.util.ServerRobot.Companion.USER_INFO
 import com.karhoo.sdk.api.util.TestData
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,9 +37,59 @@ class DriverTrackingIntegrationTest {
 
     private val latch: CountDownLatch = CountDownLatch(4)
 
+    @Before
+    fun setUp() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = TestSDKConfig(context =
+                                                                               InstrumentationRegistry.getInstrumentation().context,
+                                                                               authenticationMethod = AuthenticationMethod.KarhooUser()))
+        serverRobot {
+            successfulToken()
+        }
+    }
+
     @After
     fun tearDown() {
         wireMockRule.resetAll()
+    }
+
+    /**
+     * Given:   A booking id has been polled for driver tracking info
+     * When:    It is a guest booking
+     * Then:    The correctly endpoint is called
+     **/
+    @Test
+    fun driverTrackingGuestBooking() {
+        KarhooSDKConfigurationProvider.setConfig(configuration = TestSDKConfig(context =
+                                                                               InstrumentationRegistry.getInstrumentation().context,
+                                                                               authenticationMethod = AuthenticationMethod.Guest("identifier", "referer", "organisationId")))
+        serverRobot {
+            driverTrackingGuestBookingResponse(code = HTTP_OK, response = DRIVER_TRACKING, trip = BOOKING_ID)
+        }
+
+        var result: DriverTrackingInfo? = null
+
+        val observer = object : Observer<Resource<DriverTrackingInfo>> {
+            override fun onValueChanged(value: Resource<DriverTrackingInfo>) {
+                when (value) {
+                    is Resource.Success -> {
+                        result = value.data
+                        latch.countDown()
+                    }
+                }
+            }
+        }
+
+        KarhooApi.driverTrackingService.trackDriver(TestData.BOOKING_ID)
+                .observable()
+                .apply {
+                    subscribe(observer, 300L)
+                    latch.await(1, TimeUnit.SECONDS)
+                    unsubscribe(observer)
+                }
+
+
+        assertThat(latch.count).isZero()
+        assertThat(result).isEqualTo(DRIVER_TRACKING)
     }
 
     /**
@@ -48,7 +101,6 @@ class DriverTrackingIntegrationTest {
     @Test
     fun driverTrackingPollingSuccess() {
         serverRobot {
-            authRefreshResponse(code = HTTP_OK, response = TOKEN)
             driverTrackingResponse(code = HTTP_OK, response = DRIVER_TRACKING, trip = BOOKING_ID)
         }
 
@@ -126,7 +178,7 @@ class DriverTrackingIntegrationTest {
     @Test
     fun trackDriverInvalidDataReturnsEmptyObject() {
         serverRobot {
-            authRefreshResponse(code = HTTP_OK, response = TOKEN)
+            successfulToken()
             driverTrackingResponse(code = HTTP_OK, response = EMPTY, trip = BOOKING_ID)
         }
 
@@ -138,6 +190,9 @@ class DriverTrackingIntegrationTest {
                     is Resource.Success -> {
                         result = value.data
                         latch.countDown()
+                    }
+                    is Resource.Failure -> {
+                        Log.d("ERR", value.error.code)
                     }
                 }
             }

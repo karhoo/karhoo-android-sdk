@@ -18,5 +18,4 @@ interface Analytics {
     var deviceId: String
 
     var sessionId: String
-
 }

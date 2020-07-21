@@ -165,20 +165,24 @@ class ServerRobot {
                         )
     }
 
-    fun quoteIdResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+    fun quoteIdResponse(code: Int, response: Any, endpoint: String = APITemplate.QUOTE_REQUEST_METHOD,
+                        delayInMillis: Int = 0) {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.QUOTE_REQUEST_METHOD,
+                endpoint = endpoint,
                 delayInMillis = delayInMillis
                         )
     }
 
-    fun quotesResponse(code: Int, response: Any, delayInMillis: Int = 0, quoteId: String = QUOTE_ID.quoteId) {
+    fun quotesResponse(code: Int, response: Any, endpoint: String = APITemplate.QUOTES_METHOD, delayInMillis:
+    Int = 0,
+                       quoteId: String =
+            QUOTE_ID.quoteId) {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.QUOTES_METHOD.replace("{$identifierId}", quoteId),
+                endpoint = endpoint.replace("{$identifierId}", quoteId),
                 delayInMillis = delayInMillis
                        )
     }
@@ -211,11 +215,30 @@ class ServerRobot {
                         )
     }
 
+    fun cancelGuestBookingResponse(code: Int, response: Any, delayInMillis: Int = 0, trip: String) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.CANCEL_GUEST_BOOKING_METHOD.replace("{$identifierId}", trip),
+                delayInMillis = delayInMillis
+                        )
+    }
+
     fun driverTrackingResponse(code: Int, response: Any, delayInMillis: Int = 0, trip: String) {
         mockGetResponse(
                 code = code,
                 response = response,
                 endpoint = APITemplate.TRACK_DRIVER_METHOD.replace("{$identifierId}", trip),
+                delayInMillis = delayInMillis
+                       )
+    }
+
+    fun driverTrackingGuestBookingResponse(code: Int, response: Any, delayInMillis: Int = 0, trip:
+    String) {
+        mockGetResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.GUEST_BOOKING_TRACK_DRIVER_METHOD.replace("{$identifierId}", trip),
                 delayInMillis = delayInMillis
                        )
     }
@@ -371,7 +394,7 @@ class ServerRobot {
                                  ),
                 status = "PROGRESSING",
                 id = QUOTE_ID.quoteId,
-                categoryNames = AVAILABILITIES.categoryNames.orEmpty())
+                categoryNames = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"))
 
         val QUOTES = QuoteList(
                 categories = mapOf(
@@ -524,7 +547,6 @@ class ServerRobot {
                 tripState = TripStatus.DRIVER_EN_ROUTE,
                 fleetInfo = FleetInfo(
                         name = "Antelope [Zoo]",
-                        email = "lova@karhoo.com",
                         description = "Zoo Test Fleet 5",
                         fleetId = "d4e6e7df-76ac-46dd-89c9-5968949ed10a",
                         logoUrl = "https://cdn.karhoo.com/d/images/logos/cc775eda-950d-4a77-aa83-172d487a4cbf.png",

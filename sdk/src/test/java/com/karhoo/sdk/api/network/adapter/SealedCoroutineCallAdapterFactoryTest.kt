@@ -12,8 +12,8 @@ import com.karhoo.sdk.api.network.request.TripBooking
 import com.karhoo.sdk.api.pairCaptor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertEquals
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

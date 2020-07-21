@@ -11,7 +11,6 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.PLACE_SEARCH_LIST
-import com.karhoo.sdk.api.util.ServerRobot.Companion.TOKEN
 import com.karhoo.sdk.api.util.TestData.Companion.PLACE_SEARCH
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Assertions.assertThat
@@ -21,7 +20,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.net.HttpURLConnection.HTTP_CREATED
-import java.net.HttpURLConnection.HTTP_OK
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -37,7 +35,7 @@ class PlaceSearchIntegrationTest {
     @Before
     fun setUp() {
         serverRobot {
-            authRefreshResponse(code = HTTP_OK, response = TOKEN)
+            successfulToken()
         }
     }
 
