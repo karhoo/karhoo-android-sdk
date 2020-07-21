@@ -311,7 +311,7 @@ class SDKInitialiserIntegrationTest {
         val org = "FAKE_ORG"
         val currency = "GBP"
 
-        val sdkInitUrl = "?${APITemplate.identifierOrg}=$org&${APITemplate.identifierCurrency}=$currency"
+        val sdkInitUrl = "?${APITemplate.IDENTIFIER_ORG}=$org&${APITemplate.IDENTIFIER_CURRENCY}=$currency"
 
         val sdkInitRequest = SDKInitRequest(
                 currency = currency,
