@@ -123,10 +123,10 @@ ext.enableJacoco = { Project project, String variant, String[] projectFileFilter
         group = "Reporting"
         description = "Generate Jacoco coverage reports for the ${project.name} with the " +
                 "$variant variant."
-        classDirectories = files([ javaClasses ], [ kotlinClasses ])
-        additionalSourceDirs = files(coverageSourceDirs)
-        sourceDirectories = files(coverageSourceDirs)
-        executionData = files("${project.buildDir}/jacoco/test${capVariant}UnitTest.exec")
+        getClassDirectories().setFrom([javaClasses], [kotlinClasses])
+        getAdditionalSourceDirs().setFrom(coverageSourceDirs)
+        getSourceDirectories().setFrom(coverageSourceDirs)
+        getExecutionData().setFrom("${project.buildDir}/jacoco/test${capVariant}UnitTest.exec")
         reports {
             xml.enabled = true
             html.enabled = true
