@@ -160,7 +160,6 @@ class TestData {
         val FLEET_INFO = FleetInfo(
                 fleetId = "some fleet id",
                 name = "some fleet name",
-                email = "dispatch-co@karhoo.com",
                 phoneNumber = "some phone number",
                 description = "some description",
                 logoUrl = "some logo url",

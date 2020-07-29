@@ -429,7 +429,6 @@ class ServerRobot {
 
         val QUOTE_FLEET = FleetInfo(fleetId = "someFleetId",
                                     name = "someFleetName",
-                                    email = "name@email.com",
                                     logoUrl = "someLogoUrl",
                                     description = "Some fleet description",
                                     phoneNumber = "+123",
@@ -447,7 +446,6 @@ class ServerRobot {
                                price = QUOTE_PRICE,
                                fleet = QUOTE_FLEET,
                                pickupType = PickupType.CURBSIDE,
-                               qta = 2,
                                vehicle = QUOTE_VEHICLE,
                                vehicleAttributes = VEHICLE_ATTRIBUTES)
 
@@ -463,8 +461,7 @@ class ServerRobot {
                                 id = "someOtherQuoteId",
                                 quoteSource = QuoteSource.FLEET,
                                 quoteType = QuoteType.METERED,
-                                fleet = QUOTE_FLEET.copy(fleetId = "someOtherFleetId"),
-                                qta = 2)
+                                fleet = QUOTE_FLEET.copy(fleetId = "someOtherFleetId"))
                                ))
 
         val QUOTES = QuoteList(
