@@ -21,6 +21,7 @@ class KarhooQuotesService : QuotesService {
     @Inject
     internal lateinit var apiTemplate: APITemplate
 
+    @Deprecated("Quotes is deprecated")
     override fun quotes(quotesSearch: QuotesSearch): PollCall<QuoteList> = QuotesInteractor(
             credentialsManager = credentialsManager,
             apiTemplate = apiTemplate).apply {
