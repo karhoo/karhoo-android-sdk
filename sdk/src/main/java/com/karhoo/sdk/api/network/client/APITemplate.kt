@@ -9,6 +9,7 @@ import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.Places
+import com.karhoo.sdk.api.model.ProviderID
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
@@ -44,6 +45,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
+import java.security.Provider
 
 interface APITemplate {
 
@@ -88,6 +90,8 @@ interface APITemplate {
         const val IDENTIFIER_LONGITUDE = "longitude"
         const val IDENTIFIER_ORG = "organisation_id"
         const val IDENTIFIER_CURRENCY = "currency"
+
+        const val CHOOSE_PROVIDER = "v3/payments/providers"
 
         private fun authHost() = EnvironmentDetails.current().authHost
     }
@@ -178,6 +182,9 @@ interface APITemplate {
 
     @GET(FARE_DETAILS)
     fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
+
+    @GET(CHOOSE_PROVIDER)
+    fun chooseProvider(): Deferred<Resource<ProviderID>>
 
     @POST
     @FormUrlEncoded
