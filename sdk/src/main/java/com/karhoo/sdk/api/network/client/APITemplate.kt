@@ -91,7 +91,7 @@ interface APITemplate {
         const val IDENTIFIER_ORG = "organisation_id"
         const val IDENTIFIER_CURRENCY = "currency"
 
-        const val CHOOSE_PROVIDER = "v3/payments/providers"
+        const val GET_PROVIDER = "v3/payments/providers"
 
         private fun authHost() = EnvironmentDetails.current().authHost
     }
@@ -183,7 +183,7 @@ interface APITemplate {
     @GET(FARE_DETAILS)
     fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
 
-    @GET(CHOOSE_PROVIDER)
+    @GET(GET_PROVIDER)
     fun getProvider(): Deferred<Resource<Provider>>
 
     @POST
