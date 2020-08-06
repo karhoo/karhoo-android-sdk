@@ -9,6 +9,7 @@ import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.Places
+import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
@@ -57,6 +58,7 @@ interface APITemplate {
         const val ADDRESS_AUTOCOMPLETE_METHOD = "/v1/locations/address-autocomplete"
         const val PLACE_DETAILS_METHOD = "/v1/locations/place-details"
         const val REVERSE_GEO_METHOD = "/v1/locations/reverse-geocode"
+
         @Deprecated("Availabilities endpoint is deprecated")
         const val AVAILABILITY_METHOD = "/v1/quotes/availability"
         const val QUOTE_REQUEST_METHOD = "/v1/quotes"
@@ -88,6 +90,8 @@ interface APITemplate {
         const val IDENTIFIER_LONGITUDE = "longitude"
         const val IDENTIFIER_ORG = "organisation_id"
         const val IDENTIFIER_CURRENCY = "currency"
+
+        const val GET_PROVIDERS_METHOD = "v3/payments/providers"
 
         private fun authHost() = EnvironmentDetails.current().authHost
     }
@@ -178,6 +182,9 @@ interface APITemplate {
 
     @GET(FARE_DETAILS)
     fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
+
+    @GET(GET_PROVIDERS_METHOD)
+    fun getProvider(): Deferred<Resource<Provider>>
 
     @POST
     @FormUrlEncoded
