@@ -9,7 +9,7 @@ import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.Places
-import com.karhoo.sdk.api.model.ProviderID
+import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
@@ -45,7 +45,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
-import java.security.Provider
 
 interface APITemplate {
 
@@ -59,6 +58,7 @@ interface APITemplate {
         const val ADDRESS_AUTOCOMPLETE_METHOD = "/v1/locations/address-autocomplete"
         const val PLACE_DETAILS_METHOD = "/v1/locations/place-details"
         const val REVERSE_GEO_METHOD = "/v1/locations/reverse-geocode"
+
         @Deprecated("Availabilities endpoint is deprecated")
         const val AVAILABILITY_METHOD = "/v1/quotes/availability"
         const val QUOTE_REQUEST_METHOD = "/v1/quotes"
@@ -184,7 +184,7 @@ interface APITemplate {
     fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
 
     @GET(CHOOSE_PROVIDER)
-    fun chooseProvider(): Deferred<Resource<ProviderID>>
+    fun getProvider(): Deferred<Resource<Provider>>
 
     @POST
     @FormUrlEncoded
