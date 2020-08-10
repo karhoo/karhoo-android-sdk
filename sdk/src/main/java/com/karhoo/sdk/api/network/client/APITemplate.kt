@@ -7,9 +7,9 @@ import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.LocationInfo
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.Places
-import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
@@ -184,7 +184,7 @@ interface APITemplate {
     fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
 
     @GET(GET_PROVIDERS_METHOD)
-    fun getProvider(): Deferred<Resource<Provider>>
+    fun getProvider(): Deferred<Resource<PaymentProvider>>
 
     @POST
     @FormUrlEncoded
