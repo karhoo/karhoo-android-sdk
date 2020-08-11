@@ -12,9 +12,9 @@ import kotlinx.coroutines.async
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-internal class GetPaymentMethodsInteractor @Inject constructor(credentialsManager: CredentialsManager,
-                                                               private val apiTemplate: APITemplate,
-                                                               private val context:
+internal class GetAdyenPaymentMethodsInteractor @Inject constructor(credentialsManager: CredentialsManager,
+                                                                    private val apiTemplate: APITemplate,
+                                                                    private val context:
                                                                CoroutineContext = Dispatchers.Main)
     : BaseCallInteractor<PaymentMethods>(true, credentialsManager, apiTemplate, context) {
 

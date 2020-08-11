@@ -49,6 +49,11 @@ import com.karhoo.sdk.api.model.Vehicle
 import com.karhoo.sdk.api.model.VehicleAttributes
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.model.VehiclesV2
+import com.karhoo.sdk.api.model.adyen.Detail
+import com.karhoo.sdk.api.model.adyen.Group
+import com.karhoo.sdk.api.model.adyen.Item
+import com.karhoo.sdk.api.model.adyen.PaymentMethod
+import com.karhoo.sdk.api.model.adyen.PaymentMethods
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
 import com.karhoo.sdk.api.network.request.QuoteQTA
@@ -295,6 +300,16 @@ class ServerRobot {
                 delayInMillis = delayInMillis,
                 endpoint = APITemplate.FARE_DETAILS.replace("{$IDENTIFIER_ID}", tripId)
                        )
+    }
+
+    fun getAdyenPaymentMethodsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.GET_ADYEN_PAYMENT_METHODS_METHOD,
+                delayInMillis = delayInMillis
+
+                        )
     }
 
     fun authRevokeResponse(code: Int, response: Any, delayInMillis: Int = 0, token: String) {
@@ -688,6 +703,33 @@ class ServerRobot {
         val FARE = Fare(
                 state = "PENDING",
                 breakdown = FARE_BREAKDOWN)
+
+        val DETAIL = Detail(
+                items = listOf(
+                        Item(id = "87", name = "Credit Agricole PBL"),
+                        Item(id = "89", name = "Santander")),
+                key = "issuer",
+                optional = true,
+                type = "select"
+                           )
+
+        val ADYEN_PAYMENT_METHOD = PaymentMethod(
+                brands = listOf("amex", "diners", "maestro", "visa"),
+                details = listOf(DETAIL, DETAIL.copy()),
+                name = "",
+                supportsRecurring = true,
+                type = ""
+                                                )
+
+        val GROUP_CARD = Group(name = "Credit Card",
+                               types = listOf("amex", "diners", "maestro", "visa"))
+
+        val ADYEN_PAYMENT_METHODS = PaymentMethods(
+                groups = listOf(
+                        GROUP_CARD,
+                        GROUP_CARD.copy(name = "AliPay", types = listOf("alipay_wap"))),
+                paymentMethods = listOf(ADYEN_PAYMENT_METHOD, ADYEN_PAYMENT_METHOD.copy())
+                                                  )
 
         /**
          *
