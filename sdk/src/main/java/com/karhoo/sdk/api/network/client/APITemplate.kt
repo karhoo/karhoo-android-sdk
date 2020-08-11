@@ -184,7 +184,7 @@ interface APITemplate {
     fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
 
     @GET(GET_PROVIDERS_METHOD)
-    fun getProvider(): Deferred<Resource<PaymentProvider>>
+    fun getPaymentProvider(): Deferred<Resource<PaymentProvider>>
 
     @POST
     @FormUrlEncoded
