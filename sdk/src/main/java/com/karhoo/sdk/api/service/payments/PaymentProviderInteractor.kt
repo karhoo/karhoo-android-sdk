@@ -25,8 +25,7 @@ internal class PaymentProviderInteractor @Inject constructor(credentialsManager:
     }
 
     private suspend fun getPaymentProvider(): Resource<PaymentProvider> {
-        val result = apiTemplate.getPaymentProvider().await()
-        return when (result) {
+        return when (val result = apiTemplate.getPaymentProvider().await()) {
             is Resource.Success -> Resource.Success(data = result.data)
             is Resource.Failure -> Resource.Failure(error = result.error)
         }
