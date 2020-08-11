@@ -2,10 +2,7 @@ package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.adyen.PaymentMethods
-import com.karhoo.sdk.api.network.request.AddPaymentRequest
-import com.karhoo.sdk.api.network.request.Payer
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENT_METHODS
@@ -14,7 +11,6 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
-import com.karhoo.sdk.api.util.ServerRobot.Companion.PAYMENTS_TOKEN
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
@@ -26,7 +22,6 @@ import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_CREATED
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -54,12 +49,12 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Successful response has been returned
+     * Given:   Adyen payment methods are retrieved
+     * When:    A successful response has been returned
      * Then:    The response payload should be valid
      **/
     @Test
-    fun addCardSuccess() {
+    fun getAdyenPaymentMethodsSuccess() {
         serverRobot {
             getAdyenPaymentMethodsResponse(HTTP_CREATED, ADYEN_PAYMENT_METHODS)
         }
@@ -80,12 +75,12 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Success 204 but with invalid data
+     * Given:   Adyen payment methods are retrieved
+     * When:    The call is successful but with invalid data
      * Then:    An internal sdk error should be returned
      **/
     @Test
-    fun invalidDataWhenAddingCardReturnsInternalError() {
+    fun invalidDataWhenGettingAdyenPaymentMethodsReturnsInternalError() {
         serverRobot {
             getAdyenPaymentMethodsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
         }
@@ -106,8 +101,8 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Success 204 but with bad json
+     * Given:   Adyen payment methods are retrieved
+     * When:    The call is successful but with bad json
      * Then:    A blank object should be returned
      **/
     @Test
@@ -132,8 +127,8 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Success 204 but with no body
+     * Given:   Adyen payment methods are retrieved
+     * When:    The call is successful but with no body
      * Then:    A blank object should be returned
      **/
     @Test
@@ -158,9 +153,9 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with error payload
-     * Then:    The karhoo error should be valid
+     * Given:   Adyen payment methods are retrieved
+     * When:    An error is returned with error payload
+     * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseGetsParsedIntoKarhooError() {
@@ -185,9 +180,9 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with no body payload
-     * Then:    The karhoo error should be valid
+     * Given:   Adyen payment methods are retrieved
+     * When:    An error is returned with no body payload
+     * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithNoBodyGetsParsedIntoKarhooError() {
@@ -211,9 +206,9 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with empty payload
-     * Then:    The karhoo error should be valid
+     * Given:   Adyen payment methods are retrieved
+     * When:    An error is returned with an empty body
+     * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithEmptyBodyGetsParsedIntoKarhooError() {
@@ -237,9 +232,9 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with empty payload
-     * Then:    The karhoo error should be valid
+     * Given:   Adyen payment methods are retrieved
+     * When:    An error is returned with invalid json
+     * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithInvalidJsonGetsParsedIntoKarhooError() {
@@ -263,9 +258,9 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with empty payload
-     * Then:    The karhoo error should be valid
+     * Given:   Adyen payment methods are retrieved
+     * When:    An error is returned for invalid data
+     * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithInvalidDataGetsParsedIntoKarhooError() {
@@ -289,8 +284,8 @@ class GetAdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    The add card response takes too long
+     * Given:   Adyen payment methods are retrieved
+     * When:    The response takes too long
      * Then:    The timeout error should be returned
      **/
     @Test
