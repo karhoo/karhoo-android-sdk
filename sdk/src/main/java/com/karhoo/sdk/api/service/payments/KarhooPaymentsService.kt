@@ -7,6 +7,7 @@ import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.adyen.PaymentMethods
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
+import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.karhoo.sdk.call.Call
@@ -35,6 +36,9 @@ class KarhooPaymentsService : PaymentsService {
         this.nonceRequest = request
     }
 
-    override fun getAdyenPaymentMethods(): Call<PaymentMethods> = GetAdyenPaymentMethodsInteractor(credentialsManager, apiTemplate).apply {}
+    override fun getAdyenPaymentMethods(request: AdyenPaymentMethodsRequest): Call<PaymentMethods> =
+            AdyenPaymentMethodsInteractor(credentialsManager, apiTemplate).apply {
+                this.request = request
+            }
 
 }

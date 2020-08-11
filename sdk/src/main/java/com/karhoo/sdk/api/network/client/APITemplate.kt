@@ -22,6 +22,7 @@ import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AvailabilityRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
+import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
@@ -190,7 +191,8 @@ interface APITemplate {
     fun getProvider(): Deferred<Resource<PaymentProvider>>
 
     @POST(GET_ADYEN_PAYMENT_METHODS_METHOD)
-    fun getPaymentMethods(): Deferred<Resource<PaymentMethods>>
+    fun getPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
+            Deferred<Resource<PaymentMethods>>
 
     @POST
     @FormUrlEncoded

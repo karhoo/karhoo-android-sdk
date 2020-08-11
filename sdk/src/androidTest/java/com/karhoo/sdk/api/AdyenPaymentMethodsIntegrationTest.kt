@@ -3,6 +3,7 @@ package com.karhoo.sdk.api
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.karhoo.sdk.api.model.adyen.PaymentMethods
+import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENT_METHODS
@@ -29,7 +30,9 @@ import java.util.concurrent.TimeUnit
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 @RunWith(AndroidJUnit4::class)
-class GetAdyenPaymentMethodsIntegrationTest {
+class AdyenPaymentMethodsIntegrationTest {
+
+    private var request: AdyenPaymentMethodsRequest = AdyenPaymentMethodsRequest()
 
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
@@ -61,7 +64,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
 
         var result: PaymentMethods? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -87,7 +90,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -113,7 +116,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -139,7 +142,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -166,7 +169,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -192,7 +195,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -218,7 +221,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -244,7 +247,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -270,7 +273,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -296,7 +299,7 @@ class GetAdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
