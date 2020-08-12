@@ -6,5 +6,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Group(@SerializedName("name") val name: String,
+                 @SerializedName("paymentMethodData") val paymentMethodData: String,
                  @SerializedName("types") val types: List<String>)
     : Parcelable
