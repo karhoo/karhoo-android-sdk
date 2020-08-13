@@ -51,7 +51,7 @@ class KarhooPaymentsServiceTest {
 
     /**
      * Given:   A request is made to get a nonce for a payment method
-     * When:    The call is constructed and executedh
+     * When:    The call is constructed and executed
      * Then:    A call should be made to the appropriate endpoint
      */
     @Test
