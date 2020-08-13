@@ -94,7 +94,6 @@ interface APITemplate {
         const val IDENTIFIER_LATITUDE = "latitude"
         const val IDENTIFIER_LONGITUDE = "longitude"
         const val IDENTIFIER_ORG = "organisation_id"
-
         const val IDENTIFIER_CURRENCY = "currency"
 
         private fun authHost() = EnvironmentDetails.current().authHost

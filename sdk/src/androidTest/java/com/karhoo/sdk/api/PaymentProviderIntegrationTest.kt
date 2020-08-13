@@ -2,9 +2,7 @@ package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.karhoo.sdk.api.model.PaymentsNonce
-import com.karhoo.sdk.api.network.request.AddPaymentRequest
-import com.karhoo.sdk.api.network.request.Payer
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
@@ -12,7 +10,7 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
-import com.karhoo.sdk.api.util.ServerRobot.Companion.PAYMENTS_TOKEN
+import com.karhoo.sdk.api.util.ServerRobot.Companion.PAYMENT_PROVIDER
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
@@ -25,14 +23,8 @@ import java.net.HttpURLConnection.HTTP_CREATED
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * @see [Testing documentation](http://d.android.com/tools/testing)
- */
 @RunWith(AndroidJUnit4::class)
-class PaymentNonceIntegrationTest {
-
+class PaymentProviderIntegrationTest {
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
 
@@ -51,19 +43,19 @@ class PaymentNonceIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Successful response has been returned
+     * Given:   Payment provider methods are retrieved
+     * When:    A successful response is returned
      * Then:    The response payload should be valid
      **/
     @Test
-    fun addCardSuccess() {
+    fun getPaymentProviderSuccess() {
         serverRobot {
-            addCardResponse(HTTP_CREATED, PAYMENTS_TOKEN)
+            getPaymentProviderMethodsResponse(code = HTTP_CREATED, response = PAYMENT_PROVIDER)
         }
 
-        var result: PaymentsNonce? = null
+        var result: PaymentProvider? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.getPaymentProvider().execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -77,19 +69,19 @@ class PaymentNonceIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Success 204 but with invalid data
-     * Then:    An internal sdk error should be returned
+     * Given:   Payment Provider methods are retrieved
+     * When:    The call is successful but with invalid data
+     * Then:    An internal SDK error should be returned
      **/
     @Test
-    fun invalidDataWhenAddingCardReturnsInternalError() {
+    fun invalidDataWhenGettingPaymentProviderMethodsReturnsInternalError() {
         serverRobot {
-            addCardResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
+            getPaymentProviderMethodsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.getPaymentProvider().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -103,19 +95,19 @@ class PaymentNonceIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Success 204 but with bad json
+     * Given:   Payment Provider methods are retrieved
+     * When:    The call is successful but with bad JSON
      * Then:    A blank object should be returned
      **/
     @Test
-    fun badJsonSuccessReturnsBlankResult() {
+    fun badJsonSuccessReturnsBlankResultPaymentProvider() {
         serverRobot {
-            addCardResponse(code = HTTP_CREATED, response = INVALID_JSON)
+            getPaymentProviderMethodsResponse(code = HTTP_CREATED, response = INVALID_JSON)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.getPaymentProvider().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -129,19 +121,19 @@ class PaymentNonceIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Success 204 but with no body
+     * Given:   Payment Provider methods are retrieved
+     * When:    The call is successful but with no body
      * Then:    A blank object should be returned
      **/
     @Test
-    fun blankBodyReturnsDefaultObject() {
+    fun blankBodyReturnsDefaultObjectPaymentProvider() {
         serverRobot {
-            addCardResponse(code = HTTP_CREATED, response = NO_BODY)
+            getPaymentProviderMethodsResponse(code = HTTP_CREATED, response = NO_BODY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.getPaymentProvider().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -155,20 +147,20 @@ class PaymentNonceIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with error payload
-     * Then:    The karhoo error should be valid
+     * Given:   Payment Provider methods are retrieved
+     * When:    An error is returned with error payload
+     * Then:    The Karhoo error should be valid
      **/
     @Test
-    fun errorResponseGetsParsedIntoKarhooError() {
+    fun errorResponseGetsParsedIntoKarhooErrorPaymentProvider() {
         serverRobot {
-            addCardResponse(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR)
+            getPaymentProviderMethodsResponse(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR)
         }
 
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.getPaymentProvider().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -182,19 +174,19 @@ class PaymentNonceIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with no body payload
-     * Then:    The karhoo error should be valid
+     * Given:   Payment Provider methods are retrieved
+     * When:    An error is returned with an empty body
+     * Then:    The Karhoo error should be valid
      **/
     @Test
-    fun errorResponseWithNoBodyGetsParsedIntoKarhooError() {
+    fun errorResponseWithEmptyBodyGetsParsedIntoKarhooErrorPaymentProvider() {
         serverRobot {
-            addCardResponse(code = HTTP_BAD_REQUEST, response = NO_BODY)
+            getPaymentProviderMethodsResponse(code = HTTP_BAD_REQUEST, response = EMPTY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.getPaymentProvider().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -208,19 +200,19 @@ class PaymentNonceIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with empty payload
-     * Then:    The karhoo error should be valid
+     * Given:   Payment Provider methods are retrieved
+     * When:    An error is returned with an invalid Json
+     * Then:    The Karhoo error should be valid
      **/
     @Test
-    fun errorResponseWithEmptyBodyGetsParsedIntoKarhooError() {
+    fun errorResponseWithInvalidJsonGetsParsedIntoKarhooErrorPaymentProvider() {
         serverRobot {
-            addCardResponse(code = HTTP_BAD_REQUEST, response = EMPTY)
+            getPaymentProviderMethodsResponse(code = HTTP_BAD_REQUEST, response = INVALID_JSON)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.getPaymentProvider().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -234,19 +226,19 @@ class PaymentNonceIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with empty payload
-     * Then:    The karhoo error should be valid
+     * Given:   Payment Provider methods are retrieved
+     * When:    An error is returned with invaid data
+     * Then:    The Karhoo error should be valid
      **/
     @Test
-    fun errorResponseWithInvalidJsonGetsParsedIntoKarhooError() {
+    fun errorResponseWithInvalidDataGetsParsedIntoKarhooErrorPaymentProvider() {
         serverRobot {
-            addCardResponse(code = HTTP_BAD_REQUEST, response = INVALID_JSON)
+            getPaymentProviderMethodsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.getPaymentProvider().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -260,45 +252,19 @@ class PaymentNonceIntegrationTest {
     }
 
     /**
-     * Given:   A card has been added
-     * When:    Error 401 with empty payload
-     * Then:    The karhoo error should be valid
+     * Given:   Payment Provider methods are retrieved
+     * When:    The response takes too long
+     * Then:    The Timeout error should be returned
      **/
     @Test
-    fun errorResponseWithInvalidDataGetsParsedIntoKarhooError() {
+    fun timeoutErrorReturnedWhenResponseTakesTooLongPaymentProvider() {
         serverRobot {
-            addCardResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
+            getPaymentProviderMethodsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA,
+                                              delayInMillis = 2000)
         }
-
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
-            when (it) {
-                is Resource.Failure -> {
-                    result = it.error
-                    latch.countDown()
-                }
-            }
-        }
-
-        latch.await(2, TimeUnit.SECONDS)
-        assertThat(result).isEqualTo(KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   A card has been added
-     * When:    The add card response takes too long
-     * Then:    The timeout error should be returned
-     **/
-    @Test
-    fun timeoutErrorReturnedWhenResponseTakesTooLong() {
-        serverRobot {
-            addCardResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, delayInMillis = 2000)
-        }
-
-        var result: KarhooError? = null
-
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.getPaymentProvider().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -310,18 +276,4 @@ class PaymentNonceIntegrationTest {
         latch.await(2, TimeUnit.SECONDS)
         assertThat(result).isEqualTo(KarhooError.Timeout)
     }
-
-    companion object {
-        val payer = Payer(
-                id = "123",
-                email = "name@email.com",
-                firstName = "John",
-                lastName = "Smith")
-
-        val org = "FAKE_ORG"
-
-        val nonce = "Test Nonce"
-    }
-
 }
-
