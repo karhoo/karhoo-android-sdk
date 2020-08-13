@@ -2,7 +2,6 @@ package com.karhoo.sdk.api.service.payments
 
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.model.adyen.PaymentMethods
-import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
@@ -35,31 +34,6 @@ class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    An InternalSDKError is returned
      **/
     @Test
-    fun `get Adyen payment methods call with no request returns an error`() {
-        var shouldBeNull: PaymentMethods? = null
-        var error: KarhooError? = null
-
-        interactor.request = null
-        runBlocking {
-            interactor.execute { result ->
-                when (result) {
-                    is Resource.Success -> shouldBeNull = result.data
-                    is Resource.Failure -> error = result.error
-                }
-            }
-            delay(5)
-        }
-
-        assertEquals(KarhooError.InternalSDKError, error)
-        assertNull(shouldBeNull)
-    }
-
-    /**
-     * Given:   A request is made to get Adyen payment methods
-     * When:    The call is not successful
-     * Then:    An InternalSDKError is returned
-     **/
-    @Test
     fun `get Adyen payment methods call failure returns an error`() {
         var shouldBeNull: PaymentMethods? = null
         var error: KarhooError? = null
@@ -67,7 +41,6 @@ class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
         whenever(apiTemplate.getPaymentMethods(any()))
                 .thenReturn(CompletableDeferred(Resource.Failure(expectedError)))
 
-        interactor.request = AdyenPaymentMethodsRequest()
         runBlocking {
             interactor.execute { result ->
                 when (result) {
@@ -94,7 +67,6 @@ class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
 
         var paymentMethods: PaymentMethods? = null
 
-        interactor.request = AdyenPaymentMethodsRequest()
         runBlocking {
             interactor.execute {
                 when (it) {

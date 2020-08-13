@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PaymentMethods(@SerializedName("groups") val groups: List<Group>,
-                          @SerializedName("paymentMethods") val paymentMethods: List<PaymentMethodsGroup>)
+data class PaymentMethods(@SerializedName("groups") val groups: List<PaymentMethodsGroup>,
+                          @SerializedName("paymentMethods") val paymentMethods: List<PaymentMethod>)
     : Parcelable

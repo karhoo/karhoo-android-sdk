@@ -17,6 +17,6 @@ interface PaymentsService {
 
     fun getNonce(request: NonceRequest): Call<PaymentsNonce>
 
-    fun getAdyenPaymentMethods(request: AdyenPaymentMethodsRequest): Call<PaymentMethods>
+    fun getAdyenPaymentMethods(): Call<PaymentMethods>
 
 }

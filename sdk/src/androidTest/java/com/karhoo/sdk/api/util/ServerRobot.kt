@@ -54,6 +54,7 @@ import com.karhoo.sdk.api.model.adyen.Group
 import com.karhoo.sdk.api.model.adyen.Item
 import com.karhoo.sdk.api.model.adyen.PaymentMethod
 import com.karhoo.sdk.api.model.adyen.PaymentMethods
+import com.karhoo.sdk.api.model.adyen.PaymentMethodsGroup
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
 import com.karhoo.sdk.api.network.request.QuoteQTA
@@ -721,8 +722,9 @@ class ServerRobot {
                 type = ""
                                                 )
 
-        val GROUP_CARD = Group(name = "Credit Card",
-                               types = listOf("amex", "diners", "maestro", "visa"))
+        val GROUP_CARD = PaymentMethodsGroup(name = "Credit Card",
+                               types = listOf("amex", "diners", "maestro", "visa"),
+                                            groupType = "type")
 
         val ADYEN_PAYMENT_METHODS = PaymentMethods(
                 groups = listOf(

@@ -1,13 +1,11 @@
 package com.karhoo.sdk.api.service.payments
 
-import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.adyen.PaymentMethods
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BaseCallInteractor
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -21,20 +19,14 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
                                                                  CoroutineContext = Dispatchers.Main)
     : BaseCallInteractor<PaymentMethods>(true, credentialsManager, apiTemplate, context) {
 
-    var request: AdyenPaymentMethodsRequest? = null
-
     override fun createRequest(): Deferred<Resource<PaymentMethods>> {
-        request?.let {
-            return GlobalScope.async {
-                return@async getPaymentMethods(it)
-            }
-        } ?: run {
-            return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
+        return GlobalScope.async {
+            return@async getPaymentMethods()
         }
     }
 
-    private suspend fun getPaymentMethods(request: AdyenPaymentMethodsRequest): Resource<PaymentMethods> {
-        return when (val result = apiTemplate.getPaymentMethods(request)
+    private suspend fun getPaymentMethods(): Resource<PaymentMethods> {
+        return when (val result = apiTemplate.getPaymentMethods(AdyenPaymentMethodsRequest())
                 .await()) {
             is Resource.Success -> Resource.Success(data = result.data)
             is Resource.Failure -> Resource.Failure(error = result.error)

@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Detail(@SerializedName("items") val items: List<Item>,
-                  @SerializedName("key") val key: String,
+data class Detail(@SerializedName("items") val items: List<Item> = emptyList(),
+                  @SerializedName("key") val key: String? = "",
                   @SerializedName("optional") val optional: Boolean,
-                  @SerializedName("type") val type: String,
-                  val config: Map<String,String>)
+                  @SerializedName("type") val type: String? = "",
+                  val config: Map<String,String> = emptyMap())
     : Parcelable
