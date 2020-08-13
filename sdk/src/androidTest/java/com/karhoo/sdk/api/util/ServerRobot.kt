@@ -20,8 +20,10 @@ import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.FareBreakdown
 import com.karhoo.sdk.api.model.FleetInfo
 import com.karhoo.sdk.api.model.LocationInfo
+import com.karhoo.sdk.api.model.LoyaltyProgramme
 import com.karhoo.sdk.api.model.MeetingPoint
 import com.karhoo.sdk.api.model.Organisation
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.PickupType
 import com.karhoo.sdk.api.model.Place
@@ -33,7 +35,6 @@ import com.karhoo.sdk.api.model.Price
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
-import com.karhoo.sdk.api.model.QuoteListV2
 import com.karhoo.sdk.api.model.QuotePrice
 import com.karhoo.sdk.api.model.QuoteSource
 import com.karhoo.sdk.api.model.QuoteType
@@ -52,6 +53,7 @@ import com.karhoo.sdk.api.model.VehiclesV2
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
 import com.karhoo.sdk.api.network.request.QuoteQTA
+import kotlinx.coroutines.delay
 import java.util.Date
 
 fun serverRobot(func: ServerRobot.() -> Unit) = ServerRobot().apply { func() }
@@ -326,6 +328,13 @@ class ServerRobot {
                         endpoint = APITemplate.AUTH_USER_INFO_METHOD)
     }
 
+    fun getPaymentProviderMethodsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockGetResponse(code= code,
+                       response = response,
+                       delayInMillis = delayInMillis,
+                       endpoint = APITemplate.GET_PROVIDERS_METHOD)
+    }
+
     private fun mockPostResponse(code: Int,
                                  response: Any,
                                  endpoint: String,
@@ -510,6 +519,27 @@ class ServerRobot {
 
         val PAYMENT_TOKEN = BraintreeSDKToken(
                 token = "njfdeilnvbflinvbiurnceernnvbrgtuverosa")
+
+        val LOYALTY_PROGRAMMES = LoyaltyProgramme(
+                loyaltyID = "JA02121981",
+                loyaltyName = "someLoyaltyName"
+                                                 )
+
+        val PAYMENT_PROVIDER = PaymentProvider(
+                provider = "Provider1234",
+                loyalty = listOf(
+                        LOYALTY_PROGRAMMES,
+                        LOYALTY_PROGRAMMES.copy(
+                                loyaltyID = "CO49501318",
+                                loyaltyName = "aDifferentLoyaltyName"
+                                               )
+                                )
+                                              )
+
+        val PAYMENT_PROVIDER_EMPTY = PaymentProvider(
+                provider = "",
+                loyalty = emptyList()
+                                                    )
 
         /**
          *
