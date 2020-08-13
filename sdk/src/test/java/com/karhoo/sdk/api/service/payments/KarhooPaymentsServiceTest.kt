@@ -61,4 +61,15 @@ class KarhooPaymentsServiceTest {
         val call = service.getNonce(addPaymentRequest)
         assertNotNull(call)
     }
+
+    /**
+     * Given:   A request is made to get payment provider methods
+     * When:    The call is constructed and executed
+     * Then:    A call should be made to the appropriate endpoint
+     */
+    @Test
+    fun getPaymentProviderMethodsCallWhenGettingPaymentProviderMethods() {
+        val call = service.getPaymentProvider()
+        assertNotNull(call)
+    }
 }
