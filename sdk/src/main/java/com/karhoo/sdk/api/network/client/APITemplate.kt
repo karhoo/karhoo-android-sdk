@@ -187,7 +187,7 @@ interface APITemplate {
     fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
 
     @GET(GET_PROVIDERS_METHOD)
-    fun getProvider(): Deferred<Resource<PaymentProvider>>
+    fun getPaymentProvider(): Deferred<Resource<PaymentProvider>>
 
     @POST(GET_ADYEN_PAYMENT_METHODS_METHOD)
     fun getPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):

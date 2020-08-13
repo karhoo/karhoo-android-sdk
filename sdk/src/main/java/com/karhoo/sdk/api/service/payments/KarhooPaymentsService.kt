@@ -3,6 +3,7 @@ package com.karhoo.sdk.api.service.payments
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.BraintreeSDKToken
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.adyen.PaymentMethods
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -35,6 +36,8 @@ class KarhooPaymentsService : PaymentsService {
     override fun getNonce(request: NonceRequest): Call<PaymentsNonce> = GetNonceInteractor(credentialsManager, apiTemplate, userManager).apply {
         this.nonceRequest = request
     }
+
+    override fun getPaymentProvider(): Call<PaymentProvider> = PaymentProviderInteractor(credentialsManager, apiTemplate).apply {}
 
     override fun getAdyenPaymentMethods(): Call<PaymentMethods> =
             AdyenPaymentMethodsInteractor(credentialsManager, apiTemplate).apply {}
