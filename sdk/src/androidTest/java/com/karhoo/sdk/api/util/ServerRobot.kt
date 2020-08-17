@@ -32,6 +32,7 @@ import com.karhoo.sdk.api.model.Poi
 import com.karhoo.sdk.api.model.PoiDetails
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.Price
+import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
@@ -343,10 +344,10 @@ class ServerRobot {
     }
 
     fun getPaymentProviderMethodsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
-        mockGetResponse(code= code,
-                       response = response,
-                       delayInMillis = delayInMillis,
-                       endpoint = APITemplate.GET_PROVIDERS_METHOD)
+        mockGetResponse(code = code,
+                        response = response,
+                        delayInMillis = delayInMillis,
+                        endpoint = APITemplate.GET_PROVIDERS_METHOD)
     }
 
     private fun mockPostResponse(code: Int,
@@ -540,20 +541,16 @@ class ServerRobot {
                                                  )
 
         val PAYMENT_PROVIDER = PaymentProvider(
-                id = "Provider1234",
-                loyalty = listOf(
-                        LOYALTY_PROGRAMMES,
-                        LOYALTY_PROGRAMMES.copy(
-                                loyaltyID = "CO49501318",
-                                loyaltyName = "aDifferentLoyaltyName"
-                                               )
-                                )
+                Provider(
+                        id = "Provider1234",
+                        loyalty = listOf(
+                                LOYALTY_PROGRAMMES,
+                                LOYALTY_PROGRAMMES.copy(
+                                        loyaltyID = "CO49501318",
+                                        loyaltyName = "aDifferentLoyaltyName"
+                                                       )
+                                        ))
                                               )
-
-        val PAYMENT_PROVIDER_EMPTY = PaymentProvider(
-                id = "",
-                loyalty = emptyList()
-                                                    )
 
         /**
          *

@@ -2,6 +2,7 @@ package com.karhoo.sdk.api.service.payments
 
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.model.PaymentProvider
+import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.whenever
@@ -17,9 +18,9 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
 
     private lateinit var interactor: PaymentProviderInteractor
 
-    private val providerId = PaymentProvider(
+    private val providerId = PaymentProvider(Provider(
             id = "provider_1234",
-            loyalty = emptyList()
+            loyalty = emptyList())
                                             )
 
     @Before
