@@ -1,7 +1,7 @@
 package com.karhoo.sdk.api.service.payments
 
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.adyen.PaymentMethods
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
@@ -17,15 +17,15 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
                                                                  private val apiTemplate: APITemplate,
                                                                  private val context:
                                                                  CoroutineContext = Dispatchers.Main)
-    : BaseCallInteractor<PaymentMethods>(true, credentialsManager, apiTemplate, context) {
+    : BaseCallInteractor<AdyenPaymentMethods>(true, credentialsManager, apiTemplate, context) {
 
-    override fun createRequest(): Deferred<Resource<PaymentMethods>> {
+    override fun createRequest(): Deferred<Resource<AdyenPaymentMethods>> {
         return GlobalScope.async {
             return@async getPaymentMethods()
         }
     }
 
-    private suspend fun getPaymentMethods(): Resource<PaymentMethods> {
+    private suspend fun getPaymentMethods(): Resource<AdyenPaymentMethods> {
         return when (val result = apiTemplate.getPaymentMethods(AdyenPaymentMethodsRequest())
                 .await()) {
             is Resource.Success -> Resource.Success(data = result.data)

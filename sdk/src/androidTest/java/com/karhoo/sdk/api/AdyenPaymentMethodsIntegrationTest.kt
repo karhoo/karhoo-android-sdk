@@ -2,7 +2,7 @@ package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.karhoo.sdk.api.model.adyen.PaymentMethods
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENT_METHODS
@@ -59,7 +59,7 @@ class AdyenPaymentMethodsIntegrationTest {
             getAdyenPaymentMethodsResponse(HTTP_CREATED, ADYEN_PAYMENT_METHODS)
         }
 
-        var result: PaymentMethods? = null
+        var result: AdyenPaymentMethods? = null
 
         KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
             when (it) {

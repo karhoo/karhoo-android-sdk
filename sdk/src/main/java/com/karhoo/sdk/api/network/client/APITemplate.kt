@@ -17,7 +17,7 @@ import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.model.VehiclesV2
-import com.karhoo.sdk.api.model.adyen.PaymentMethods
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AvailabilityRequest
@@ -191,7 +191,7 @@ interface APITemplate {
 
     @POST(GET_ADYEN_PAYMENT_METHODS_METHOD)
     fun getPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
-            Deferred<Resource<PaymentMethods>>
+            Deferred<Resource<AdyenPaymentMethods>>
 
     @POST
     @FormUrlEncoded
