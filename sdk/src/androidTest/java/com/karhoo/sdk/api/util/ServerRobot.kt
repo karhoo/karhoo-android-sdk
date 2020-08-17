@@ -540,7 +540,7 @@ class ServerRobot {
                                                  )
 
         val PAYMENT_PROVIDER = PaymentProvider(
-                provider = "Provider1234",
+                id = "Provider1234",
                 loyalty = listOf(
                         LOYALTY_PROGRAMMES,
                         LOYALTY_PROGRAMMES.copy(
@@ -551,7 +551,7 @@ class ServerRobot {
                                               )
 
         val PAYMENT_PROVIDER_EMPTY = PaymentProvider(
-                provider = "",
+                id = "",
                 loyalty = emptyList()
                                                     )
 

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PaymentProvider(@SerializedName("id") val provider: String = "",
-                           @SerializedName("loyalty_programmes") val loyalty: List<LoyaltyProgramme> =
-                                   listOf()) :
-        Parcelable
+data class PaymentProvider(@SerializedName("id") val id: String = "",
+                           @SerializedName("loyalty_programmes") val loyalty:
+                           List<LoyaltyProgramme>? = listOf())
+    : Parcelable

@@ -18,7 +18,7 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
     private lateinit var interactor: PaymentProviderInteractor
 
     private val providerId = PaymentProvider(
-            provider = "provider_1234",
+            id = "provider_1234",
             loyalty = emptyList()
                                             )
 
