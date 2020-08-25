@@ -6,7 +6,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.karhoo.sdk.analytics.Analytics
 import com.karhoo.sdk.api.model.CardType
+import com.karhoo.sdk.api.model.LoyaltyProgramme
 import com.karhoo.sdk.api.model.Organisation
+import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.UserInfo
 
 class KarhooUserManager(private val sharedPreferences: SharedPreferences,
@@ -69,6 +71,17 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
             value?.let { storeSavedPaymentInfo(value) }
         }
 
+    override var paymentProvider: Provider?
+        get() = returnSavedPaymentProvider()
+        set(value) {
+            value?.let {
+                sharedPreferences.edit()
+                        .putString(PROVIDER_ID, value.id)
+                        .putString(PROVIDER_LOYALTY_PROGRAMMES, gson.toJson(value.loyalty))
+                        .commit()
+            }
+        }
+
     @SuppressLint("ApplySharedPref")
     private fun storeSavedPaymentInfo(savedPaymentInfo: SavedPaymentInfo) {
         sharedPreferences.edit()
@@ -81,6 +94,18 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
                 userPaymentObservers.remove(it)
             }
         }
+    }
+
+    private fun returnSavedPaymentProvider(): Provider? {
+        val id = sharedPreferences.getString(PROVIDER_ID, "").orEmpty()
+        val loyaltyProgrammes = getLoyaltyProgrammesForUser()
+
+        return if (id.isNotBlank()) Provider(id = id, loyalty = loyaltyProgrammes) else null
+    }
+
+    private fun getLoyaltyProgrammesForUser(): List<LoyaltyProgramme> {
+        val listType = object : TypeToken<ArrayList<LoyaltyProgramme>>() {}.type
+        return gson.fromJson(sharedPreferences.getString(PROVIDER_LOYALTY_PROGRAMMES, "[]"), listType)
     }
 
     private fun returnSavedPaymentInfo(): SavedPaymentInfo? {
@@ -120,6 +145,8 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
         private const val ORGANISATIONS = "organisations"
         private const val LAST_FOUR = "last_four"
         private const val CARD_TYPE = "card_type"
+        private const val PROVIDER_ID = "payment_provider_id"
+        private const val PROVIDER_LOYALTY_PROGRAMMES = "payment_provider_loyalty_programmes"
         const val PREFERENCES_USER_NAME = "user"
     }
 

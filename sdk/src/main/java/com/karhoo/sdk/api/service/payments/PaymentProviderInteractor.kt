@@ -1,6 +1,7 @@
 package com.karhoo.sdk.api.service.payments
 
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
@@ -13,6 +14,7 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 internal class PaymentProviderInteractor @Inject constructor(credentialsManager: CredentialsManager,
+                                                             private val userManager: UserManager,
                                                              private val apiTemplate: APITemplate,
                                                              context: CoroutineContext
                                                              = Dispatchers.Main)
@@ -26,10 +28,12 @@ internal class PaymentProviderInteractor @Inject constructor(credentialsManager:
 
     private suspend fun getPaymentProvider(): Resource<PaymentProvider> {
         return when (val result = apiTemplate.getPaymentProvider().await()) {
-            is Resource.Success -> Resource.Success(data = result.data)
+            is Resource.Success -> {
+                userManager.paymentProvider = result.data.provider
+                Resource.Success(data = result.data)
+            }
             is Resource.Failure -> Resource.Failure(error = result.error)
         }
     }
-
 
 }

@@ -47,8 +47,7 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
             return Resource.Failure(error = KarhooError.UserAlreadyLoggedIn)
         }
 
-        val credentials = apiTemplate.login(userLogin).await()
-        return when (credentials) {
+        return when (val credentials = apiTemplate.login(userLogin).await()) {
             is Resource.Success -> userProfile(credentials.data)
             is Resource.Failure -> Resource.Failure(error = credentials.error)
         }
@@ -56,8 +55,7 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
 
     private suspend fun userProfile(credentials: Credentials): Resource<UserInfo> {
         onSuccessfulCredentials(credentials)
-        val userInfo = apiTemplate.userProfile().await()
-        return when (userInfo) {
+        return when (val userInfo = apiTemplate.userProfile().await()) {
             is Resource.Success -> checkIfRolesAreValidAndSave(userInfo.data)
             is Resource.Failure -> userInfo
         }
@@ -90,6 +88,8 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
 
     private fun onSuccessfulUser(userInfo: UserInfo) {
         analytics.userInfo = userInfo
+        paymentsService.getPaymentProvider().execute {}
+        //TODO only call this for Braintree users
         fetchUserCardDetails(userInfo)
         userManager.saveUser(userInfo)
     }

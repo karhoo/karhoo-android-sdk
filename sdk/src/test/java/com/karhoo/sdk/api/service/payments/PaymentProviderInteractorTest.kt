@@ -1,10 +1,13 @@
 package com.karhoo.sdk.api.service.payments
 
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
@@ -16,6 +19,7 @@ import org.junit.Test
 
 class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
 
+    private var userManager: UserManager = mock()
     private lateinit var interactor: PaymentProviderInteractor
 
     private val providerId = PaymentProvider(Provider(
@@ -27,7 +31,8 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
     override fun setUp() {
         super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
-        interactor = PaymentProviderInteractor(credentialsManager, apiTemplate, context)
+        interactor = PaymentProviderInteractor(credentialsManager, userManager, apiTemplate,
+                                               context)
     }
 
     /**
@@ -74,7 +79,10 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
         runBlocking {
             interactor.execute {
                 when (it) {
-                    is Resource.Success -> paymentProvider = it.data
+                    is Resource.Success -> {
+                        verify(userManager).paymentProvider = it.data.provider
+                        paymentProvider = it.data
+                    }
                 }
             }
             delay(20)
