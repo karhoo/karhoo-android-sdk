@@ -78,6 +78,7 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
                 sharedPreferences.edit()
                         .putString(PROVIDER_ID, value.id)
                         .putString(PROVIDER_LOYALTY_PROGRAMMES, gson.toJson(value.loyalty))
+                        .commit()
             }
         }
 
