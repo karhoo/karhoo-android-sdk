@@ -5,6 +5,7 @@ import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.Organisation
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.request.UserLogin
@@ -37,6 +38,7 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
     private var analytics: Analytics = mock()
     private var paymentService: PaymentsService = mock()
     private var paymentsCall: Call<PaymentsNonce> = mock()
+    private var paymentProviderCall: Call<PaymentProvider> = mock()
 
     @Captor
     private lateinit var credentialsCaptor: ArgumentCaptor<Credentials>
@@ -57,15 +59,6 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
                         roles = mutableListOf(InteractorContants.REQUIRED_ROLE, InteractorContants.MOBILE_USER)
                                                           )))
 
-    private val unAuthedUserInfo: UserInfo
-        get() = UserInfo(
-                firstName = "John",
-                lastName = "Smith",
-                email = "name@email.com",
-                phoneNumber = "1234567",
-                userId = "123",
-                locale = "")
-
     private val email = "name@email.com"
 
     private val userLogin = UserLogin(email = email, password = "Password123")
@@ -82,6 +75,7 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
      * Given:   A user wants to log into the system
      * When:    logging in the user successfully
      * Then:    A user details object should be returned with the details of that user
+     * And:     A call is made to retrieve the payment provider
      */
     @Test
     fun `login user returns a user details object on successful login`() {
@@ -91,6 +85,8 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
                 .thenReturn(CompletableDeferred(Resource.Success(userInfo)))
         whenever(paymentService.getNonce(any()))
                 .thenReturn(paymentsCall)
+        whenever(paymentService.getPaymentProvider())
+                .thenReturn(paymentProviderCall)
 
         interactor.userLogin = userLogin
         var returnedUserInfo: UserInfo? = null
@@ -107,6 +103,7 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
         assertEquals(userInfo.firstName, returnedUserInfo?.firstName)
         assertEquals(userInfo.lastName, returnedUserInfo?.lastName)
         assertEquals(userInfo.phoneNumber, returnedUserInfo?.phoneNumber)
+        verify(paymentService).getPaymentProvider()
     }
 
     /**
@@ -122,6 +119,8 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
                 .thenReturn(CompletableDeferred(Resource.Success(userInfo)))
         whenever(paymentService.getNonce(any()))
                 .thenReturn(paymentsCall)
+        whenever(paymentService.getPaymentProvider())
+                .thenReturn(paymentProviderCall)
 
         interactor.userLogin = userLogin
         runBlocking {

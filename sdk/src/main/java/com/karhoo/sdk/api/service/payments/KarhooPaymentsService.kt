@@ -36,7 +36,7 @@ class KarhooPaymentsService : PaymentsService {
         this.nonceRequest = request
     }
 
-    override fun getPaymentProvider(): Call<PaymentProvider> = PaymentProviderInteractor(credentialsManager, apiTemplate).apply {}
+    override fun getPaymentProvider(): Call<PaymentProvider> = PaymentProviderInteractor(credentialsManager, userManager, apiTemplate).apply {}
 
     override fun getAdyenPaymentMethods(): Call<AdyenPaymentMethods> =
             AdyenPaymentMethodsInteractor(credentialsManager, apiTemplate).apply {}

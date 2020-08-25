@@ -1,5 +1,7 @@
 package com.karhoo.sdk.api.datastore.user
 
+import com.karhoo.sdk.api.model.PaymentProvider
+import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.UserInfo
 
 interface UserManager {
@@ -9,6 +11,8 @@ interface UserManager {
     val isUserStillValid: Boolean
 
     var savedPaymentInfo: SavedPaymentInfo?
+
+    var paymentProvider: Provider?
 
     fun saveUser(userInfo: UserInfo)
 
