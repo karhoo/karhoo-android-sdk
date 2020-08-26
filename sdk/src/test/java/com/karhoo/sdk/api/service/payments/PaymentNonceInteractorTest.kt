@@ -8,7 +8,10 @@ import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.Payer
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
@@ -81,6 +84,7 @@ class PaymentNonceInteractorTest : BaseKarhooUserInteractorTest() {
 
         assertEquals(KarhooError.InternalSDKError, error)
         assertNull(shouldBeNull)
+        verify(apiTemplate, never()).addPayment(any())
     }
 
     companion object {

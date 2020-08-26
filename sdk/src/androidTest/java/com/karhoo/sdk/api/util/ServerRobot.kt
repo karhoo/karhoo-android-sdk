@@ -56,6 +56,8 @@ import com.karhoo.sdk.api.model.adyen.AdyenItem
 import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethod
 import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethodsGroup
+import com.karhoo.sdk.api.model.adyen.AdyenPayments
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
 import com.karhoo.sdk.api.network.request.QuoteQTA
@@ -310,7 +312,15 @@ class ServerRobot {
                 response = response,
                 endpoint = APITemplate.GET_ADYEN_PAYMENT_METHODS_METHOD,
                 delayInMillis = delayInMillis
+                        )
+    }
 
+    fun getAdyenPaymentsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.GET_ADYEN_PAYMENTS_METHOD,
+                delayInMillis = delayInMillis
                         )
     }
 
@@ -757,6 +767,10 @@ class ServerRobot {
                         GROUP_CARD.copy(name = "AliPay", types = listOf("alipay_wap"))),
                 paymentMethods = listOf(ADYEN_PAYMENT_METHOD, ADYEN_PAYMENT_METHOD.copy())
                                                        )
+
+        val ADYEN_PAYMENTS = AdyenPaymentsResponse(
+                payload = AdyenPayments(),
+                transactionId = "1234")
 
         /**
          *
