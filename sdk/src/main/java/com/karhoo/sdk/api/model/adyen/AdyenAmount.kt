@@ -6,6 +6,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AdyenAmount(
-        @SerializedName("value") val currency: String = "",
+        @SerializedName("currency") val currency: String = "",
         @SerializedName("value") val value: Double = 0.0)
     : Parcelable

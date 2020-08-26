@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 data class AdyenPaymentsRequestPayload(
         @SerializedName("amount") val amount: AdyenAmount,
         @SerializedName("merchantAccount") val merchantAccount: String,
-        @SerializedName("paymentMethod") val paymentMethodAdyen: AdyenStoredPaymentMethod,
+        @SerializedName("paymentMethod") val storedPaymentMethod: AdyenStoredPaymentMethod,
         @SerializedName("reference") val reference: String,
-        @SerializedName("returnUrl") val returnUrl: String
-                                      ) : Parcelable
+        @SerializedName("returnUrl") val returnUrl: String)
+    : Parcelable
