@@ -731,7 +731,7 @@ class ServerRobot {
                 breakdown = FARE_BREAKDOWN)
 
         val DETAIL = AdyenDetail(
-                adyenItems = listOf(
+                items = listOf(
                         AdyenItem(id = "87", name = "Credit Agricole PBL"),
                         AdyenItem(id = "89", name = "Santander")),
                 key = "issuer",
@@ -741,7 +741,7 @@ class ServerRobot {
 
         val ADYEN_PAYMENT_METHOD = AdyenPaymentMethod(
                 brands = listOf("amex", "diners", "maestro", "visa"),
-                adyenDetails = listOf(DETAIL, DETAIL.copy()),
+                details = listOf(DETAIL, DETAIL.copy()),
                 name = "",
                 supportsRecurring = true,
                 type = ""
@@ -752,10 +752,10 @@ class ServerRobot {
                                                   groupType = "type")
 
         val ADYEN_PAYMENT_METHODS = AdyenPaymentMethods(
-                groupAdyens = listOf(
+                groups = listOf(
                         GROUP_CARD,
                         GROUP_CARD.copy(name = "AliPay", types = listOf("alipay_wap"))),
-                adyenPaymentMethods = listOf(ADYEN_PAYMENT_METHOD, ADYEN_PAYMENT_METHOD.copy())
+                paymentMethods = listOf(ADYEN_PAYMENT_METHOD, ADYEN_PAYMENT_METHOD.copy())
                                                        )
 
         /**
