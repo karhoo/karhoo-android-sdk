@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 @RunWith(AndroidJUnit4::class)
-class AdyenPaymentsIntegrationTest {
+class AdyenPaymentsMethodsIntegrationTest {
 
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
