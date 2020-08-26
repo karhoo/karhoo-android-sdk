@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AdyenPayments(
-        @SerializedName("amount") val amount: Amount = Amount(),
+        @SerializedName("amount") val amount: AdyenAmount = AdyenAmount(),
         @SerializedName("merchantReference") val merchantReference: String = "",
         @SerializedName("pspReference") val pspReference: String = "",
         @SerializedName("resultCode") val resultCode: String = "")

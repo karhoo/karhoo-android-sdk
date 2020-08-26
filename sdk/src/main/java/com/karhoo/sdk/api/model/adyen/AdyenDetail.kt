@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AdyenDetail(@SerializedName("items") val adyenItems: List<AdyenItem> = emptyList(),
+data class AdyenDetail(@SerializedName("items") val items: List<AdyenItem> = emptyList(),
                        @SerializedName("key") val key: String? = "",
                        @SerializedName("optional") val optional: Boolean,
                        @SerializedName("type") val type: String? = "",

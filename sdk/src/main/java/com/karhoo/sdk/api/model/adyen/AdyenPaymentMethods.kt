@@ -5,8 +5,12 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AdyenPaymentMethods(@SerializedName("groups") val groupAdyens:
+data class AdyenPaymentMethods(@SerializedName("groups") val groups:
                                List<AdyenPaymentMethodsGroup> = emptyList(),
-                               @SerializedName("paymentMethods") val adyenPaymentMethods:
-                               List<AdyenPaymentMethod> = emptyList())
+                               @SerializedName("oneClickPaymentMethods") val oneClickPaymentMethods:
+                               List<AdyenOneClickPaymentMethod> = emptyList(),
+                               @SerializedName("paymentMethods") val paymentMethods:
+                               List<AdyenPaymentMethod> = emptyList(),
+                               @SerializedName("storedPaymentMethods") val storedPaymentMethods:
+                               List<AdyenStoredPaymentMethod> = emptyList())
     : Parcelable
