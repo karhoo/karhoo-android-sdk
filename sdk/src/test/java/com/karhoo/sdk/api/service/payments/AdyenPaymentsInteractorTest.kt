@@ -15,7 +15,7 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
-class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
+class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
 
     private val adyenPaymentMethods: AdyenPaymentMethods = mock()
 
