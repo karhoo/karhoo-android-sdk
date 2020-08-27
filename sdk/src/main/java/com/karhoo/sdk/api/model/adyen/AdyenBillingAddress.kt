@@ -6,10 +6,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AdyenBillingAddress(
-        @SerializedName("action") val city: String = "",
-        @SerializedName("action") val country: String = "",
-        @SerializedName("action") val houseNumberOrName: String = "",
-        @SerializedName("action") val postalCode: String = "",
-        @SerializedName("action") val stateOrProvince: String? = "",
-        @SerializedName("action") val street: String = "")
+        @SerializedName("city") val city: String = "",
+        @SerializedName("country") val country: String = "",
+        @SerializedName("houseNumberOrName") val houseNumberOrName: String = "",
+        @SerializedName("postalCode") val postalCode: String = "",
+        @SerializedName("stateOrProvince") val stateOrProvince: String? = "",
+        @SerializedName("street") val street: String = "")
     : Parcelable
