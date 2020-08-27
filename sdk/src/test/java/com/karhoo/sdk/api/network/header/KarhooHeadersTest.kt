@@ -1,6 +1,7 @@
 package com.karhoo.sdk.api.network.header
 
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.ANDROID
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.nhaarman.mockitokotlin2.mock
@@ -43,7 +44,7 @@ class KarhooHeadersTest {
 
         val prefix = correlationId.subSequence(0, 7)
         val daRest = correlationId.subSequence(7, correlationId.length)
-        assertEquals("ANDROID", prefix)
+        assertEquals(ANDROID, prefix)
         assertNotNull(daRest)
     }
 
