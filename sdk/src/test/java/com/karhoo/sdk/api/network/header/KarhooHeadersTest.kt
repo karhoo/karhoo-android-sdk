@@ -44,7 +44,7 @@ class KarhooHeadersTest {
 
         val prefix = correlationId.subSequence(0, 7)
         val daRest = correlationId.subSequence(7, correlationId.length)
-        assertEquals(ANDROID, prefix)
+        assertEquals(ANDROID.toUpperCase(), prefix)
         assertNotNull(daRest)
     }
 
