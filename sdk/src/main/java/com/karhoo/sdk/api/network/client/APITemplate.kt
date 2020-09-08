@@ -39,6 +39,8 @@ import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.http.Body
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
@@ -194,11 +196,11 @@ interface APITemplate {
 
     @POST(GET_ADYEN_PAYMENT_METHODS_METHOD)
     fun getPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
-            Deferred<Resource<AdyenPaymentMethods>>
+            Deferred<Resource<ResponseBody>>
 
     @POST(GET_ADYEN_PAYMENTS_METHOD)
-    fun getAdyenPayments(@Body adyenPaymentsRequest: AdyenPaymentsRequest):
-            Deferred<Resource<AdyenPaymentsResponse>>
+    fun getAdyenPayments(@Body adyenPaymentsRequest: JSONObject):
+            Deferred<Resource<ResponseBody>>
 
     @POST
     @FormUrlEncoded

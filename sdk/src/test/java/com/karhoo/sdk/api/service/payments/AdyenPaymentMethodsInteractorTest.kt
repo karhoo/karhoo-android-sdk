@@ -1,7 +1,6 @@
 package com.karhoo.sdk.api.service.payments
 
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
@@ -10,6 +9,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import okhttp3.ResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -17,7 +17,7 @@ import org.junit.Test
 
 class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
 
-    private val adyenPaymentMethods: AdyenPaymentMethods = mock()
+    private val adyenPaymentMethods: ResponseBody = mock()
 
     private lateinit var interactor: AdyenPaymentMethodsInteractor
 
@@ -35,7 +35,7 @@ class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun `get Adyen payment methods call failure returns an error`() {
-        var shouldBeNull: AdyenPaymentMethods? = null
+        var shouldBeNull: String? = null
         var error: KarhooError? = null
         var expectedError: KarhooError = KarhooError.InternalSDKError
         whenever(apiTemplate.getPaymentMethods(any()))
@@ -65,7 +65,7 @@ class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
         whenever(apiTemplate.getPaymentMethods(any()))
                 .thenReturn(CompletableDeferred(Resource.Success(adyenPaymentMethods)))
 
-        var adyenPaymentMethods: AdyenPaymentMethods? = null
+        var adyenPaymentMethods: String? = null
 
         runBlocking {
             interactor.execute {

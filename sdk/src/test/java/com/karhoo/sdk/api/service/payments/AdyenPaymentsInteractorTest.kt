@@ -1,8 +1,6 @@
 package com.karhoo.sdk.api.service.payments
 
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
-import com.karhoo.sdk.api.network.request.AdyenPaymentsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
@@ -13,6 +11,8 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -20,8 +20,8 @@ import org.junit.Test
 
 class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
 
-    private val adyenPaymentsRequest: AdyenPaymentsRequest = mock()
-    private val adyenPaymentsResponse: AdyenPaymentsResponse = mock()
+    private val adyenPaymentsRequest: JSONObject = mock()
+    private val adyenPaymentsResponse: ResponseBody = mock()
 
     private lateinit var interactor: AdyenPaymentsInteractor
 
@@ -39,7 +39,7 @@ class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun `get Adyen payments call failure not made if request is null`() {
-        var shouldBeNull: AdyenPaymentsResponse? = null
+        var shouldBeNull: String? = null
         var error: KarhooError? = null
 
         runBlocking {
@@ -64,7 +64,7 @@ class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun `get Adyen payments call failure returns an error`() {
-        var shouldBeNull: AdyenPaymentsResponse? = null
+        var shouldBeNull: String? = null
         var error: KarhooError? = null
         whenever(apiTemplate.getAdyenPayments(adyenPaymentsRequest))
                 .thenReturn(CompletableDeferred(Resource.Failure(KarhooError.InternalSDKError)))
@@ -95,7 +95,7 @@ class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
         whenever(apiTemplate.getAdyenPayments(any()))
                 .thenReturn(CompletableDeferred(Resource.Success(adyenPaymentsResponse)))
 
-        var adyenPaymentsResponse: AdyenPaymentsResponse? = null
+        var adyenPaymentsResponse: String? = null
 
         interactor.adyenPaymentsRequest = adyenPaymentsRequest
 
