@@ -15,6 +15,7 @@ import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.Date
 
 @Module
@@ -31,6 +32,7 @@ class NetworkModule {
         val retrofit = Retrofit.Builder()
                 .baseUrl(environmentDetails.host)
                 .client(client)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(SealedCoroutineCallAdapterFactory(analytics))
                 .build()

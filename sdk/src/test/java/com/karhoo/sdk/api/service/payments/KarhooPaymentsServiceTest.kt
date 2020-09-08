@@ -93,8 +93,7 @@ class KarhooPaymentsServiceTest {
      */
     @Test
     fun getAdyenPaymentsCallWhenGettingAdyenPayments() {
-        val request: JSONObject = JSONObject()
-        val call = service.getAdyenPayments(request)
+        val call = service.getAdyenPayments("request")
         assertNotNull(call)
     }
 }

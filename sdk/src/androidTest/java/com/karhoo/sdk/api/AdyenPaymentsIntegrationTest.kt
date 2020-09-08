@@ -311,14 +311,6 @@ class AdyenPaymentsIntegrationTest {
     }
 
     companion object {
-        /*val request: AdyenPaymentsRequest = AdyenPaymentsRequest(
-                paymentsPayload = AdyenPaymentsRequestPayload(
-                        amount = AdyenAmount(currency = "GBP", value = 100.00),
-                        merchantAccount = "AB123",
-                        storedPaymentMethod = AdyenStoredPaymentMethod(),
-                        reference = "12345",
-                        returnUrl = "http://google.com"),
-                returnUrlSuffix = "return_url_suffix"*/
-        val request = JSONObject()
+        val request = ""
     }
 }

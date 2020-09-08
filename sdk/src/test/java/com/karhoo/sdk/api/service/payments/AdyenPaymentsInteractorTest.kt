@@ -20,7 +20,7 @@ import org.junit.Test
 
 class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
 
-    private val adyenPaymentsRequest: JSONObject = mock()
+    private val adyenPaymentsRequest: String = ""
     private val adyenPaymentsResponse: ResponseBody = mock()
 
     private lateinit var interactor: AdyenPaymentsInteractor

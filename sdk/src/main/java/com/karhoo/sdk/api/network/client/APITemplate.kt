@@ -198,8 +198,9 @@ interface APITemplate {
     fun getPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
             Deferred<Resource<ResponseBody>>
 
+    @Headers("Content-Type: application/json")
     @POST(GET_ADYEN_PAYMENTS_METHOD)
-    fun getAdyenPayments(@Body adyenPaymentsRequest: JSONObject):
+    fun getAdyenPayments(@Body adyenPaymentsRequest: String):
             Deferred<Resource<ResponseBody>>
 
     @POST
