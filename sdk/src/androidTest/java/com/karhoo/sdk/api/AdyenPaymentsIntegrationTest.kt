@@ -105,7 +105,7 @@ class AdyenPaymentsIntegrationTest {
      * When:    The call is successful but with no body
      * Then:    A blank object should be returned
      **/
-//    @Test
+    @Test
     fun blankBodyReturnsDefaultObject() {
         serverRobot {
             getAdyenPaymentsResponse(code = HTTP_CREATED, response = NO_BODY)
