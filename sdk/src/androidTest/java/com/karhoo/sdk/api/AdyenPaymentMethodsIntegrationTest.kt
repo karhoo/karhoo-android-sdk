@@ -2,7 +2,6 @@ package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENT_METHODS
@@ -103,36 +102,10 @@ class AdyenPaymentMethodsIntegrationTest {
 
     /**
      * Given:   Adyen payment methods are retrieved
-     * When:    The call is successful but with bad json
-     * Then:    A blank object should be returned
-     **/
-//    @Test
-    fun badJsonSuccessReturnsBlankResult() {
-        serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_CREATED, response = INVALID_JSON)
-        }
-
-        var result: KarhooError? = null
-
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
-            when (it) {
-                is Resource.Failure -> {
-                    result = it.error
-                    latch.countDown()
-                }
-            }
-        }
-
-        latch.await(2, TimeUnit.SECONDS)
-        assertThat(result).isEqualTo(KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   Adyen payment methods are retrieved
      * When:    The call is successful but with no body
      * Then:    A blank object should be returned
      **/
-//    @Test
+    @Test
     fun blankBodyReturnsDefaultObject() {
         serverRobot {
             getAdyenPaymentMethodsResponse(code = HTTP_CREATED, response = NO_BODY)

@@ -12,7 +12,6 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Assertions.assertThat
-import org.json.JSONObject
 import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -62,7 +61,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: String? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -88,7 +87,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -98,32 +97,6 @@ class AdyenPaymentsIntegrationTest {
         }
 
         latch.await(200, TimeUnit.SECONDS)
-        assertThat(result).isEqualTo(KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   Adyen payments are retrieved
-     * When:    The call is successful but with bad json
-     * Then:    A blank object should be returned
-     **/
-//    @Test
-    fun badJsonSuccessReturnsBlankResult() {
-        serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_CREATED, response = INVALID_JSON)
-        }
-
-        var result: KarhooError? = null
-
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
-            when (it) {
-                is Resource.Failure -> {
-                    result = it.error
-                    latch.countDown()
-                }
-            }
-        }
-
-        latch.await(2, TimeUnit.SECONDS)
         assertThat(result).isEqualTo(KarhooError.Unexpected)
     }
 
@@ -140,7 +113,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -167,7 +140,7 @@ class AdyenPaymentsIntegrationTest {
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -193,7 +166,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -219,7 +192,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -245,7 +218,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -271,7 +244,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -297,7 +270,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -311,6 +284,6 @@ class AdyenPaymentsIntegrationTest {
     }
 
     companion object {
-        val request = ""
+        const val REQUEST = "{\"field1\":\"some text\", \"field2\":\"some more text\"}"
     }
 }

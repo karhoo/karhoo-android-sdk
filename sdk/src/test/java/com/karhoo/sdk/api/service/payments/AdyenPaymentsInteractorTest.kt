@@ -12,7 +12,6 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -20,7 +19,7 @@ import org.junit.Test
 
 class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
 
-    private val adyenPaymentsRequest: String = ""
+    private val adyenPaymentsRequest: String = "{\"field1\":\"some text\", \"field2\":\"some more text\"}"
     private val adyenPaymentsResponse: ResponseBody = mock()
 
     private lateinit var interactor: AdyenPaymentsInteractor
