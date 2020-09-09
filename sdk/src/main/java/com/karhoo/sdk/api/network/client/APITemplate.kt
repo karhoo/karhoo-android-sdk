@@ -92,6 +92,7 @@ interface APITemplate {
         const val AUTH_REFRESH_METHOD = "/oauth/v2/token"
 
         const val GET_PROVIDERS_METHOD = "/v3/payments/providers"
+        const val GET_ADYEN_PUBLIC_KEY_METHOD = "/v3/payments/adyen/public-key"
         const val GET_ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
         const val GET_ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/payments"
 
@@ -194,8 +195,11 @@ interface APITemplate {
     @GET(GET_PROVIDERS_METHOD)
     fun getPaymentProvider(): Deferred<Resource<PaymentProvider>>
 
+    @GET(GET_ADYEN_PUBLIC_KEY_METHOD)
+    fun getAdyenPublicKey(): Deferred<Resource<String>>
+
     @POST(GET_ADYEN_PAYMENT_METHODS_METHOD)
-    fun getPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
+    fun getAdyenPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
             Deferred<Resource<ResponseBody>>
 
     @Headers("Content-Type: application/json")

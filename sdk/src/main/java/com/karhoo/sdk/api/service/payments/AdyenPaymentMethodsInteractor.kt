@@ -26,7 +26,7 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
     }
 
     private suspend fun getPaymentMethods(): Resource<String> {
-        return when (val result = apiTemplate.getPaymentMethods(AdyenPaymentMethodsRequest())
+        return when (val result = apiTemplate.getAdyenPaymentMethods(AdyenPaymentMethodsRequest())
                 .await()) {
             is Resource.Success -> {
                 val responseBody = result.data.string()

@@ -37,6 +37,9 @@ class KarhooPaymentsService : PaymentsService {
 
     override fun getPaymentProvider(): Call<PaymentProvider> = PaymentProviderInteractor(credentialsManager, userManager, apiTemplate).apply {}
 
+    override fun getAdyenPublicKey(): Call<String> = AdyenPublicKeyInteractor(credentialsManager,
+                                                                              apiTemplate).apply {}
+
     override fun getAdyenPaymentMethods(): Call<String> =
             AdyenPaymentMethodsInteractor(credentialsManager, apiTemplate).apply {}
 

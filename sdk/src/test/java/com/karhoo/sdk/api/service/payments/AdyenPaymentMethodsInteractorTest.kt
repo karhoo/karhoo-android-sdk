@@ -38,7 +38,7 @@ class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
         var shouldBeNull: String? = null
         var error: KarhooError? = null
         var expectedError: KarhooError = KarhooError.InternalSDKError
-        whenever(apiTemplate.getPaymentMethods(any()))
+        whenever(apiTemplate.getAdyenPaymentMethods(any()))
                 .thenReturn(CompletableDeferred(Resource.Failure(expectedError)))
 
         runBlocking {
@@ -62,7 +62,7 @@ class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
      */
     @Test
     fun `successful get Adyen payment methods response returns Adyen payment methods`() {
-        whenever(apiTemplate.getPaymentMethods(any()))
+        whenever(apiTemplate.getAdyenPaymentMethods(any()))
                 .thenReturn(CompletableDeferred(Resource.Success(adyenPaymentMethods)))
 
         var adyenPaymentMethods: String? = null

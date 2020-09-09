@@ -18,6 +18,8 @@ interface PaymentsService {
 
     fun getPaymentProvider(): Call<PaymentProvider>
 
+    fun getAdyenPublicKey(): Call<String>
+
     fun getAdyenPaymentMethods(): Call<String>
 
     fun getAdyenPayments(request: String): Call<String>
