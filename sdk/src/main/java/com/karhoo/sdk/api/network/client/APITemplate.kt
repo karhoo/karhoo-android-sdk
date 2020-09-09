@@ -155,18 +155,23 @@ interface APITemplate {
     @GET(GUEST_BOOKING_DETAILS_METHOD)
     fun guestTripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>
 
+    @GET(GUEST_BOOKING_DETAILS_METHOD)
+    fun guestTripDetails(@Path(identifierId) id: String): Deferred<Resource<TripInfo>>
+
     @GET(BOOKING_STATUS_METHOD)
     fun status(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<TripState>>
 
     @GET(GUEST_BOOKING_STATUS_METHOD)
     fun guestBookingStatus(@Path(IDENTIFIER_ID) tripIdentifier: String): Deferred<Resource<TripState>>
 
+    @GET(GUEST_BOOKING_STATUS_METHOD)
+    fun guestBookingStatus(@Path(identifierId) tripIdentifier: String): Deferred<Resource<TripState>>
+
     @GET(TRACK_DRIVER_METHOD)
     fun trackDriver(@Path(IDENTIFIER_ID) tripIdentifierId: String): Deferred<Resource<DriverTrackingInfo>>
 
     @GET(GUEST_BOOKING_TRACK_DRIVER_METHOD)
-    fun guestBookingTrackDriver(@Path(IDENTIFIER_ID) tripIdentifier: String):
-            Deferred<Resource<DriverTrackingInfo>>
+    fun guestBookingTrackDriver(@Path(IDENTIFIER_ID) tripIdentifier: String): Deferred<Resource<DriverTrackingInfo>>
 
     @POST(BOOKING_HISTORY_METHOD)
     fun tripHistory(@Body tripHistoryRequest: TripSearch): Deferred<Resource<TripList>>
@@ -176,6 +181,9 @@ interface APITemplate {
 
     @POST(CANCEL_GUEST_BOOKING_METHOD)
     fun cancelGuestBooking(@Path(IDENTIFIER_ID) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
+
+    @POST(CANCEL_GUEST_BOOKING_METHOD)
+    fun cancelGuestBooking(@Path(identifierId) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
 
     @POST(SDK_INITIALISER_METHOD)
     fun sdkInitToken(@Query(IDENTIFIER_ORG) organisationId: String, @Query(IDENTIFIER_CURRENCY) currency: String): Deferred<Resource<BraintreeSDKToken>>

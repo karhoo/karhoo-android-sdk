@@ -1,5 +1,6 @@
 package com.karhoo.sdk.api.service.trips
 
+import android.content.Context
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.network.response.Resource
