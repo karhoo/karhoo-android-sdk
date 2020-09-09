@@ -58,6 +58,7 @@ import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethodsGroup
 import com.karhoo.sdk.api.model.adyen.AdyenPayments
 import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
+import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
 import com.karhoo.sdk.api.network.request.QuoteQTA
@@ -304,6 +305,15 @@ class ServerRobot {
                 delayInMillis = delayInMillis,
                 endpoint = APITemplate.FARE_DETAILS.replace("{$IDENTIFIER_ID}", tripId)
                        )
+    }
+
+    fun getAdyenPublicKeyResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockGetResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.GET_ADYEN_PUBLIC_KEY_METHOD,
+                delayInMillis = delayInMillis
+                        )
     }
 
     fun getAdyenPaymentMethodsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
@@ -760,6 +770,8 @@ class ServerRobot {
         val GROUP_CARD = AdyenPaymentMethodsGroup(name = "Credit Card",
                                                   types = listOf("amex", "diners", "maestro", "visa"),
                                                   groupType = "type")
+
+        val ADYEN_PUBLIC_KEY = AdyenPublicKey(publicKey = "12234455")
 
         val ADYEN_PAYMENT_METHODS = AdyenPaymentMethods(
                 groups = listOf(

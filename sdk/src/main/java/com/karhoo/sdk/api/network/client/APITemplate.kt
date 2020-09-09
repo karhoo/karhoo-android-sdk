@@ -19,6 +19,7 @@ import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.model.VehiclesV2
 import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
+import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AvailabilityRequest
@@ -196,7 +197,7 @@ interface APITemplate {
     fun getPaymentProvider(): Deferred<Resource<PaymentProvider>>
 
     @GET(GET_ADYEN_PUBLIC_KEY_METHOD)
-    fun getAdyenPublicKey(): Deferred<Resource<String>>
+    fun getAdyenPublicKey(): Deferred<Resource<AdyenPublicKey>>
 
     @POST(GET_ADYEN_PAYMENT_METHODS_METHOD)
     fun getAdyenPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):

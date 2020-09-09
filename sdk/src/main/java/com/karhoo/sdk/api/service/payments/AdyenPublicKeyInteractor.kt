@@ -1,6 +1,7 @@
 package com.karhoo.sdk.api.service.payments
 
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BaseCallInteractor
@@ -15,15 +16,15 @@ internal class AdyenPublicKeyInteractor @Inject constructor(credentialsManager: 
                                                            private val apiTemplate: APITemplate,
                                                            private val context:
                                                            CoroutineContext = Dispatchers.Main)
-    : BaseCallInteractor<String>(true, credentialsManager, apiTemplate, context) {
+    : BaseCallInteractor<AdyenPublicKey>(true, credentialsManager, apiTemplate, context) {
 
-    override fun createRequest(): Deferred<Resource<String>> {
+    override fun createRequest(): Deferred<Resource<AdyenPublicKey>> {
         return GlobalScope.async {
             return@async getPublicKey()
         }
     }
 
-    private suspend fun getPublicKey(): Resource<String> {
+    private suspend fun getPublicKey(): Resource<AdyenPublicKey> {
         return when (val result = apiTemplate.getAdyenPublicKey()
                 .await()) {
             is Resource.Success -> Resource.Success(data = result.data)
