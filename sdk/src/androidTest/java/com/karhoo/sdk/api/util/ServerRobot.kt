@@ -260,15 +260,6 @@ class ServerRobot {
                         )
     }
 
-    fun cancelGuestBookingResponse(code: Int, response: Any, delayInMillis: Int = 0, trip: String) {
-        mockPostResponse(
-                code = code,
-                response = response,
-                endpoint = APITemplate.CANCEL_GUEST_BOOKING_METHOD.replace("{$identifierId}", trip),
-                delayInMillis = delayInMillis
-                        )
-    }
-
     fun driverTrackingResponse(code: Int, response: Any, delayInMillis: Int = 0, trip: String) {
         mockGetResponse(
                 code = code,
@@ -284,16 +275,6 @@ class ServerRobot {
                 code = code,
                 response = response,
                 endpoint = APITemplate.GUEST_BOOKING_TRACK_DRIVER_METHOD.replace("{$IDENTIFIER_ID}", trip),
-                delayInMillis = delayInMillis
-                       )
-    }
-
-    fun driverTrackingGuestBookingResponse(code: Int, response: Any, delayInMillis: Int = 0, trip:
-    String) {
-        mockGetResponse(
-                code = code,
-                response = response,
-                endpoint = APITemplate.GUEST_BOOKING_TRACK_DRIVER_METHOD.replace("{$identifierId}", trip),
                 delayInMillis = delayInMillis
                        )
     }

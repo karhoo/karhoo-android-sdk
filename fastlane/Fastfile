@@ -6,7 +6,7 @@ default_platform :android
 
 platform :android do
   before_all do
-    ENV["SLACK_URL"] = ""
+    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
   end
 
   desc "Runs all the tests"
