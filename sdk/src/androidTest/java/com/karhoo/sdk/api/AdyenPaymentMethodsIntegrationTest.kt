@@ -2,7 +2,6 @@ package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENT_METHODS
@@ -14,6 +13,7 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -59,7 +59,7 @@ class AdyenPaymentMethodsIntegrationTest {
             getAdyenPaymentMethodsResponse(HTTP_CREATED, ADYEN_PAYMENT_METHODS)
         }
 
-        var result: AdyenPaymentMethods? = null
+        var result: String? = null
 
         KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
             when (it) {
@@ -71,7 +71,7 @@ class AdyenPaymentMethodsIntegrationTest {
         }
 
         latch.await(5, TimeUnit.SECONDS)
-        assertThat(result).isNotNull
+        assertNotNull(result)
     }
 
     /**
@@ -97,32 +97,6 @@ class AdyenPaymentMethodsIntegrationTest {
         }
 
         latch.await(200, TimeUnit.SECONDS)
-        assertThat(result).isEqualTo(KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   Adyen payment methods are retrieved
-     * When:    The call is successful but with bad json
-     * Then:    A blank object should be returned
-     **/
-    @Test
-    fun badJsonSuccessReturnsBlankResult() {
-        serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_CREATED, response = INVALID_JSON)
-        }
-
-        var result: KarhooError? = null
-
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
-            when (it) {
-                is Resource.Failure -> {
-                    result = it.error
-                    latch.countDown()
-                }
-            }
-        }
-
-        latch.await(2, TimeUnit.SECONDS)
         assertThat(result).isEqualTo(KarhooError.Unexpected)
     }
 

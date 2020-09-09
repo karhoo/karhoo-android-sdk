@@ -3,10 +3,7 @@ package com.karhoo.sdk.api.service.payments
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
-import com.karhoo.sdk.api.network.request.AdyenPaymentsRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.karhoo.sdk.call.Call
@@ -21,7 +18,7 @@ interface PaymentsService {
 
     fun getPaymentProvider(): Call<PaymentProvider>
 
-    fun getAdyenPaymentMethods(): Call<AdyenPaymentMethods>
+    fun getAdyenPaymentMethods(): Call<String>
 
-    fun getAdyenPayments(request: AdyenPaymentsRequest): Call<AdyenPaymentsResponse>
+    fun getAdyenPayments(request: String): Call<String>
 }

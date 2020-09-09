@@ -9,6 +9,7 @@ import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.Payer
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.nhaarman.mockitokotlin2.mock
+import org.json.JSONObject
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -92,8 +93,7 @@ class KarhooPaymentsServiceTest {
      */
     @Test
     fun getAdyenPaymentsCallWhenGettingAdyenPayments() {
-        val request: AdyenPaymentsRequest = mock()
-        val call = service.getAdyenPayments(request)
+        val call = service.getAdyenPayments("request")
         assertNotNull(call)
     }
 }
