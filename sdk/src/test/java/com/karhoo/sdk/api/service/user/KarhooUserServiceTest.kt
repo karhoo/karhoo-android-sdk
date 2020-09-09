@@ -44,9 +44,10 @@ class KarhooUserServiceTest {
             avatarUrl = "n/a"
                                                                    )
 
+    private val userStore: KarhooUserStore = mock()
+    // Needed for InjectMocks
     private val credentialsManager: CredentialsManager = mock()
     private val userManager: UserManager = mock()
-    private val userStore: KarhooUserStore = mock()
     private val apiTemplate: APITemplate = mock()
     private val analytics: Analytics = mock()
 

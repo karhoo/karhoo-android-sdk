@@ -10,7 +10,7 @@ import com.github.tomakehurst.wiremock.stubbing.Scenario
 import com.google.gson.Gson
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.client.APITemplate.Companion.identifierId
+import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
 import com.karhoo.sdk.api.network.observable.Observer
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
@@ -873,13 +873,13 @@ class QuotesIntegrationTest {
                 .inScenario(scenario)
                 .willReturn(quoteListId))
 
-        givenThat(get(urlEqualTo(APITemplate.QUOTES_METHOD.replace("{$identifierId}", TestData.QUOTE_LIST_ID)))
+        givenThat(get(urlEqualTo(APITemplate.QUOTES_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
                 .inScenario(scenario)
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willSetStateTo(stageTwo)
                 .willReturn(quotesListError))
 
-        givenThat(get(urlEqualTo(APITemplate.QUOTES_METHOD.replace("{$identifierId}", TestData.QUOTE_LIST_ID)))
+        givenThat(get(urlEqualTo(APITemplate.QUOTES_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
                 .inScenario(scenario)
                 .whenScenarioStateIs(stageTwo)
                 .willReturn(quotesListSuccess))

@@ -5,7 +5,7 @@ import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.UserInfo
 
-object AnalyticsManager : Analytics {
+object AnalyticsManager : Analytics, AnalyticsPayload {
 
     private var analytics: MutableSet<AnalyticProvider> = mutableSetOf()
 
@@ -14,6 +14,7 @@ object AnalyticsManager : Analytics {
     override var sessionId: String = ""
     override var usersLatLng: Position? = null
     override var userInfo: UserInfo? = null
+    private var isGuestMode: Boolean = false
 
     override fun initialise() {
         KarhooSDKConfigurationProvider.configuration
@@ -26,9 +27,14 @@ object AnalyticsManager : Analytics {
         fireEvent(event, Payloader.Builder.builder.build())
     }
 
+    override fun setGuestMode(isGuestMode: Boolean) {
+        this.isGuestMode = isGuestMode
+    }
+
     override fun fireEvent(event: Event, payload: Payloader) {
         payload.apply {
             setSessionTokens(deviceId, sessionId)
+            setGuestMode(isGuestMode)
             userInfo?.let { setUser(it) }
             usersLatLng?.let { setUserLatLng(it) }
         }

@@ -1,45 +1,27 @@
 package com.karhoo.sdk.api.service.address
 
-import android.content.Context
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.LocationInfo
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.response.Resource
-import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class LocationInfoInteractorTest {
-
-    internal var credentialsManager: CredentialsManager = mock()
-    internal var apiTemplate: APITemplate = mock()
-    private val applicationContext: Context = mock()
-    internal var context: CoroutineContext = Unconfined
+class LocationInfoInteractorTest : BaseKarhooUserInteractorTest() {
 
     private lateinit var interactor: LocationInfoInteractor
 
     @Before
-    fun setUp() {
-        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
-                                                                                   applicationContext,
-                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
+    override fun setUp() {
+        super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = LocationInfoInteractor(credentialsManager, apiTemplate, context)
     }

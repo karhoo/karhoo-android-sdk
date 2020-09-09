@@ -8,6 +8,8 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.karhoo.sdk.api.model.Address
+import com.karhoo.sdk.api.model.Availability
+import com.karhoo.sdk.api.model.AvailabilityVehicle
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.Categories
@@ -18,8 +20,10 @@ import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.FareBreakdown
 import com.karhoo.sdk.api.model.FleetInfo
 import com.karhoo.sdk.api.model.LocationInfo
+import com.karhoo.sdk.api.model.LoyaltyProgramme
 import com.karhoo.sdk.api.model.MeetingPoint
 import com.karhoo.sdk.api.model.Organisation
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.PickupType
 import com.karhoo.sdk.api.model.Place
@@ -28,11 +32,15 @@ import com.karhoo.sdk.api.model.Poi
 import com.karhoo.sdk.api.model.PoiDetails
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.Price
+import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
+import com.karhoo.sdk.api.model.QuotePrice
 import com.karhoo.sdk.api.model.QuoteSource
 import com.karhoo.sdk.api.model.QuoteType
+import com.karhoo.sdk.api.model.QuoteV2
+import com.karhoo.sdk.api.model.QuoteVehicle
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
 import com.karhoo.sdk.api.model.TripLocationInfo
@@ -40,9 +48,19 @@ import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.TripStatus
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicle
+import com.karhoo.sdk.api.model.VehicleAttributes
 import com.karhoo.sdk.api.model.Vehicles
+import com.karhoo.sdk.api.model.VehiclesV2
+import com.karhoo.sdk.api.model.adyen.AdyenDetail
+import com.karhoo.sdk.api.model.adyen.AdyenItem
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethod
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethodsGroup
+import com.karhoo.sdk.api.model.adyen.AdyenPayments
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.client.APITemplate.Companion.identifierId
+import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
+import com.karhoo.sdk.api.network.request.QuoteQTA
 import java.util.Date
 
 fun serverRobot(func: ServerRobot.() -> Unit) = ServerRobot().apply { func() }
@@ -165,20 +183,42 @@ class ServerRobot {
                         )
     }
 
-    fun quoteIdResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+    fun quoteIdResponse(code: Int, response: Any, endpoint: String = APITemplate.QUOTE_REQUEST_METHOD,
+                        delayInMillis: Int = 0) {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.QUOTE_REQUEST_METHOD,
+                endpoint = endpoint,
                 delayInMillis = delayInMillis
                         )
     }
 
-    fun quotesResponse(code: Int, response: Any, delayInMillis: Int = 0, quoteId: String = QUOTE_ID.quoteId) {
+    fun quotesResponse(code: Int, response: Any, endpoint: String = APITemplate.QUOTES_METHOD, delayInMillis: Int = 0,
+                       quoteId: String = QUOTE_ID.quoteId) {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.QUOTES_METHOD.replace("{$identifierId}", quoteId),
+                endpoint = endpoint.replace("{$IDENTIFIER_ID}", quoteId),
+                delayInMillis = delayInMillis
+                       )
+    }
+
+    fun quoteIdResponseV2(code: Int, response: Any, endpoint: String = APITemplate
+            .QUOTES_V2_REQUEST_METHOD, delayInMillis: Int = 0) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = endpoint,
+                delayInMillis = delayInMillis
+                        )
+    }
+
+    fun quotesResponseV2(code: Int, response: Any, endpoint: String = APITemplate.QUOTES_V2_METHOD,
+                         delayInMillis: Int = 0, quoteId: String = QUOTE_ID.quoteId) {
+        mockGetResponse(
+                code = code,
+                response = response,
+                endpoint = endpoint.replace("{$IDENTIFIER_ID}", quoteId),
                 delayInMillis = delayInMillis
                        )
     }
@@ -197,7 +237,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.BOOKING_DETAILS_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.BOOKING_DETAILS_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                        )
     }
@@ -206,7 +246,7 @@ class ServerRobot {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.CANCEL_BOOKING_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.CANCEL_BOOKING_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                         )
     }
@@ -215,7 +255,7 @@ class ServerRobot {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.CANCEL_GUEST_BOOKING_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.CANCEL_GUEST_BOOKING_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                         )
     }
@@ -224,7 +264,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.TRACK_DRIVER_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.TRACK_DRIVER_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                        )
     }
@@ -234,7 +274,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.GUEST_BOOKING_TRACK_DRIVER_METHOD.replace("{$identifierId}", trip),
+                endpoint = APITemplate.GUEST_BOOKING_TRACK_DRIVER_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                        )
     }
@@ -243,7 +283,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.BOOKING_STATUS_METHOD.replace("{$identifierId}", tripId),
+                endpoint = APITemplate.BOOKING_STATUS_METHOD.replace("{$IDENTIFIER_ID}", tripId),
                 delayInMillis = delayInMillis
                        )
     }
@@ -262,8 +302,26 @@ class ServerRobot {
                 code = code,
                 response = response,
                 delayInMillis = delayInMillis,
-                endpoint = APITemplate.FARE_DETAILS.replace("{$identifierId}", tripId)
+                endpoint = APITemplate.FARE_DETAILS.replace("{$IDENTIFIER_ID}", tripId)
                        )
+    }
+
+    fun getAdyenPaymentMethodsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.GET_ADYEN_PAYMENT_METHODS_METHOD,
+                delayInMillis = delayInMillis
+                        )
+    }
+
+    fun getAdyenPaymentsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.GET_ADYEN_PAYMENTS_METHOD,
+                delayInMillis = delayInMillis
+                        )
     }
 
     fun authRevokeResponse(code: Int, response: Any, delayInMillis: Int = 0, token: String) {
@@ -293,6 +351,13 @@ class ServerRobot {
                         response = response,
                         delayInMillis = delayInMillis,
                         endpoint = APITemplate.AUTH_USER_INFO_METHOD)
+    }
+
+    fun getPaymentProviderMethodsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockGetResponse(code = code,
+                        response = response,
+                        delayInMillis = delayInMillis,
+                        endpoint = APITemplate.GET_PROVIDERS_METHOD)
     }
 
     private fun mockPostResponse(code: Int,
@@ -390,7 +455,48 @@ class ServerRobot {
                                  ),
                 status = "PROGRESSING",
                 id = QUOTE_ID.quoteId,
-                categoryNames = AVAILABILITIES.categoryNames.orEmpty())
+                categoryNames = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"))
+
+        val QUOTE_PRICE = QuotePrice(currencyCode = "GBP",
+                                     highPrice = 779,
+                                     lowPrice = 778)
+
+        val QUOTE_FLEET = FleetInfo(fleetId = "someFleetId",
+                                    name = "someFleetName",
+                                    logoUrl = "someLogoUrl",
+                                    description = "Some fleet description",
+                                    phoneNumber = "+123",
+                                    termsConditionsUrl = "someTermsUrl")
+
+        val QUOTE_VEHICLE = QuoteVehicle(vehicleClass = "Saloon",
+                                         vehicleQta = QuoteQTA(highMinutes = 10, lowMinutes = 1))
+
+        val VEHICLE_ATTRIBUTES = VehicleAttributes(passengerCapacity = 4,
+                                                   luggageCapacity = 2)
+
+        val QUOTE_V2 = QuoteV2(id = "someQuoteId",
+                               quoteType = QuoteType.ESTIMATED,
+                               quoteSource = QuoteSource.FLEET,
+                               price = QUOTE_PRICE,
+                               fleet = QUOTE_FLEET,
+                               pickupType = PickupType.CURBSIDE,
+                               vehicle = QUOTE_VEHICLE,
+                               vehicleAttributes = VEHICLE_ATTRIBUTES)
+
+        val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto")))
+
+        val VEHICLES_V2 = VehiclesV2(
+                status = "PROGRESSING",
+                id = QUOTE_ID.quoteId,
+                availability = AVAILABILITY,
+                quotes = listOf(
+                        QUOTE_V2,
+                        QUOTE_V2.copy(
+                                id = "someOtherQuoteId",
+                                quoteSource = QuoteSource.FLEET,
+                                quoteType = QuoteType.METERED,
+                                fleet = QUOTE_FLEET.copy(fleetId = "someOtherFleetId"))
+                               ))
 
         val QUOTES = QuoteList(
                 categories = mapOf(
@@ -414,8 +520,7 @@ class ServerRobot {
                         "Exec" to listOf(QUOTE),
                         "Electric" to emptyList(),
                         "Moto" to emptyList()),
-                id = QUOTE_ID
-                              )
+                id = QUOTE_ID)
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_ID.quoteId),
@@ -426,6 +531,7 @@ class ServerRobot {
                         "Exec" to emptyList(),
                         "Electric" to emptyList(),
                         "Moto" to emptyList()))
+
         /**
          *
          * Payments
@@ -438,6 +544,23 @@ class ServerRobot {
 
         val PAYMENT_TOKEN = BraintreeSDKToken(
                 token = "njfdeilnvbflinvbiurnceernnvbrgtuverosa")
+
+        val LOYALTY_PROGRAMMES = LoyaltyProgramme(
+                loyaltyID = "JA02121981",
+                loyaltyName = "someLoyaltyName"
+                                                 )
+
+        val PAYMENT_PROVIDER = PaymentProvider(
+                Provider(
+                        id = "Provider1234",
+                        loyalty = listOf(
+                                LOYALTY_PROGRAMMES,
+                                LOYALTY_PROGRAMMES.copy(
+                                        loyaltyID = "CO49501318",
+                                        loyaltyName = "aDifferentLoyaltyName"
+                                                       )
+                                        ))
+                                              )
 
         /**
          *
@@ -543,7 +666,6 @@ class ServerRobot {
                 tripState = TripStatus.DRIVER_EN_ROUTE,
                 fleetInfo = FleetInfo(
                         name = "Antelope [Zoo]",
-                        email = "lova@karhoo.com",
                         description = "Zoo Test Fleet 5",
                         fleetId = "d4e6e7df-76ac-46dd-89c9-5968949ed10a",
                         logoUrl = "https://cdn.karhoo.com/d/images/logos/cc775eda-950d-4a77-aa83-172d487a4cbf.png",
@@ -617,6 +739,38 @@ class ServerRobot {
         val FARE = Fare(
                 state = "PENDING",
                 breakdown = FARE_BREAKDOWN)
+
+        val DETAIL = AdyenDetail(
+                items = listOf(
+                        AdyenItem(id = "87", name = "Credit Agricole PBL"),
+                        AdyenItem(id = "89", name = "Santander")),
+                key = "issuer",
+                optional = true,
+                type = "select"
+                                )
+
+        val ADYEN_PAYMENT_METHOD = AdyenPaymentMethod(
+                brands = listOf("amex", "diners", "maestro", "visa"),
+                details = listOf(DETAIL, DETAIL.copy()),
+                name = "",
+                supportsRecurring = true,
+                type = ""
+                                                     )
+
+        val GROUP_CARD = AdyenPaymentMethodsGroup(name = "Credit Card",
+                                                  types = listOf("amex", "diners", "maestro", "visa"),
+                                                  groupType = "type")
+
+        val ADYEN_PAYMENT_METHODS = AdyenPaymentMethods(
+                groups = listOf(
+                        GROUP_CARD,
+                        GROUP_CARD.copy(name = "AliPay", types = listOf("alipay_wap"))),
+                paymentMethods = listOf(ADYEN_PAYMENT_METHOD, ADYEN_PAYMENT_METHOD.copy())
+                                                       )
+
+        val ADYEN_PAYMENTS = AdyenPaymentsResponse(
+                payload = AdyenPayments(),
+                transactionId = "1234")
 
         /**
          *

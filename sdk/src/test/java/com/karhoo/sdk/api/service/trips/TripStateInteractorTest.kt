@@ -1,43 +1,25 @@
 package com.karhoo.sdk.api.service.trips
 
-import android.content.Context
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.TripState
-import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
-import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
-import com.nhaarman.mockitokotlin2.mock
+import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import kotlin.coroutines.CoroutineContext
 
-@RunWith(MockitoJUnitRunner::class)
-class TripStateInteractorTest {
-
-    private val credentialsManager: CredentialsManager = mock()
-    private val apiTemplate: APITemplate = mock()
-    private val applicationContext: Context = mock()
-    private val context: CoroutineContext = Unconfined
+class TripStateInteractorTest : BaseKarhooUserInteractorTest() {
 
     private lateinit var interactor: TripStateInteractor
 
     @Before
-    fun setUp() {
-        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
-                                                                                   applicationContext,
-                                                                                   authenticationMethod = AuthenticationMethod.KarhooUser()))
+    override fun setUp() {
+        super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
         interactor = TripStateInteractor(credentialsManager, apiTemplate, context)
     }

@@ -161,7 +161,6 @@ class TestData {
                 fleetId = "some fleet id",
                 name = "some fleet name",
                 phoneNumber = "some phone number",
-                email = "dispatch-co@karhoo.com",
                 description = "some description",
                 logoUrl = "some logo url",
                 termsConditionsUrl = "some terms and conditions")

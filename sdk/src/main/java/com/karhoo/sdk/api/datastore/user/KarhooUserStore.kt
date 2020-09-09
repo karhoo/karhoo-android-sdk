@@ -1,6 +1,8 @@
 package com.karhoo.sdk.api.datastore.user
 
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.PaymentProvider
+import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.UserInfo
 import javax.inject.Inject
 
@@ -33,6 +35,12 @@ class KarhooUserStore : UserStore {
         get() = userManager.savedPaymentInfo
         set(value) {
             value?.let { userManager.savedPaymentInfo = value }
+        }
+
+    override var paymentProvider: Provider?
+        get() = userManager.paymentProvider
+        set(value) {
+            value?.let { userManager.paymentProvider = value }
         }
 
 }

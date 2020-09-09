@@ -25,7 +25,6 @@ import java.net.HttpURLConnection.HTTP_CREATED
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-
 /**
  * Instrumented test, which will execute on an Android device.
  *

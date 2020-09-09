@@ -7,6 +7,7 @@ import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.LocationInfo
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.Places
 import com.karhoo.sdk.api.model.QuoteId
@@ -15,14 +16,20 @@ import com.karhoo.sdk.api.model.TripList
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicles
+import com.karhoo.sdk.api.model.VehiclesV2
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
 import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AvailabilityRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
+import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
+import com.karhoo.sdk.api.network.request.AdyenPaymentsRequest
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
 import com.karhoo.sdk.api.network.request.QuotesRequest
+import com.karhoo.sdk.api.network.request.QuotesV2Request
 import com.karhoo.sdk.api.network.request.RefreshTokenRequest
 import com.karhoo.sdk.api.network.request.ResetPasswordRequest
 import com.karhoo.sdk.api.network.request.TripBooking
@@ -55,9 +62,13 @@ interface APITemplate {
         const val ADDRESS_AUTOCOMPLETE_METHOD = "/v1/locations/address-autocomplete"
         const val PLACE_DETAILS_METHOD = "/v1/locations/place-details"
         const val REVERSE_GEO_METHOD = "/v1/locations/reverse-geocode"
+
+        @Deprecated("Availabilities endpoint is deprecated")
         const val AVAILABILITY_METHOD = "/v1/quotes/availability"
         const val QUOTE_REQUEST_METHOD = "/v1/quotes"
         const val QUOTES_METHOD = "/v1/quotes/{id}"
+        const val QUOTES_V2_REQUEST_METHOD = "/v2/quotes"
+        const val QUOTES_V2_METHOD = "/v2/quotes/{id}"
         const val BOOKING_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
         const val GUEST_BOOKING_DETAILS_METHOD = "/v1/bookings/follow/{id}"
@@ -70,7 +81,7 @@ interface APITemplate {
         const val CANCEL_GUEST_BOOKING_METHOD = "/v1/bookings/follow/{id}/cancel"
         const val SDK_INITIALISER_METHOD = "/v2/payments/payment-methods/braintree/client-tokens"
         const val ADD_CARD_METHOD = "/v2/payments/payment-methods/braintree/add-payment-details"
-        const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-nonce"
+        const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-payment-method"
         const val FARE_DETAILS = "/v1/fares/trip/{id}"
 
         const val AUTH_TOKEN_METHOD = "/karhoo/anonymous/token-exchange"
@@ -78,12 +89,15 @@ interface APITemplate {
         const val AUTH_USER_INFO_METHOD = "/oauth/v2/userinfo"
         const val AUTH_REFRESH_METHOD = "/oauth/v2/token"
 
-        const val identifierId = "id"
-        const val identifierClient = "clientId"
-        const val identifierLatitude = "latitude"
-        const val identifierLongitude = "longitude"
-        const val identifierOrg = "organisation_id"
-        const val identifierCurrency = "currency"
+        const val GET_PROVIDERS_METHOD = "/v3/payments/providers"
+        const val GET_ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
+        const val GET_ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/payments"
+
+        const val IDENTIFIER_ID = "id"
+        const val IDENTIFIER_LATITUDE = "latitude"
+        const val IDENTIFIER_LONGITUDE = "longitude"
+        const val IDENTIFIER_ORG = "organisation_id"
+        const val IDENTIFIER_CURRENCY = "currency"
 
         private fun authHost() = EnvironmentDetails.current().authHost
     }
@@ -105,7 +119,7 @@ interface APITemplate {
     fun userProfile(): Deferred<Resource<UserInfo>>
 
     @PUT(USER_PROFILE_UPDATE_METHOD)
-    fun userProfileUpdate(@Path(identifierId) userId: String, @Body usersDetailsUpdateRequestRequest: UserDetailsUpdateRequest): Deferred<Resource<UserInfo>>
+    fun userProfileUpdate(@Path(IDENTIFIER_ID) userId: String, @Body usersDetailsUpdateRequestRequest: UserDetailsUpdateRequest): Deferred<Resource<UserInfo>>
 
     @POST(ADDRESS_AUTOCOMPLETE_METHOD)
     fun placeSearch(@Body placeSearch: PlaceSearch): Deferred<Resource<Places>>
@@ -114,50 +128,56 @@ interface APITemplate {
     fun locationInfo(@Body locationInfoRequest: LocationInfoRequest): Deferred<Resource<LocationInfo>>
 
     @GET(REVERSE_GEO_METHOD)
-    fun reverseGeocode(@Query(identifierLatitude) latitude: Double, @Query(identifierLongitude) longitude: Double): Deferred<Resource<LocationInfo>>
+    fun reverseGeocode(@Query(IDENTIFIER_LATITUDE) latitude: Double, @Query(IDENTIFIER_LONGITUDE) longitude: Double): Deferred<Resource<LocationInfo>>
 
     @POST(AVAILABILITY_METHOD)
+    @Deprecated("Availabilities endpoint is deprecated")
     fun availabilities(@Body availabilityRequest: AvailabilityRequest): Deferred<Resource<Categories>>
 
     @POST(QUOTE_REQUEST_METHOD)
     fun quotes(@Body quotesRequest: QuotesRequest): Deferred<Resource<QuoteId>>
 
     @GET(QUOTES_METHOD)
-    fun quotes(@Path(identifierId) id: String): Deferred<Resource<Vehicles>>
+    fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
+
+    @POST(QUOTES_V2_REQUEST_METHOD)
+    fun quotesv2(@Body quotesV2Request: QuotesV2Request): Deferred<Resource<QuoteId>>
+
+    @GET(QUOTES_V2_METHOD)
+    fun quotesv2(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<VehiclesV2>>
 
     @POST(BOOKING_METHOD)
     fun book(@Body tripBooking: TripBooking): Deferred<Resource<TripInfo>>
 
     @GET(BOOKING_DETAILS_METHOD)
-    fun tripDetails(@Path(identifierId) id: String): Deferred<Resource<TripInfo>>
+    fun tripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>
 
     @GET(GUEST_BOOKING_DETAILS_METHOD)
-    fun guestTripDetails(@Path(identifierId) id: String): Deferred<Resource<TripInfo>>
+    fun guestTripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>
 
     @GET(BOOKING_STATUS_METHOD)
-    fun status(@Path(identifierId) tripId: String): Deferred<Resource<TripState>>
+    fun status(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<TripState>>
 
     @GET(GUEST_BOOKING_STATUS_METHOD)
-    fun guestBookingStatus(@Path(identifierId) tripIdentifier: String): Deferred<Resource<TripState>>
+    fun guestBookingStatus(@Path(IDENTIFIER_ID) tripIdentifier: String): Deferred<Resource<TripState>>
 
     @GET(TRACK_DRIVER_METHOD)
-    fun trackDriver(@Path(identifierId) tripIdentifierId: String): Deferred<Resource<DriverTrackingInfo>>
+    fun trackDriver(@Path(IDENTIFIER_ID) tripIdentifierId: String): Deferred<Resource<DriverTrackingInfo>>
 
     @GET(GUEST_BOOKING_TRACK_DRIVER_METHOD)
-    fun guestBookingTrackDriver(@Path(identifierId) tripIdentifier: String):
-            Deferred<Resource<DriverTrackingInfo>>
+    fun guestBookingTrackDriver(@Path(IDENTIFIER_ID) tripIdentifier: String): Deferred<Resource<DriverTrackingInfo>>
 
     @POST(BOOKING_HISTORY_METHOD)
     fun tripHistory(@Body tripHistoryRequest: TripSearch): Deferred<Resource<TripList>>
 
     @POST(CANCEL_BOOKING_METHOD)
-    fun cancel(@Path(identifierId) tripId: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
+    fun cancel(@Path(IDENTIFIER_ID) tripId: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
 
     @POST(CANCEL_GUEST_BOOKING_METHOD)
-    fun cancelGuestBooking(@Path(identifierId) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
+    fun cancelGuestBooking(@Path(IDENTIFIER_ID) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
 
     @POST(SDK_INITIALISER_METHOD)
-    fun sdkInitToken(@Query(identifierOrg) organisationId: String, @Query(identifierCurrency) currency: String): Deferred<Resource<BraintreeSDKToken>>
+    fun sdkInitToken(@Query(IDENTIFIER_ORG) organisationId: String, @Query(IDENTIFIER_CURRENCY) currency: String): Deferred<Resource<BraintreeSDKToken>>
 
     @POST(ADD_CARD_METHOD)
     fun addPayment(@Body addPaymentRequest: AddPaymentRequest): Deferred<Resource<PaymentsNonce>>
@@ -166,7 +186,18 @@ interface APITemplate {
     fun nonce(@Body nonceRequest: NonceRequest): Deferred<Resource<PaymentsNonce>>
 
     @GET(FARE_DETAILS)
-    fun fareDetails(@Path(identifierId) tripId: String): Deferred<Resource<Fare>>
+    fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
+
+    @GET(GET_PROVIDERS_METHOD)
+    fun getPaymentProvider(): Deferred<Resource<PaymentProvider>>
+
+    @POST(GET_ADYEN_PAYMENT_METHODS_METHOD)
+    fun getPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
+            Deferred<Resource<AdyenPaymentMethods>>
+
+    @POST(GET_ADYEN_PAYMENTS_METHOD)
+    fun getAdyenPayments(@Body adyenPaymentsRequest: AdyenPaymentsRequest):
+            Deferred<Resource<AdyenPaymentsResponse>>
 
     @POST
     @FormUrlEncoded

@@ -19,6 +19,7 @@ class KarhooQuotesServiceTest {
     @InjectMocks
     private lateinit var service: KarhooQuotesService
 
+    // Needed for InjectMocks
     private val availabilityService: AvailabilityService = mock()
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
