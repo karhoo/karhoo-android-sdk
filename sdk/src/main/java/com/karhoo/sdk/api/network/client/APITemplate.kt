@@ -165,8 +165,7 @@ interface APITemplate {
     fun trackDriver(@Path(IDENTIFIER_ID) tripIdentifierId: String): Deferred<Resource<DriverTrackingInfo>>
 
     @GET(GUEST_BOOKING_TRACK_DRIVER_METHOD)
-    fun guestBookingTrackDriver(@Path(IDENTIFIER_ID) tripIdentifier: String):
-            Deferred<Resource<DriverTrackingInfo>>
+    fun guestBookingTrackDriver(@Path(IDENTIFIER_ID) tripIdentifier: String): Deferred<Resource<DriverTrackingInfo>>
 
     @POST(BOOKING_HISTORY_METHOD)
     fun tripHistory(@Body tripHistoryRequest: TripSearch): Deferred<Resource<TripList>>

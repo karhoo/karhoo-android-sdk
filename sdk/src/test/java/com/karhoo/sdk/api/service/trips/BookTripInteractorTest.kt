@@ -1,6 +1,9 @@
 package com.karhoo.sdk.api.service.trips
 
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
+import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.FlightDetails
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.network.request.PassengerDetails
