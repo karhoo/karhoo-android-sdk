@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class AnalyticsModule() {
+class AnalyticsModule {
 
     @Provides
     fun provideAnalytics(): Analytics = AnalyticsManager

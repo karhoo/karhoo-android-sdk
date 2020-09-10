@@ -15,6 +15,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
+import java.net.HttpURLConnection
 
 class SealedCoroutineCallAdapterFactory private constructor(private val analyticsManager: Analytics) : CallAdapter.Factory() {
 
@@ -90,8 +91,9 @@ class SealedCoroutineCallAdapterFactory private constructor(private val analytic
                         response.body()?.let {
                             deferred.complete(Resource.Success(it))
                         } ?: run {
-                            if (response.code() == 204 || response.code() == 201) {
-                                deferred.complete(Resource.Success(Void() as T))
+                            if (response.code() == HttpURLConnection.HTTP_NO_CONTENT
+                                    || response.code() == HttpURLConnection.HTTP_CREATED) {
+                                deferred.complete(Resource.Success(void() as T))
                             }
                         }
                     } else {
@@ -136,8 +138,9 @@ class SealedCoroutineCallAdapterFactory private constructor(private val analytic
                         response.body()?.let {
                             deferred.complete(Resource.Success(it))
                         } ?: run {
-                            if (response.code() == 204 || response.code() == 201) {
-                                deferred.complete(Resource.Success(Void() as T))
+                            if (response.code() == HttpURLConnection.HTTP_NO_CONTENT
+                                    || response.code() == HttpURLConnection.HTTP_CREATED) {
+                                deferred.complete(Resource.Success(void() as T))
                             }
                         }
                     } else {
