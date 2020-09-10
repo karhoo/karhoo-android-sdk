@@ -31,8 +31,8 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
             if (!credentials.refreshToken.isEmpty()) {
                 putString(REFRESH_TOKEN, credentials.refreshToken)
             }
-            credentials.expiresIn?.let { putLong(EXPIRES_ON, System.currentTimeMillis() + (it * 1000)) }
-            credentials.refreshExpiresIn?.let { putLong(REFRESH_EXPIRES_ON, System.currentTimeMillis() + (it * 1000)) }
+            credentials.expiresIn?.let { putLong(EXPIRES_ON, System.currentTimeMillis() + (it * SECOND_MILLISECONDS)) }
+            credentials.refreshExpiresIn?.let { putLong(REFRESH_EXPIRES_ON, System.currentTimeMillis() + (it * SECOND_MILLISECONDS)) }
             apply()
         }
     }
@@ -47,6 +47,7 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
 
     companion object {
         const val PREFERENCES_CRED_NAME = "credentials"
+        const val SECOND_MILLISECONDS = 1000
         private const val REFRESH_TOKEN = "refresh_token"
         private const val ACCESS_TOKEN = "access_token"
         private const val EXPIRES_ON = "expires_on"

@@ -6,7 +6,7 @@ import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserStore
 import com.karhoo.sdk.api.model.AuthenticationMethod
-import com.karhoo.sdk.api.network.adapter.Void
+import com.karhoo.sdk.api.network.adapter.void
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.network.response.Resource.Failure
@@ -68,7 +68,7 @@ class AuthRevokeInteractorTest {
      */
     @Test
     fun `revoke token Success`() {
-        whenever(apiTemplate.authRevoke(authRevokeParams)).thenReturn(CompletableDeferred(Resource.Success(Void())))
+        whenever(apiTemplate.authRevoke(authRevokeParams)).thenReturn(CompletableDeferred(Resource.Success(void())))
         var returnedRevokeResponse: Void? = null
         runBlocking {
             interactor.execute { result ->

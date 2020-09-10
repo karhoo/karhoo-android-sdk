@@ -2,13 +2,13 @@ package com.karhoo.sdk.api
 
 import com.karhoo.sdk.BuildConfig
 
-internal data class EnvironmentDetails(val environment: KarhooEnvironment) {
+internal data class KarhooEnvironmentDetails(val karhooEnvironment: KarhooEnvironment) {
     var host: String = ""
     var authHost: String = ""
     var guestHost: String = ""
 
     init {
-        when (environment) {
+        when (karhooEnvironment) {
             is KarhooEnvironment.Sandbox -> {
                 this.host = BuildConfig.KARHOO_API_POINT_SANDBOX
                 this.authHost = BuildConfig.KARHOO_AUTH_API_POINT_SANDBOX
@@ -20,16 +20,16 @@ internal data class EnvironmentDetails(val environment: KarhooEnvironment) {
                 this.guestHost = BuildConfig.KARHOO_GUEST_API_POINT_PROD
             }
             is KarhooEnvironment.Custom -> {
-                this.host = environment.host
-                this.authHost = environment.authHost
-                this.guestHost = environment.guestHost
+                this.host = karhooEnvironment.host
+                this.authHost = karhooEnvironment.authHost
+                this.guestHost = karhooEnvironment.guestHost
             }
         }
     }
 
     companion object {
-        fun current(): EnvironmentDetails {
-            return EnvironmentDetails(KarhooSDKConfigurationProvider.configuration.environment())
+        fun current(): KarhooEnvironmentDetails {
+            return KarhooEnvironmentDetails(KarhooSDKConfigurationProvider.configuration.environment())
         }
     }
 

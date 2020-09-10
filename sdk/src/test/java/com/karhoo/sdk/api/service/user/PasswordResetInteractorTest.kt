@@ -1,7 +1,7 @@
 package com.karhoo.sdk.api.service.user
 
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.network.adapter.Void
+import com.karhoo.sdk.api.network.adapter.void
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
@@ -34,7 +34,7 @@ class PasswordResetInteractorTest : BaseKarhooUserInteractorTest() {
     @Test
     fun `resetting password makes an api call to reset the password`() {
         whenever(apiTemplate.passwordReset(any()))
-                .thenReturn(CompletableDeferred(Resource.Success(Void())))
+                .thenReturn(CompletableDeferred(Resource.Success(void())))
         interactor.email = "123456567@1234.dwsjh"
 
         var returnedPasswordReset: Void? = null

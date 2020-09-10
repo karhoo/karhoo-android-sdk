@@ -27,6 +27,11 @@ jobs:
                     sudo chmod +x ./gradlew 
                     ./gradlew testDebug lintRelease
       - run:
+          name: Build Detekt
+          command: |
+                    sudo chmod +x ./gradlew
+                    ./gradlew detekt
+      - run:
           name: Save test results
           command: |
             mkdir -p ~/junit/
@@ -40,6 +45,11 @@ jobs:
       - store_artifacts:
           path: ./build/reports
           destination: reports/
+      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: sdk/build/reports
+          destination: reports
+      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: sdk/build/test-results
       - persist_to_workspace:
           root: .
           paths:
