@@ -4,6 +4,7 @@ import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
+import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentsRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.Payer
@@ -82,7 +83,7 @@ class KarhooPaymentsServiceTest {
      */
     @Test
     fun getAdyenPaymentMethodsCallWhenGettingAdyenPaymentMethods() {
-        val call = service.getAdyenPaymentMethods()
+        val call = service.getAdyenPaymentMethods(AdyenPaymentMethodsRequest())
         assertNotNull(call)
     }
 
