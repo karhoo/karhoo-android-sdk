@@ -32,5 +32,4 @@ internal class AdyenPublicKeyInteractor @Inject constructor(credentialsManager: 
             is Resource.Failure -> Resource.Failure(error = result.error)
         }
     }
-
 }
