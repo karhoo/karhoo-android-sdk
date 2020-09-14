@@ -3,6 +3,7 @@ package com.karhoo.sdk.api
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
+import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PUBLIC_KEY
@@ -31,6 +32,8 @@ import java.util.concurrent.TimeUnit
  */
 @RunWith(AndroidJUnit4::class)
 class AdyenPublicKeyIntegrationTest {
+
+    private val request: AdyenPaymentMethodsRequest = AdyenPaymentMethodsRequest()
 
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
@@ -62,7 +65,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: AdyenPublicKey? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey().execute {
+        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -88,7 +91,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey().execute {
+        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -114,7 +117,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey().execute {
+        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -141,7 +144,7 @@ class AdyenPublicKeyIntegrationTest {
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey().execute {
+        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -167,7 +170,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey().execute {
+        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -193,7 +196,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey().execute {
+        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -219,7 +222,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey().execute {
+        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -245,7 +248,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey().execute {
+        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -271,7 +274,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey().execute {
+        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -283,6 +286,5 @@ class AdyenPublicKeyIntegrationTest {
         latch.await(2, TimeUnit.SECONDS)
         assertThat(result).isEqualTo(KarhooError.Timeout)
     }
-
 }
 
