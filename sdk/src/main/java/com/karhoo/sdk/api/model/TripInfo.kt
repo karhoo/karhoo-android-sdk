@@ -20,5 +20,3 @@ data class TripInfo(@SerializedName("id") val tripId: String = "",
                     @SerializedName("comments") val comments: String? = null,
                     @SerializedName("meeting_point") val meetingPoint: MeetingPoint? = null)
     : Parcelable
-
-

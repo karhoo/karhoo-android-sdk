@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AdyenData(
-        @SerializedName("MD") val MD: String = "",
-        @SerializedName("PaReq") val PaReq: String = "",
-        @SerializedName("TermUrl") val TermUrl: String = "")
+        @SerializedName("MD") val md: String = "",
+        @SerializedName("PaReq") val paReq: String = "",
+        @SerializedName("TermUrl") val termUrl: String = "")
     : Parcelable
