@@ -5,6 +5,7 @@ import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
+import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.karhoo.sdk.call.Call
@@ -19,7 +20,7 @@ interface PaymentsService {
 
     fun getPaymentProvider(): Call<PaymentProvider>
 
-    fun getAdyenPublicKey(): Call<AdyenPublicKey>
+    fun getAdyenPublicKey(request: AdyenPaymentMethodsRequest): Call<AdyenPublicKey>
 
     fun getAdyenPaymentMethods(): Call<String>
 
