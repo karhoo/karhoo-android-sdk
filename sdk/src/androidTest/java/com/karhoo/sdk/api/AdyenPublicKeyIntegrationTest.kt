@@ -33,8 +33,6 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 class AdyenPublicKeyIntegrationTest {
 
-    private val request: AdyenPaymentMethodsRequest = AdyenPaymentMethodsRequest()
-
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
 
@@ -65,7 +63,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: AdyenPublicKey? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -91,7 +89,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -117,7 +115,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -144,7 +142,7 @@ class AdyenPublicKeyIntegrationTest {
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -170,7 +168,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -196,7 +194,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -222,7 +220,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -248,7 +246,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -274,7 +272,7 @@ class AdyenPublicKeyIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPublicKey(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error

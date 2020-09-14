@@ -20,9 +20,9 @@ interface PaymentsService {
 
     fun getPaymentProvider(): Call<PaymentProvider>
 
-    fun getAdyenPublicKey(request: AdyenPaymentMethodsRequest): Call<AdyenPublicKey>
+    fun getAdyenPublicKey(): Call<AdyenPublicKey>
 
-    fun getAdyenPaymentMethods(): Call<String>
+    fun getAdyenPaymentMethods(request: AdyenPaymentMethodsRequest): Call<String>
 
     fun getAdyenPayments(request: String): Call<String>
 }

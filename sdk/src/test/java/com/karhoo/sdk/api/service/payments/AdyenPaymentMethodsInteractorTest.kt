@@ -70,7 +70,7 @@ class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
         whenever(apiTemplate.getAdyenPaymentMethods(adyenPaymentMethodsRequest))
                 .thenReturn(CompletableDeferred(Resource.Failure(expectedError)))
 
-        interactor.request = adyenPaymentMethodsRequest
+        interactor.adyenPaymentMethodsRequest = adyenPaymentMethodsRequest
 
         runBlocking {
             interactor.execute { result ->
@@ -97,7 +97,7 @@ class AdyenPaymentMethodsInteractorTest : BaseKarhooUserInteractorTest() {
                 .thenReturn(CompletableDeferred(Resource.Success(adyenPaymentMethods)))
 
         var adyenPaymentMethods: String? = null
-        interactor.request = adyenPaymentMethodsRequest
+        interactor.adyenPaymentMethodsRequest = adyenPaymentMethodsRequest
 
         runBlocking {
             interactor.execute {

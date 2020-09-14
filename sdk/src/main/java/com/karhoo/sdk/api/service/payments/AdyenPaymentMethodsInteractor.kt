@@ -20,10 +20,10 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
                                                                  CoroutineContext = Dispatchers.Main)
     : BaseCallInteractor<String>(true, credentialsManager, apiTemplate, context) {
 
-    var request: AdyenPaymentMethodsRequest? = null
+    var adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest? = null
 
     override fun createRequest(): Deferred<Resource<String>> {
-        request?.let {
+        adyenPaymentMethodsRequest?.let {
             return GlobalScope.async {
                 return@async getPaymentMethods(it)
             }

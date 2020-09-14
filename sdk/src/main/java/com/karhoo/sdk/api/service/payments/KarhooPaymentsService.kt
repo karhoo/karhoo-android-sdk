@@ -9,7 +9,6 @@ import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
-import com.karhoo.sdk.api.network.request.AdyenPaymentsRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.karhoo.sdk.call.Call
@@ -40,10 +39,12 @@ class KarhooPaymentsService : PaymentsService {
 
     override fun getPaymentProvider(): Call<PaymentProvider> = PaymentProviderInteractor(credentialsManager, userManager, apiTemplate).apply {}
 
-    override fun getAdyenPublicKey(request: AdyenPaymentMethodsRequest): Call<AdyenPublicKey> = AdyenPublicKeyInteractor(credentialsManager, apiTemplate).apply {}
+    override fun getAdyenPublicKey(): Call<AdyenPublicKey> = AdyenPublicKeyInteractor(credentialsManager, apiTemplate).apply {}
 
-    override fun getAdyenPaymentMethods(): Call<String> =
-            AdyenPaymentMethodsInteractor(credentialsManager, apiTemplate).apply {}
+    override fun getAdyenPaymentMethods(request: AdyenPaymentMethodsRequest): Call<String> =
+            AdyenPaymentMethodsInteractor(credentialsManager, apiTemplate).apply {
+                this.adyenPaymentMethodsRequest = request
+            }
 
     override fun getAdyenPayments(request: String): Call<String> =
             AdyenPaymentsInteractor(credentialsManager, apiTemplate).apply {
