@@ -1,6 +1,6 @@
 package com.karhoo.sdk.api.network.client
 
-import com.karhoo.sdk.api.EnvironmentDetails
+import com.karhoo.sdk.api.KarhooEnvironmentDetails
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.Categories
 import com.karhoo.sdk.api.model.Credentials
@@ -25,7 +25,6 @@ import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AvailabilityRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
-import com.karhoo.sdk.api.network.request.AdyenPaymentsRequest
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
@@ -41,7 +40,6 @@ import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.http.Body
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
@@ -103,7 +101,7 @@ interface APITemplate {
         const val IDENTIFIER_ORG = "organisation_id"
         const val IDENTIFIER_CURRENCY = "currency"
 
-        private fun authHost() = EnvironmentDetails.current().authHost
+        private fun authHost() = KarhooEnvironmentDetails.current().authHost
     }
 
     @NoAuthorisationHeader

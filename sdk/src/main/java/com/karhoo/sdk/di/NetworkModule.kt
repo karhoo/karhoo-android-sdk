@@ -2,7 +2,7 @@ package com.karhoo.sdk.di
 
 import com.google.gson.GsonBuilder
 import com.karhoo.sdk.analytics.Analytics
-import com.karhoo.sdk.api.EnvironmentDetails
+import com.karhoo.sdk.api.KarhooEnvironmentDetails
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.network.adapter.SealedCoroutineCallAdapterFactory
@@ -27,7 +27,7 @@ class NetworkModule {
 
         val gson = GsonBuilder().registerTypeAdapter(Date::class.java, DateTypeAdapter()).create()
         val environment = KarhooSDKConfigurationProvider.configuration.environment()
-        val environmentDetails = EnvironmentDetails(environment = environment)
+        val environmentDetails = KarhooEnvironmentDetails(karhooEnvironment = environment)
 
         val retrofit = Retrofit.Builder()
                 .baseUrl(environmentDetails.host)
