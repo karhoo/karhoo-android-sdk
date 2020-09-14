@@ -5,6 +5,8 @@ import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
+import com.karhoo.sdk.api.model.adyen.AdyenPaymentDetails
+import com.karhoo.sdk.api.model.adyen.PaymentsDetailsRequestPayload
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
@@ -44,5 +46,9 @@ class KarhooPaymentsService : PaymentsService {
             AdyenPaymentsInteractor(credentialsManager, apiTemplate).apply {
                 this.adyenPaymentsRequest = request
             }
+
+    override fun getAdyenPaymentDetails(paymentDetails: PaymentsDetailsRequestPayload): Call<AdyenPaymentDetails> {
+        TODO("Not yet implemented")
+    }
 
 }
