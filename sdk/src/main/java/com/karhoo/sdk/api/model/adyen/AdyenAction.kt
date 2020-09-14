@@ -11,5 +11,7 @@ data class AdyenAction(
         @SerializedName("paymentData") val paymentData: String = "",
         @SerializedName("paymentMethodType") val paymentMethodType: String = "",
         @SerializedName("type") val type: String = "",
-        @SerializedName("url") val url: String = "")
+        @SerializedName("url") val url: String = "",
+        @SerializedName("token") val token: String = "",
+        @SerializedName("sdkData") val sdkData: AdyenSDKData = AdyenSDKData())
     : Parcelable

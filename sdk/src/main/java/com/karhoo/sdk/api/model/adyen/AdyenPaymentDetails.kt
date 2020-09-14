@@ -15,5 +15,10 @@ data class AdyenPaymentDetails(@SerializedName("MD") val MD: String = "",
                               @SerializedName("orderID") val orderID: String = "",
                               @SerializedName("payerID") val payerID: String = "",
                               @SerializedName("payload") val payload: String = "",
-                              @SerializedName("paymentID") val paymentID: String = "") :
+                              @SerializedName("paymentID") val paymentID: String = "",
+                               @SerializedName("paymentStatus") val paymentStatus: String = "",
+                               @SerializedName("redirectResult") val redirectResult: String = "",
+                               @SerializedName("returnUrlQueryString") val returnUrlQueryString: String = "",
+                               @SerializedName("threeds2ChallengeResult") val threeds2ChallengeResult: String = "threeds2.challengeResult",
+                               @SerializedName("threeds2Fingerprint") val threeds2Fingerprint: String = "threeds2.fingerprintcase") :
         Parcelable
