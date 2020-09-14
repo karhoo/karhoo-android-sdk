@@ -5,7 +5,5 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AdyenPaymentDetail(
-        @SerializedName("key") val key: String = "",
-        @SerializedName("type") val type: String = "")
-    : Parcelable
+data class AdyenPaymentDetail(@SerializedName("key") val key: String = "",
+                              @SerializedName("type") val type: String = "") : Parcelable
