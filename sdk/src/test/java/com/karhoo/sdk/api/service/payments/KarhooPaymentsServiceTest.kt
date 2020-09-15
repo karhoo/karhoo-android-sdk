@@ -96,4 +96,15 @@ class KarhooPaymentsServiceTest {
         val call = service.getAdyenPayments("request")
         assertNotNull(call)
     }
+
+    /**
+     * Given: A request is made to get Adyen payment details
+     * When: The call is constructed and executed
+     * Then: A call should be made to the appropriate endpoint
+     */
+    @Test
+    fun getAdyenPaymentsDetailsCallWhenGettingAdyenPaymentsDetails() {
+        val call = service.getAdyenPaymentDetails("request")
+        assertNotNull(call)
+    }
 }
