@@ -27,7 +27,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
     }
 
     /**
-     * Given:   A request is made to get Adyen payments
+     * Given:   A request is made to get Adyen payments details
      * When:    The call is not successful
      * Then:    An InternalSDKError is returned
      **/
@@ -52,7 +52,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
     }
 
     /**
-     * Given:   A request is made to get Adyen payments
+     * Given:   A request is made to get Adyen payments details
      * When:    The call is not successful
      * Then:    An InternalSDKError is returned
      **/
@@ -80,7 +80,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
     }
 
     /**
-     * Given:   A request is made to get Adyen payments
+     * Given:   A request is made to get Adyen payments details
      * When:    The call is successful
      * Then:    The correct response is returned
      */
