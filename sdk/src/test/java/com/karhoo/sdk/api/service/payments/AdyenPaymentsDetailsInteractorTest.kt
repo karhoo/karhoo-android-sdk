@@ -32,7 +32,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    An InternalSDKError is returned
      **/
     @Test
-    fun `get Adyen payments call failure not made if request is null`() {
+    fun `get Adyen payments details call failure not made if request is null`() {
         var shouldBeNull: String? = null
         var error: KarhooError? = null
 
@@ -57,7 +57,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    An InternalSDKError is returned
      **/
     @Test
-    fun `get Adyen payments call failure returns an error`() {
+    fun `get Adyen payments details call failure returns an error`() {
         var shouldBeNull: String? = null
         var error: KarhooError? = null
         whenever(apiTemplate.getAdyenPaymentDetails(adyenPaymentsDetails))
@@ -85,7 +85,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    The correct response is returned
      */
     @Test
-    fun `successful get Adyen payments response returns Adyen payments`() {
+    fun `successful get Adyen payments details response returns Adyen payments`() {
         whenever(apiTemplate.getAdyenPaymentDetails(any()))
                 .thenReturn(CompletableDeferred(Resource.Success(adyenPaymentsResponse)))
 
