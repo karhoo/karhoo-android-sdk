@@ -24,5 +24,5 @@ interface PaymentsService {
 
     fun getAdyenPayments(request: String): Call<String>
 
-    fun getAdyenPaymentDetails(paymentDetails: PaymentsDetailsRequestPayload): Call<AdyenPaymentDetails>
+    fun getAdyenPaymentDetails(paymentDetails: String): Call<String>
 }

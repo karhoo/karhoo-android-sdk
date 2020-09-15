@@ -47,8 +47,8 @@ class KarhooPaymentsService : PaymentsService {
                 this.adyenPaymentsRequest = request
             }
 
-    override fun getAdyenPaymentDetails(paymentDetails: PaymentsDetailsRequestPayload): Call<AdyenPaymentDetails> {
-        TODO("Not yet implemented")
+    override fun getAdyenPaymentDetails(paymentDetails: String): Call<String> = AdyenPaymentsDetailsInteractor(credentialsManager, apiTemplate).apply {
+        this.adyenPaymentsDetails = paymentDetails
     }
 
 }

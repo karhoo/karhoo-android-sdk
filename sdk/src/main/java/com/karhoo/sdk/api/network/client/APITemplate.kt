@@ -201,7 +201,7 @@ interface   APITemplate {
             Deferred<Resource<ResponseBody>>
 
     @POST(ADYEN_PAYMENT_DETAILS)
-    fun getAdyenPaymentDetails()
+    fun getAdyenPaymentDetails(@Body adyenPaymentsDetails: String): Deferred<Resource<ResponseBody>>
 
     @POST
     @FormUrlEncoded
