@@ -2,10 +2,11 @@ package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENT_METHODS
+import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PUBLIC_KEY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
@@ -30,9 +31,7 @@ import java.util.concurrent.TimeUnit
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 @RunWith(AndroidJUnit4::class)
-class AdyenPaymentMethodsIntegrationTest {
-
-    private val request: AdyenPaymentMethodsRequest = AdyenPaymentMethodsRequest()
+class AdyenPublicKeyIntegrationTest {
 
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
@@ -52,19 +51,19 @@ class AdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payment methods are retrieved
+     * Given:   Adyen public key is retrieved
      * When:    A successful response has been returned
      * Then:    The response payload should be valid
      **/
     @Test
-    fun getAdyenPaymentMethodsSuccess() {
+    fun getAdyenPublicKeySuccess() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(HTTP_CREATED, ADYEN_PAYMENT_METHODS)
+            getAdyenPublicKeyResponse(HTTP_CREATED, ADYEN_PUBLIC_KEY)
         }
 
-        var result: String? = null
+        var result: AdyenPublicKey? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -78,19 +77,19 @@ class AdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payment methods are retrieved
+     * Given:   Adyen public key is retrieved
      * When:    The call is successful but with invalid data
      * Then:    An internal sdk error should be returned
      **/
     @Test
-    fun invalidDataWhenGettingAdyenPaymentMethodsReturnsInternalError() {
+    fun invalidDataWhenGettingAdyenPublicKeyReturnsInternalError() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
+            getAdyenPublicKeyResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -104,19 +103,19 @@ class AdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payment methods are retrieved
+     * Given:   Adyen public key is retrieved
      * When:    The call is successful but with no body
      * Then:    A blank object should be returned
      **/
     @Test
     fun blankBodyReturnsDefaultObject() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_CREATED, response = NO_BODY)
+            getAdyenPublicKeyResponse(code = HTTP_CREATED, response = NO_BODY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -130,20 +129,20 @@ class AdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payment methods are retrieved
+     * Given:   Adyen public key is retrieved
      * When:    An error is returned with error payload
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR)
+            getAdyenPublicKeyResponse(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR)
         }
 
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -157,19 +156,19 @@ class AdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payment methods are retrieved
+     * Given:   Adyen public key is retrieved
      * When:    An error is returned with no body payload
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithNoBodyGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_BAD_REQUEST, response = NO_BODY)
+            getAdyenPublicKeyResponse(code = HTTP_BAD_REQUEST, response = NO_BODY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -183,19 +182,19 @@ class AdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payment methods are retrieved
+     * Given:   Adyen public key is retrieved
      * When:    An error is returned with an empty body
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithEmptyBodyGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_BAD_REQUEST, response = EMPTY)
+            getAdyenPublicKeyResponse(code = HTTP_BAD_REQUEST, response = EMPTY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -209,19 +208,19 @@ class AdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payment methods are retrieved
+     * Given:   Adyen public key is retrieved
      * When:    An error is returned with invalid json
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithInvalidJsonGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_BAD_REQUEST, response = INVALID_JSON)
+            getAdyenPublicKeyResponse(code = HTTP_BAD_REQUEST, response = INVALID_JSON)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -235,19 +234,19 @@ class AdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payment methods are retrieved
+     * Given:   Adyen public key is retrieved
      * When:    An error is returned for invalid data
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithInvalidDataGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
+            getAdyenPublicKeyResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -261,19 +260,19 @@ class AdyenPaymentMethodsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payment methods are retrieved
+     * Given:   Adyen public key is retrieved
      * When:    The response takes too long
      * Then:    The timeout error should be returned
      **/
     @Test
     fun timeoutErrorReturnedWhenResponseTakesTooLong() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, delayInMillis = 2000)
+            getAdyenPublicKeyResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, delayInMillis = 2000)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
+        KarhooApi.paymentsService.getAdyenPublicKey().execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -285,6 +284,5 @@ class AdyenPaymentMethodsIntegrationTest {
         latch.await(2, TimeUnit.SECONDS)
         assertThat(result).isEqualTo(KarhooError.Timeout)
     }
-
 }
 

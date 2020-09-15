@@ -6,6 +6,7 @@ import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BaseCallInteractor
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -19,14 +20,20 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
                                                                  CoroutineContext = Dispatchers.Main)
     : BaseCallInteractor<String>(true, credentialsManager, apiTemplate, context) {
 
+    var adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest? = null
+
     override fun createRequest(): Deferred<Resource<String>> {
-        return GlobalScope.async {
-            return@async getPaymentMethods()
+        adyenPaymentMethodsRequest?.let {
+            return GlobalScope.async {
+                return@async getPaymentMethods(it)
+            }
+        } ?: run {
+            return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }
     }
 
-    private suspend fun getPaymentMethods(): Resource<String> {
-        return when (val result = apiTemplate.getPaymentMethods(AdyenPaymentMethodsRequest())
+    private suspend fun getPaymentMethods(request: AdyenPaymentMethodsRequest): Resource<String> {
+        return when (val result = apiTemplate.getAdyenPaymentMethods(request)
                 .await()) {
             is Resource.Success -> {
                 val responseBody = result.data.string()
