@@ -4,7 +4,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENTS
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
@@ -56,12 +55,12 @@ class AdyenPaymentsIntegrationTest {
     @Test
     fun getAdyenPaymentsSuccess() {
         serverRobot {
-            getAdyenPaymentsResponse(HTTP_CREATED, ADYEN_PAYMENTS)
+            getAdyenPaymentsResponse(HTTP_CREATED, RESPONSE)
         }
 
         var result: String? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -87,7 +86,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -113,7 +112,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -140,7 +139,7 @@ class AdyenPaymentsIntegrationTest {
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -166,7 +165,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -192,7 +191,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -218,7 +217,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -244,7 +243,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -270,7 +269,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(REQUEST).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -284,6 +283,6 @@ class AdyenPaymentsIntegrationTest {
     }
 
     companion object {
-        const val REQUEST = "{\"field1\":\"some text\", \"field2\":\"some more text\"}"
+        const val RESPONSE = "{\"field1\":\"some text\", \"field2\":\"some more text\"}"
     }
 }

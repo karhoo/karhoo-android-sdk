@@ -5,12 +5,10 @@ import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
-import com.karhoo.sdk.api.network.request.AdyenPaymentsRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.Payer
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.nhaarman.mockitokotlin2.mock
-import org.json.JSONObject
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith

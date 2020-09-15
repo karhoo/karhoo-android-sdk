@@ -51,13 +51,6 @@ import com.karhoo.sdk.api.model.Vehicle
 import com.karhoo.sdk.api.model.VehicleAttributes
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.model.VehiclesV2
-import com.karhoo.sdk.api.model.adyen.AdyenDetail
-import com.karhoo.sdk.api.model.adyen.AdyenItem
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethod
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethodsGroup
-import com.karhoo.sdk.api.model.adyen.AdyenPayments
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
@@ -750,39 +743,7 @@ class ServerRobot {
                 state = "PENDING",
                 breakdown = FARE_BREAKDOWN)
 
-        val DETAIL = AdyenDetail(
-                items = listOf(
-                        AdyenItem(id = "87", name = "Credit Agricole PBL"),
-                        AdyenItem(id = "89", name = "Santander")),
-                key = "issuer",
-                optional = true,
-                type = "select"
-                                )
-
-        val ADYEN_PAYMENT_METHOD = AdyenPaymentMethod(
-                brands = listOf("amex", "diners", "maestro", "visa"),
-                details = listOf(DETAIL, DETAIL.copy()),
-                name = "",
-                supportsRecurring = true,
-                type = ""
-                                                     )
-
-        val GROUP_CARD = AdyenPaymentMethodsGroup(name = "Credit Card",
-                                                  types = listOf("amex", "diners", "maestro", "visa"),
-                                                  groupType = "type")
-
         val ADYEN_PUBLIC_KEY = AdyenPublicKey(publicKey = "12234455")
-
-        val ADYEN_PAYMENT_METHODS = AdyenPaymentMethods(
-                groups = listOf(
-                        GROUP_CARD,
-                        GROUP_CARD.copy(name = "AliPay", types = listOf("alipay_wap"))),
-                paymentMethods = listOf(ADYEN_PAYMENT_METHOD, ADYEN_PAYMENT_METHOD.copy())
-                                                       )
-
-        val ADYEN_PAYMENTS = AdyenPaymentsResponse(
-                payload = AdyenPayments(),
-                transactionId = "1234")
 
         /**
          *

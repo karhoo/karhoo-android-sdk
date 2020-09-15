@@ -5,7 +5,6 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENT_METHODS
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
@@ -59,7 +58,7 @@ class AdyenPaymentMethodsIntegrationTest {
     @Test
     fun getAdyenPaymentMethodsSuccess() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(HTTP_CREATED, ADYEN_PAYMENT_METHODS)
+            getAdyenPaymentMethodsResponse(HTTP_CREATED, RESPONSE)
         }
 
         var result: String? = null
@@ -286,5 +285,8 @@ class AdyenPaymentMethodsIntegrationTest {
         assertThat(result).isEqualTo(KarhooError.Timeout)
     }
 
+    companion object {
+        private const val RESPONSE = "{\"field1\":\"some text\", \"field2\":\"some more text\"}"
+    }
 }
 
