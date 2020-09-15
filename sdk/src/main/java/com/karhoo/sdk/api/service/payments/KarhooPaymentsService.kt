@@ -51,4 +51,8 @@ class KarhooPaymentsService : PaymentsService {
                 this.adyenPaymentsRequest = request
             }
 
+    override fun getAdyenPaymentDetails(paymentDetails: String): Call<String> = AdyenPaymentsDetailsInteractor(credentialsManager, apiTemplate).apply {
+        this.adyenPaymentsDetails = paymentDetails
+    }
+
 }

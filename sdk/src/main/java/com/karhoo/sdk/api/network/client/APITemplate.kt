@@ -49,7 +49,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
 
-interface APITemplate {
+interface   APITemplate {
 
     companion object {
         const val TOKEN_METHOD = "/v1/auth/token"
@@ -92,6 +92,7 @@ interface APITemplate {
         const val GET_ADYEN_PUBLIC_KEY_METHOD = "/v3/payments/adyen/public-key"
         const val GET_ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
         const val GET_ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/payments"
+        const val ADYEN_PAYMENT_DETAILS = "/v3/payments/adyen/payment-details"
 
         const val IDENTIFIER_ID = "id"
         const val IDENTIFIER_LATITUDE = "latitude"
@@ -203,6 +204,9 @@ interface APITemplate {
     @POST(GET_ADYEN_PAYMENTS_METHOD)
     fun getAdyenPayments(@Body adyenPaymentsRequest: String):
             Deferred<Resource<ResponseBody>>
+
+    @POST(ADYEN_PAYMENT_DETAILS)
+    fun getAdyenPaymentDetails(@Body adyenPaymentsDetails: String): Deferred<Resource<ResponseBody>>
 
     @POST
     @FormUrlEncoded
