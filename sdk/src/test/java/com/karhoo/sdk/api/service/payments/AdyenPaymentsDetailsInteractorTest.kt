@@ -85,7 +85,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    The correct response is returned
      */
     @Test
-    fun `successful get Adyen payments details response returns Adyen payments`() {
+    fun `successful get Adyen payments details response returns Adyen payments details`() {
         whenever(apiTemplate.getAdyenPaymentDetails(any()))
                 .thenReturn(CompletableDeferred(Resource.Success(adyenPaymentsResponse)))
 
