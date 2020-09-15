@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AdyenPaymentDetails(@SerializedName("MD") val MD: String = "",
-                              @SerializedName("PaReq") val PaReq: String = "",
-                              @SerializedName("PaRes") val PaRes: String = "",
+data class AdyenPaymentDetails(@SerializedName("MD") val md: String = "",
+                              @SerializedName("PaReq") val paReq: String = "",
+                              @SerializedName("PaRes") val paRes: String = "",
                               @SerializedName("billingToken") val billingToken: String = "",
                               @SerializedName("cupSecurePlusSmsCode") val cupSecurePlusSmsCode: String = "cupsecureplus.smscode",
                               @SerializedName("facilitatorAccessToken") val facilitatorAccessToken: String = "",
