@@ -92,7 +92,7 @@ interface   APITemplate {
         const val GET_ADYEN_PUBLIC_KEY_METHOD = "/v3/payments/adyen/public-key"
         const val GET_ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
         const val GET_ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/payments"
-        const val ADYEN_PAYMENT_DETAILS = "/v3/payments/adyen/payment-details"
+        const val ADYEN_PAYMENT_DETAILS = "/v3/payments/adyen/payments-details"
 
         const val IDENTIFIER_ID = "id"
         const val IDENTIFIER_LATITUDE = "latitude"
@@ -205,6 +205,7 @@ interface   APITemplate {
     fun getAdyenPayments(@Body adyenPaymentsRequest: String):
             Deferred<Resource<ResponseBody>>
 
+    @Headers("Content-Type: application/json")
     @POST(ADYEN_PAYMENT_DETAILS)
     fun getAdyenPaymentDetails(@Body adyenPaymentsDetails: String): Deferred<Resource<ResponseBody>>
 
