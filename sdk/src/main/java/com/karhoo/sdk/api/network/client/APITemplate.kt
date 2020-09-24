@@ -68,7 +68,8 @@ interface   APITemplate {
         const val QUOTES_METHOD = "/v1/quotes/{id}"
         const val QUOTES_V2_REQUEST_METHOD = "/v2/quotes"
         const val QUOTES_V2_METHOD = "/v2/quotes/{id}"
-        const val BOOKING_METHOD = "/v1/bookings/with-nonce"
+        const val BOOKING_METHOD = "/v1/bookings"
+        const val BOOKING_WITH_NONCE_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
         const val GUEST_BOOKING_DETAILS_METHOD = "/v1/bookings/follow/{id}"
         const val BOOKING_STATUS_METHOD = "/v1/bookings/{id}/status"
@@ -148,7 +149,10 @@ interface   APITemplate {
     fun quotesv2(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<VehiclesV2>>
 
     @POST(BOOKING_METHOD)
-    fun book(@Body tripBooking: TripBooking): Deferred<Resource<TripInfo>>
+    fun book(): Deferred<Resource<TripInfo>>
+
+    @POST(BOOKING_WITH_NONCE_METHOD)
+    fun bookWithNonce(@Body tripBooking: TripBooking): Deferred<Resource<TripInfo>>
 
     @GET(BOOKING_DETAILS_METHOD)
     fun tripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>

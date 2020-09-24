@@ -221,7 +221,7 @@ class ServerRobot {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.BOOKING_METHOD,
+                endpoint = APITemplate.BOOKING_WITH_NONCE_METHOD,
                 delayInMillis = delayInMillis,
                 header = header
                         )
