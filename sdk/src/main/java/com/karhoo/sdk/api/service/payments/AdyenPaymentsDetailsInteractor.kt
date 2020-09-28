@@ -10,17 +10,18 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import org.json.JSONObject
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 internal class AdyenPaymentsDetailsInteractor @Inject constructor(private val credentialsManager: CredentialsManager,
-                                                           private val apiTemplate: APITemplate,
-                                                           context: CoroutineContext = Dispatchers.Main)
-    : BaseCallInteractor<String>(true, credentialsManager, apiTemplate, context) {
+                                                                  private val apiTemplate: APITemplate,
+                                                                  context: CoroutineContext = Dispatchers.Main)
+    : BaseCallInteractor<JSONObject>(true, credentialsManager, apiTemplate, context) {
 
     var adyenPaymentsDetails: String? = null
 
-    override fun createRequest(): Deferred<Resource<String>> {
+    override fun createRequest(): Deferred<Resource<JSONObject>> {
         adyenPaymentsDetails?.let {
             return GlobalScope.async {
                 return@async getAdyenPaymentsDetails(it)
@@ -31,14 +32,15 @@ internal class AdyenPaymentsDetailsInteractor @Inject constructor(private val cr
     }
 
     private suspend fun getAdyenPaymentsDetails(adyenPaymentsDetails: String):
-            Resource<String> {
+            Resource<JSONObject> {
         return when (val result = apiTemplate.getAdyenPaymentDetails(adyenPaymentsDetails).await()) {
             is Resource.Success -> {
                 val responseBody = result.data.string()
-                if(responseBody.isNullOrBlank()) {
+                if (responseBody.isNullOrBlank()) {
                     Resource.Failure(error = KarhooError.InternalSDKError)
                 } else {
-                    Resource.Success(data = responseBody)
+                    val response = JSONObject(responseBody)
+                    Resource.Success(data = response)
                 }
             }
             is Resource.Failure -> Resource.Failure(error = result.error)

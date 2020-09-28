@@ -12,6 +12,7 @@ import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.karhoo.sdk.call.Call
+import org.json.JSONObject
 import javax.inject.Inject
 
 class KarhooPaymentsService : PaymentsService {
@@ -46,12 +47,12 @@ class KarhooPaymentsService : PaymentsService {
                 this.adyenPaymentMethodsRequest = request
             }
 
-    override fun getAdyenPayments(request: String): Call<String> =
+    override fun getAdyenPayments(request: String): Call<JSONObject> =
             AdyenPaymentsInteractor(credentialsManager, apiTemplate).apply {
                 this.adyenPaymentsRequest = request
             }
 
-    override fun getAdyenPaymentDetails(paymentDetails: String): Call<String> = AdyenPaymentsDetailsInteractor(credentialsManager, apiTemplate).apply {
+    override fun getAdyenPaymentDetails(paymentDetails: String): Call<JSONObject> = AdyenPaymentsDetailsInteractor(credentialsManager, apiTemplate).apply {
         this.adyenPaymentsDetails = paymentDetails
     }
 
