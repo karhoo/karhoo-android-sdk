@@ -11,6 +11,7 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Assertions.assertThat
+import org.json.JSONObject
 import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -58,7 +59,7 @@ class AdyenPaymentsIntegrationTest {
             getAdyenPaymentsResponse(HTTP_CREATED, RESPONSE)
         }
 
-        var result: String? = null
+        var result: JSONObject? = null
 
         KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {

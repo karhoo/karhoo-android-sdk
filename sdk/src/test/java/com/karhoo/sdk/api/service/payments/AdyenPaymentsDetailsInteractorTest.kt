@@ -3,11 +3,16 @@ package com.karhoo.sdk.api.service.payments
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -33,7 +38,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun `get Adyen payments details call failure not made if request is null`() {
-        var shouldBeNull: String? = null
+        var shouldBeNull: JSONObject? = null
         var error: KarhooError? = null
 
         runBlocking {
@@ -58,7 +63,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun `get Adyen payments details call failure returns an error`() {
-        var shouldBeNull: String? = null
+        var shouldBeNull: JSONObject? = null
         var error: KarhooError? = null
         whenever(apiTemplate.getAdyenPaymentDetails(adyenPaymentsDetails))
                 .thenReturn(CompletableDeferred(Resource.Failure(KarhooError.InternalSDKError)))
@@ -89,7 +94,7 @@ class AdyenPaymentsDetailsInteractorTest : BaseKarhooUserInteractorTest() {
         whenever(apiTemplate.getAdyenPaymentDetails(any()))
                 .thenReturn(CompletableDeferred(Resource.Success(adyenPaymentsResponse)))
 
-        var adyenPaymentsResponse: String? = null
+        var adyenPaymentsResponse: JSONObject? = null
 
         interactor.adyenPaymentsDetails = adyenPaymentsDetails
 

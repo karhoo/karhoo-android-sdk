@@ -9,6 +9,7 @@ import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.karhoo.sdk.call.Call
+import org.json.JSONObject
 
 interface PaymentsService {
 
@@ -24,7 +25,7 @@ interface PaymentsService {
 
     fun getAdyenPaymentMethods(request: AdyenPaymentMethodsRequest): Call<String>
 
-    fun getAdyenPayments(request: String): Call<String>
+    fun getAdyenPayments(request: String): Call<JSONObject>
 
-    fun getAdyenPaymentDetails(paymentDetails: String): Call<String>
+    fun getAdyenPaymentDetails(paymentDetails: String): Call<JSONObject>
 }

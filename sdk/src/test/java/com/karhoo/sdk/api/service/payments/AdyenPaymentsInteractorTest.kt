@@ -12,6 +12,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -38,7 +39,7 @@ class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun `get Adyen payments call failure not made if request is null`() {
-        var shouldBeNull: String? = null
+        var shouldBeNull: JSONObject? = null
         var error: KarhooError? = null
 
         runBlocking {
@@ -63,7 +64,7 @@ class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun `get Adyen payments call failure returns an error`() {
-        var shouldBeNull: String? = null
+        var shouldBeNull: JSONObject? = null
         var error: KarhooError? = null
         whenever(apiTemplate.getAdyenPayments(adyenPaymentsRequest))
                 .thenReturn(CompletableDeferred(Resource.Failure(KarhooError.InternalSDKError)))
@@ -94,7 +95,7 @@ class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
         whenever(apiTemplate.getAdyenPayments(any()))
                 .thenReturn(CompletableDeferred(Resource.Success(adyenPaymentsResponse)))
 
-        var adyenPaymentsResponse: String? = null
+        var adyenPaymentsResponse: JSONObject? = null
 
         interactor.adyenPaymentsRequest = adyenPaymentsRequest
 
