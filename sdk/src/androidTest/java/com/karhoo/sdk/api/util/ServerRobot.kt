@@ -424,7 +424,7 @@ class ServerRobot {
         val VEHICLE_ATTRIBUTES = VehicleAttributes(passengerCapacity = 4,
                                                    luggageCapacity = 2)
 
-        val QUOTE_V2 = Quote(id = "someQuoteId",
+        val QUOTE = Quote(id = "someQuoteId",
                                quoteType = QuoteType.ESTIMATED,
                                quoteSource = QuoteSource.FLEET,
                                price = QUOTE_PRICE,
@@ -440,8 +440,8 @@ class ServerRobot {
                 id = QUOTE_ID.quoteId,
                 availability = AVAILABILITY,
                 quotes = listOf(
-                        QUOTE_V2,
-                        QUOTE_V2.copy(
+                        QUOTE,
+                        QUOTE.copy(
                                 id = "someOtherQuoteId",
                                 quoteSource = QuoteSource.FLEET,
                                 quoteType = QuoteType.METERED,

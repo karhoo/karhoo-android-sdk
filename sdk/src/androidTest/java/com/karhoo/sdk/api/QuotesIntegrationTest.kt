@@ -26,7 +26,7 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.K3001_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_ID
-import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_V2
+import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE
 import com.karhoo.sdk.api.util.ServerRobot.Companion.VEHICLES
 import com.karhoo.sdk.api.util.TestData
 import com.karhoo.sdk.api.util.serverRobot
@@ -108,10 +108,10 @@ class QuotesIntegrationTest {
 
         val saloonQuotes = result?.categories?.get("Saloon")
         assertEquals(VEHICLES.quotes.size, saloonQuotes?.size)
-        assertEquals(QUOTE_V2.id, saloonQuotes?.get(0)?.id)
-        assertEquals(QUOTE_V2.fleet, saloonQuotes?.get(0)?.fleet)
-        assertEquals(QUOTE_V2.quoteSource, saloonQuotes?.get(0)?.quoteSource)
-        assertEquals(QUOTE_V2.quoteType, saloonQuotes?.get(0)?.quoteType)
+        assertEquals(QUOTE.id, saloonQuotes?.get(0)?.id)
+        assertEquals(QUOTE.fleet, saloonQuotes?.get(0)?.fleet)
+        assertEquals(QUOTE.quoteSource, saloonQuotes?.get(0)?.quoteSource)
+        assertEquals(QUOTE.quoteType, saloonQuotes?.get(0)?.quoteType)
         assertEquals("someOtherQuoteId", saloonQuotes?.get(1)?.id)
         assertEquals("someOtherFleetId", saloonQuotes?.get(1)?.fleet?.fleetId)
         assertEquals(QuoteSource.FLEET, saloonQuotes?.get(1)?.quoteSource)
