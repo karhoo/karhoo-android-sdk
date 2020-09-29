@@ -17,7 +17,7 @@ class KarhooHeaders(private val credentialsManager: CredentialsManager) : Header
     override fun generateCorrelationId(method: String): String {
         return when (method) {
             APITemplate.BOOKING_WITH_NONCE_METHOD -> configuredQuoteId()
-            APITemplate.QUOTE_REQUEST_METHOD -> updatedQuoteId()
+            APITemplate.QUOTES_V2_REQUEST_METHOD -> updatedQuoteId()
             else -> ANDROID + UUID.randomUUID()
         }
     }

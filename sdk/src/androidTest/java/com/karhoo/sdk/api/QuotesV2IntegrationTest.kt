@@ -18,7 +18,6 @@ import com.karhoo.sdk.api.network.observable.Observer
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ResponseUtils
-import com.karhoo.sdk.api.util.ServerRobot.Companion.AVAILABILITIES
 import com.karhoo.sdk.api.util.ServerRobot.Companion.AVAILABILITY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
@@ -27,14 +26,12 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.K3001_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_ID
 import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_V2
-import com.karhoo.sdk.api.util.ServerRobot.Companion.VEHICLES
 import com.karhoo.sdk.api.util.ServerRobot.Companion.VEHICLES_V2
 import com.karhoo.sdk.api.util.TestData
 import com.karhoo.sdk.api.util.serverRobot
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -73,8 +70,8 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(4)
 
         serverRobot {
-            quoteIdResponseV2(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_V2_REQUEST_METHOD)
-            quotesResponseV2(code = HTTP_OK, response = VEHICLES_V2, endpoint = QUOTES_V2_METHOD,
+            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_V2_REQUEST_METHOD)
+            quotesResponse(code = HTTP_OK, response = VEHICLES_V2, endpoint = QUOTES_V2_METHOD,
                             quoteId = QUOTE_ID.quoteId)
         }
 
@@ -122,215 +119,6 @@ class QuotesV2IntegrationTest {
 
     /**
      * Given:   A quote search has been made
-     * When:    Success 200 but with invalid data responses for Availabilities
-     * Then:    an unexpected error was returned
-     * And:     The endpoint was polled the correct number of times
-     **/
-    @Test
-    fun availabilitiesInvalidDataReturnsError() {
-        val latch = CountDownLatch(1)
-
-        serverRobot {
-            availabilitiesResponse(code = HTTP_UNAUTHORIZED, response = INVALID_DATA)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
-        }
-
-        var result: KarhooError? = null
-
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
-                when (value) {
-                    is Resource.Failure -> {
-                        result = value.error
-                        latch.countDown()
-                    }
-                }
-            }
-
-        }
-
-        KarhooApi.quotesService.quotesV2(TestData.QUOTE_SEARCH)
-                .observable()
-                .apply {
-                    subscribe(observer, 300L)
-                    latch.await(2, TimeUnit.SECONDS)
-                    unsubscribe(observer)
-                }
-
-        assertEquals(0, latch.count)
-        assertEquals(result, KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   A quote search has been made
-     * When:    Success 200 but with bad json responses for Availabilities
-     * Then:    An unexpected KarhooError should be returned
-     * And:     The endpoint was polled the correct number of times
-     **/
-    @Test
-    fun availabilitiesBadJsonSuccessReturnsUnexpectedError() {
-        val latch = CountDownLatch(1)
-
-        serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = INVALID_JSON)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
-        }
-
-        var result: KarhooError? = null
-
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
-                when (value) {
-                    is Resource.Failure -> {
-                        result = value.error
-                        latch.countDown()
-                    }
-                }
-            }
-        }
-
-        KarhooApi.quotesService.quotesV2(TestData.QUOTE_SEARCH)
-                .observable()
-                .apply {
-                    subscribe(observer, 300L)
-                    latch.await(1000L, TimeUnit.MILLISECONDS)
-                    unsubscribe(observer)
-                }
-
-        assertEquals(0, latch.count)
-        assertEquals(result, KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   A quote search has been made
-     * When:    Success 200 but with no body responses for Availabilities
-     * Then:    Unexpected KarhooError returned
-     * And:     The endpoint was polled the correct number of times
-     **/
-    @Test
-    fun availabilitiesBlankBodyThrowsUnexpectedError() {
-        val latch = CountDownLatch(1)
-
-        serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = NO_BODY)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
-        }
-
-        var result: KarhooError? = null
-
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
-                when (value) {
-                    is Resource.Failure -> {
-                        result = value.error
-                        latch.countDown()
-                    }
-                }
-            }
-        }
-
-        KarhooApi.quotesService.quotesV2(TestData.QUOTE_SEARCH)
-                .observable()
-                .apply {
-                    subscribe(observer, 300L)
-                    latch.await(1000L, TimeUnit.MILLISECONDS)
-                    unsubscribe(observer)
-                }
-
-
-        assertEquals(0, latch.count)
-        assertEquals(result, KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   A quote search has been made
-     * When:    Error 401 with no body responses for Availabilities
-     * Then:    Unexpected KarhooError returned
-     * And:     The endpoint was polled the correct number of times
-     **/
-    @Test
-    fun availabilitiesErrorResponseWithNoBodyGetsParsedIntoKarhooError() {
-        val latch = CountDownLatch(1)
-
-        serverRobot {
-            availabilitiesResponse(code = HTTP_UNAUTHORIZED, response = NO_BODY)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
-        }
-
-        var result: KarhooError? = null
-
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
-                when (value) {
-                    is Resource.Failure -> {
-                        result = value.error
-                        latch.countDown()
-                    }
-                }
-            }
-        }
-
-        KarhooApi.quotesService.quotesV2(TestData.QUOTE_SEARCH)
-                .observable()
-                .apply {
-                    subscribe(observer, 300L)
-                    latch.await(1000L, TimeUnit.MILLISECONDS)
-                    unsubscribe(observer)
-                }
-
-
-        assertEquals(0, latch.count)
-        assertEquals(result, KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   A quote search has been made
-     * When:    Error 401 with empty payload responses for Availabilities
-     * Then:    Unexpected KarhooError returned
-     * And:     The endpoint was polled the correct number of times
-     **/
-    @Test
-    fun availabilitiesErrorResponseWithInvalidJsonGetsParsedIntoKarhooError() {
-        val latch = CountDownLatch(1)
-
-        serverRobot {
-            availabilitiesResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
-        }
-
-        var result: KarhooError? = null
-
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
-                when (value) {
-                    is Resource.Failure -> {
-                        result = value.error
-                        latch.countDown()
-                    }
-                }
-            }
-        }
-
-        KarhooApi.quotesService.quotesV2(TestData.QUOTE_SEARCH)
-                .observable()
-                .apply {
-                    subscribe(observer, 300L)
-                    latch.await(1000L, TimeUnit.MILLISECONDS)
-                    unsubscribe(observer)
-                }
-
-
-        assertEquals(0, latch.count)
-        assertEquals(result, KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   A quote search has been made
      * When:    Error 401 with valid error json responses for quoteListId
      * Then:    The correctly parsed error should be returned
      * And:     The endpoint was polled the correct number of times
@@ -341,7 +129,7 @@ class QuotesV2IntegrationTest {
 
         serverRobot {
             quoteIdResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, endpoint = QUOTES_V2_REQUEST_METHOD)
-            quotesResponse(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_V2_METHOD)
+            quotesResponse(code = HTTP_OK, response = VEHICLES_V2, endpoint = QUOTES_V2_METHOD)
         }
 
         var result: KarhooError? = null
@@ -380,9 +168,8 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
             quoteIdResponse(code = HTTP_OK, response = INVALID_DATA)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
+            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
         }
 
         var result: KarhooError? = null
@@ -422,9 +209,8 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
             quoteIdResponse(code = HTTP_OK, response = INVALID_JSON)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
+            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
         }
 
         var result: KarhooError? = null
@@ -463,9 +249,8 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
             quoteIdResponse(code = HTTP_OK, response = NO_BODY)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
+            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
         }
 
         var result: KarhooError? = null
@@ -504,9 +289,8 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
             quoteIdResponse(code = HTTP_UNAUTHORIZED, response = NO_BODY)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
+            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
         }
 
         var result: KarhooError? = null
@@ -545,9 +329,8 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
             quoteIdResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
+            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
         }
 
         var result: KarhooError? = null
@@ -666,7 +449,6 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
             quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
             quotesResponse(code = HTTP_OK, response = INVALID_JSON)
         }
@@ -707,7 +489,6 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
             quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
             quotesResponse(code = HTTP_OK, response = NO_BODY)
         }
@@ -748,7 +529,6 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
             quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
             quotesResponse(code = HTTP_UNAUTHORIZED, response = NO_BODY)
         }
@@ -789,7 +569,6 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
             quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
             quotesResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON)
         }
@@ -829,7 +608,7 @@ class QuotesV2IntegrationTest {
         val latch = CountDownLatch(1)
 
         val quoteListId = ResponseUtils(httpCode = HTTP_OK, response = Gson().toJson(QUOTE_ID)).createResponse()
-        val quotesListSuccess = ResponseUtils(httpCode = HTTP_OK, response = Gson().toJson(VEHICLES)).createResponse()
+        val quotesListSuccess = ResponseUtils(httpCode = HTTP_OK, response = Gson().toJson(VEHICLES_V2)).createResponse()
         val quotesListError = ResponseUtils(httpCode = HTTP_UNAUTHORIZED, response = Gson().toJson(K3001_ERROR)).createResponse()
 
         val scenario = "ScenarioOne"
