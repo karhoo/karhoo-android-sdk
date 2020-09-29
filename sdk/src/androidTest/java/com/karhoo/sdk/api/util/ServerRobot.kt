@@ -39,7 +39,6 @@ import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotePrice
 import com.karhoo.sdk.api.model.QuoteSource
 import com.karhoo.sdk.api.model.QuoteType
-import com.karhoo.sdk.api.model.QuoteV2
 import com.karhoo.sdk.api.model.QuoteVehicle
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
@@ -50,7 +49,6 @@ import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicle
 import com.karhoo.sdk.api.model.VehicleAttributes
 import com.karhoo.sdk.api.model.Vehicles
-import com.karhoo.sdk.api.model.VehiclesV2
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
@@ -417,7 +415,7 @@ class ServerRobot {
         val VEHICLE_ATTRIBUTES = VehicleAttributes(passengerCapacity = 4,
                                                    luggageCapacity = 2)
 
-        val QUOTE_V2 = QuoteV2(id = "someQuoteId",
+        val QUOTE_V2 = Quote(id = "someQuoteId",
                                quoteType = QuoteType.ESTIMATED,
                                quoteSource = QuoteSource.FLEET,
                                price = QUOTE_PRICE,
@@ -428,7 +426,7 @@ class ServerRobot {
 
         val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto")))
 
-        val VEHICLES_V2 = VehiclesV2(
+        val VEHICLES_V2 = Vehicles(
                 status = "PROGRESSING",
                 id = QUOTE_ID.quoteId,
                 availability = AVAILABILITY,

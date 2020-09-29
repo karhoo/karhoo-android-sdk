@@ -2,7 +2,6 @@ package com.karhoo.sdk.api.network.client
 
 import com.karhoo.sdk.api.KarhooEnvironmentDetails
 import com.karhoo.sdk.api.model.BraintreeSDKToken
-import com.karhoo.sdk.api.model.Categories
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
@@ -15,7 +14,7 @@ import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.model.VehiclesV2
+import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
@@ -129,7 +128,7 @@ interface   APITemplate {
     fun quotesv2(@Body quotesV2Request: QuotesV2Request): Deferred<Resource<QuoteId>>
 
     @GET(QUOTES_V2_METHOD)
-    fun quotesv2(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<VehiclesV2>>
+    fun quotesv2(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
 
     @POST(BOOKING_METHOD)
     fun book(): Deferred<Resource<TripInfo>>

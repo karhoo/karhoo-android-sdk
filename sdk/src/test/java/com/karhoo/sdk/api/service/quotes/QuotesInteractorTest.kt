@@ -5,14 +5,14 @@ import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.AuthenticationMethod
-import com.karhoo.sdk.api.model.Categories
 import com.karhoo.sdk.api.model.LocationInfo
+import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.request.QuotesRequest
+import com.karhoo.sdk.api.network.request.QuotesV2Request
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
 import com.nhaarman.mockitokotlin2.any
@@ -20,20 +20,16 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import junit.framework.Assert
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers.Unconfined
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers
 import org.mockito.junit.MockitoJUnitRunner
 import java.util.Date
 import kotlin.coroutines.CoroutineContext
@@ -43,7 +39,7 @@ class QuotesInteractorTest {
 
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
-    private val context: CoroutineContext = Unconfined
+    private val context: CoroutineContext = Dispatchers.Unconfined
     private val applicationContext: Context = mock()
 
     private lateinit var interactor: QuotesInteractor
@@ -68,11 +64,9 @@ class QuotesInteractorTest {
     @Test
     fun `quotes returns successful response`() {
         val quotesList = QuoteList(categories = mapOf(), id = QuoteId("1234567"))
-        whenever(apiTemplate.availabilities(any()))
-                .thenReturn(CompletableDeferred(Resource.Success(Categories(listOf()))))
-        whenever(apiTemplate.quotes(any<QuotesRequest>()))
+        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
-        whenever(apiTemplate.quotes(anyString()))
+        whenever(apiTemplate.quotesv2(ArgumentMatchers.anyString()))
                 .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
 
         interactor.quotesSearch = quotesSearch
@@ -82,47 +76,13 @@ class QuotesInteractorTest {
             interactor.execute { result ->
                 when (result) {
                     is Resource.Success -> returnedQuotesList = result.data
-                    is Resource.Failure -> fail(result.error.internalMessage)
+                    is Resource.Failure -> Assert.fail(result.error.internalMessage)
                 }
             }
             delay(5)
         }
 
-        assertEquals(quotesList, returnedQuotesList)
-    }
-
-    /**
-     * Given:   There is an issue with the request
-     * When:    An availability request is made
-     * Then:    The error is returned
-     **/
-    @Test
-    fun `when there is an issue with availability an error is returned`() {
-        val expectedError = KarhooError.CouldNotGetAvailabilityNoCategories
-        var shouldBeNull: QuoteList? = null
-        var error: KarhooError? = null
-
-        whenever(apiTemplate.availabilities(any()))
-                .thenReturn(CompletableDeferred(Resource.Failure(expectedError)))
-        whenever(apiTemplate.quotes(any<QuotesRequest>()))
-                .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
-        whenever(apiTemplate.quotes(anyString()))
-                .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
-
-        interactor.quotesSearch = quotesSearch
-
-        runBlocking {
-            interactor.execute { result ->
-                when (result) {
-                    is Resource.Success -> shouldBeNull = result.data
-                    is Resource.Failure -> error = result.error
-                }
-            }
-            delay(5)
-        }
-
-        assertNull(shouldBeNull)
-        assertEquals(expectedError, error)
+        Assert.assertEquals(quotesList, returnedQuotesList)
     }
 
     /**
@@ -136,11 +96,39 @@ class QuotesInteractorTest {
         var shouldBeNull: QuoteList? = null
         var error: KarhooError? = null
 
-        whenever(apiTemplate.availabilities(any()))
-                .thenReturn(CompletableDeferred(Resource.Success(Categories(listOf()))))
-        whenever(apiTemplate.quotes(any<QuotesRequest>()))
+        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
-        whenever(apiTemplate.quotes(anyString()))
+        whenever(apiTemplate.quotesv2(ArgumentMatchers.anyString()))
+                .thenReturn(CompletableDeferred(Resource.Failure(expectedError)))
+
+        interactor.quotesSearch = quotesSearch
+
+        runBlocking {
+            interactor.execute { result ->
+                when (result) {
+                    is Resource.Success -> shouldBeNull = result.data
+                    is Resource.Failure -> error = result.error
+                }
+            }
+            delay(100)
+        }
+
+        junit.framework.Assert.assertNull(shouldBeNull)
+        junit.framework.Assert.assertEquals(expectedError, error)
+    }
+
+    /**
+     * Given:   A quote id request is made
+     * When:    There is an issue with the requests
+     * Then:    The error is returned
+     **/
+    @Test
+    fun `when there is an issue with quote id and error is returned`() {
+        val expectedError = KarhooError.InternalSDKError
+        var shouldBeNull: QuoteList? = null
+        var error: KarhooError? = null
+
+        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
                 .thenReturn(CompletableDeferred(Resource.Failure(expectedError)))
 
         interactor.quotesSearch = quotesSearch
@@ -160,71 +148,6 @@ class QuotesInteractorTest {
     }
 
     /**
-     * Given:   A quote id request is made
-     * When:    There is an issue with the requests
-     * Then:    The error is returned
-     **/
-    @Test
-    fun `when there is an issue with quote id and error is returned`() {
-        val expectedError = KarhooError.InternalSDKError
-        var shouldBeNull: QuoteList? = null
-        var error: KarhooError? = null
-
-        whenever(apiTemplate.availabilities(any()))
-                .thenReturn(CompletableDeferred(Resource.Success(Categories(listOf()))))
-        whenever(apiTemplate.quotes(any<QuotesRequest>()))
-                .thenReturn(CompletableDeferred(Resource.Failure(expectedError)))
-
-        interactor.quotesSearch = quotesSearch
-
-        runBlocking {
-            interactor.execute { result ->
-                when (result) {
-                    is Resource.Success -> shouldBeNull = result.data
-                    is Resource.Failure -> error = result.error
-                }
-            }
-            delay(100)
-        }
-
-        assertNull(shouldBeNull)
-        assertEquals(expectedError, error)
-    }
-
-    /**
-     * Given:   A request is made to get quotes
-     * When:    There is a destination and origin
-     * Then:    The availability should return a map of categories
-     */
-    @Test
-    fun `availability returns categories`() {
-        val quotesList = QuoteList(categories = mapOf(pair = Pair("MPV", listOf())), id = QuoteId("1234567"))
-        val categoryList = listOf("MPV")
-        whenever(apiTemplate.availabilities(any()))
-                .thenReturn(CompletableDeferred(Resource.Success(Categories(categoryList))))
-        whenever(apiTemplate.quotes(any<QuotesRequest>()))
-                .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
-        whenever(apiTemplate.quotes(anyString()))
-                .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
-
-        interactor.quotesSearch = quotesSearch
-
-        var returnedQuotesList: QuoteList? = null
-        runBlocking {
-            interactor.execute { result ->
-                when (result) {
-                    is Resource.Success -> returnedQuotesList = result.data
-                    is Resource.Failure -> fail(result.error.internalMessage)
-                }
-            }
-            delay(5)
-        }
-
-        assertEquals(quotesList.categories, returnedQuotesList?.categories)
-        assertTrue(quotesList.categories.containsKey(categoryList[0]))
-    }
-
-    /**
      * Given:   A second request is made
      * When:    The request is executed
      * Then:    Only the quotes endpoint should fire
@@ -232,11 +155,9 @@ class QuotesInteractorTest {
     @Ignore("Seems to be flaky")
     @Test
     fun `repeated requests uses the same quote id`() {
-        whenever(apiTemplate.availabilities(any()))
-                .thenReturn(CompletableDeferred(Resource.Success(Categories(listOf()))))
-        whenever(apiTemplate.quotes(any<QuotesRequest>()))
+        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
-        whenever(apiTemplate.quotes(anyString()))
+        whenever(apiTemplate.quotesv2(ArgumentMatchers.anyString()))
                 .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
 
         interactor = QuotesInteractor(
@@ -254,9 +175,8 @@ class QuotesInteractorTest {
             delay(100)
         }
 
-        verify(apiTemplate, times(1)).availabilities(any())
-        verify(apiTemplate, times(1)).quotes(any<QuotesRequest>())
-        verify(apiTemplate, times(5)).quotes(anyString())
+        verify(apiTemplate, times(1)).quotesv2(any<QuotesV2Request>())
+        verify(apiTemplate, times(5)).quotesv2(ArgumentMatchers.anyString())
     }
 
     /**
@@ -280,8 +200,8 @@ class QuotesInteractorTest {
             delay(5)
         }
 
-        assertNull(shouldBeNull)
-        assertEquals(expectedError, error)
+        Assert.assertNull(shouldBeNull)
+        Assert.assertEquals(expectedError, error)
     }
 
     /**
@@ -291,11 +211,9 @@ class QuotesInteractorTest {
      **/
     @Test
     fun `no date scheduled gets executed`() {
-        whenever(apiTemplate.availabilities(any()))
-                .thenReturn(CompletableDeferred(Resource.Success(Categories(listOf()))))
-        whenever(apiTemplate.quotes(any<QuotesRequest>()))
+        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
-        whenever(apiTemplate.quotes(anyString()))
+        whenever(apiTemplate.quotesv2(ArgumentMatchers.anyString()))
                 .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
 
         interactor.quotesSearch = quotesSearchNoDate
@@ -303,19 +221,19 @@ class QuotesInteractorTest {
             interactor.execute { }
             delay(5)
         }
-        verify(apiTemplate).availabilities(any())
-        verify(apiTemplate).quotes(any<QuotesRequest>())
-        verify(apiTemplate).quotes(anyString())
+        verify(apiTemplate).quotesv2(any<QuotesV2Request>())
+        verify(apiTemplate).quotesv2(ArgumentMatchers.anyString())
 
     }
 
     companion object {
-        val origin = LocationInfo(placeId = "1234ABZ")
-        val destination = LocationInfo(placeId = "5678ZXA")
+        val origin = LocationInfo(placeId = "1234ABZ", position = Position(latitude = 0.1,
+                                                                           longitude = 0.2))
+        val destination = LocationInfo(placeId = "5678ZXA", position = Position(latitude = 0.3,
+                                                                                longitude = 0.4))
         val dateScheduled = Date()
 
         val quotesSearch = QuotesSearch(origin, destination, dateScheduled)
         val quotesSearchNoDate = QuotesSearch(origin, destination, null)
     }
-
 }

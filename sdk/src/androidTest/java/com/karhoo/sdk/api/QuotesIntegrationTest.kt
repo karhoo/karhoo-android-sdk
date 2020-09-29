@@ -8,7 +8,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import com.google.gson.Gson
-import com.karhoo.sdk.api.model.QuoteListV2
+import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuoteSource
 import com.karhoo.sdk.api.model.QuoteType
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.QUOTES_V2_REQUEST_METHOD
@@ -42,7 +42,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
-class QuotesV2IntegrationTest {
+class QuotesIntegrationTest {
 
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
@@ -75,10 +75,10 @@ class QuotesV2IntegrationTest {
                             quoteId = QUOTE_ID.quoteId)
         }
 
-        var result: QuoteListV2? = null
+        var result: QuoteList? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Success -> {
                         result = value.data
@@ -134,8 +134,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -174,8 +174,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -215,8 +215,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -255,8 +255,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -295,8 +295,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -335,8 +335,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -375,8 +375,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -413,10 +413,10 @@ class QuotesV2IntegrationTest {
             quotesResponse(code = HTTP_OK, response = INVALID_DATA, endpoint = QUOTES_V2_METHOD)
         }
 
-        var result: QuoteListV2? = null
+        var result: QuoteList? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Success -> {
                         result = value.data
@@ -455,8 +455,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -495,8 +495,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -535,8 +535,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -575,8 +575,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -632,8 +632,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error
@@ -672,8 +672,8 @@ class QuotesV2IntegrationTest {
 
         var result: KarhooError? = null
 
-        val observer = object : Observer<Resource<QuoteListV2>> {
-            override fun onValueChanged(value: Resource<QuoteListV2>) {
+        val observer = object : Observer<Resource<QuoteList>> {
+            override fun onValueChanged(value: Resource<QuoteList>) {
                 when (value) {
                     is Resource.Failure -> {
                         result = value.error

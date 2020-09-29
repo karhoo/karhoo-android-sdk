@@ -3,10 +3,10 @@ package com.karhoo.sdk.api.service.quotes
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.QuoteId
-import com.karhoo.sdk.api.model.QuoteListV2
-import com.karhoo.sdk.api.model.QuoteV2
+import com.karhoo.sdk.api.model.QuoteList
+import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuotesSearch
-import com.karhoo.sdk.api.model.VehiclesV2
+import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.QuoteRequestPoint
 import com.karhoo.sdk.api.network.request.QuotesV2Request
@@ -23,16 +23,16 @@ import java.util.TimeZone
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-internal class QuotesInteractorV2 @Inject constructor(credentialsManager: CredentialsManager,
-                                                     private val apiTemplate: APITemplate,
-                                                     context: CoroutineContext = Main) :
-        BasePollCallInteractor<QuoteListV2>(true, credentialsManager, apiTemplate, context) {
+internal class QuotesInteractor @Inject constructor(credentialsManager: CredentialsManager,
+                                                    private val apiTemplate: APITemplate,
+                                                    context: CoroutineContext = Main) :
+        BasePollCallInteractor<QuoteList>(true, credentialsManager, apiTemplate, context) {
 
     internal var quotesSearch: QuotesSearch? = null
-    private var vehicles: VehiclesV2? = null
+    private var vehicles: Vehicles? = null
     private var quoteId: QuoteId? = null
 
-    override fun createRequest(): Deferred<Resource<QuoteListV2>> {
+    override fun createRequest(): Deferred<Resource<QuoteList>> {
         quotesSearch?.let { search ->
             quoteId?.let { quote ->
                 return GlobalScope.async {
@@ -75,7 +75,7 @@ internal class QuotesInteractorV2 @Inject constructor(credentialsManager: Creden
                 dateScheduled = dateScheduled)
     }
 
-    private fun quoteList(quotesResource: Resource<VehiclesV2>): Resource<QuoteListV2> {
+    private fun quoteList(quotesResource: Resource<Vehicles>): Resource<QuoteList> {
         when (quotesResource) {
             is Resource.Success -> this.vehicles = quotesResource.data
             is Resource.Failure -> return Resource.Failure(quotesResource.error)
@@ -83,19 +83,19 @@ internal class QuotesInteractorV2 @Inject constructor(credentialsManager: Creden
 
         this.vehicles?.let {
 
-            val quotesMap = mutableMapOf<String, List<QuoteV2>>()
+            val quotesMap = mutableMapOf<String, List<Quote>>()
             val categoryNames = it.availability.vehicles.classes
 
             categoryNames.forEach { category ->
-                val filteredVehicles: List<QuoteV2> = it.quotes.filter { it.vehicle.vehicleClass ==
+                val filteredVehicles: List<Quote> = it.quotes.filter { it.vehicle.vehicleClass ==
                         category }
                 quotesMap[category] = filteredVehicles
             }
-            return Resource.Success(QuoteListV2(id = quoteId ?: QuoteId(), categories = quotesMap))
+            return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap))
         } ?: return Resource.Failure(error = KarhooError.InternalSDKError)
     }
 
-    private fun quotes(request: QuotesV2Request?): Deferred<Resource<VehiclesV2>> {
+    private fun quotes(request: QuotesV2Request?): Deferred<Resource<Vehicles>> {
         if (request == null) {
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }
@@ -103,12 +103,12 @@ internal class QuotesInteractorV2 @Inject constructor(credentialsManager: Creden
             val quoteIdResult = apiTemplate.quotesv2(request).await()
             when (quoteIdResult) {
                 is Resource.Success -> quotes(quoteIdResult.data)
-                is Resource.Failure -> async { Resource.Failure<VehiclesV2>(quoteIdResult.error) }
+                is Resource.Failure -> async { Resource.Failure<Vehicles>(quoteIdResult.error) }
             }
         }
     }
 
-    private fun quotes(quoteId: QuoteId): Deferred<Resource<VehiclesV2>> {
+    private fun quotes(quoteId: QuoteId): Deferred<Resource<Vehicles>> {
         this.quoteId = quoteId
         return apiTemplate.quotesv2(quoteId.quoteId)
     }
