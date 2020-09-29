@@ -26,7 +26,6 @@ import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
 import com.karhoo.sdk.api.network.request.QuotesRequest
-import com.karhoo.sdk.api.network.request.QuotesV2Request
 import com.karhoo.sdk.api.network.request.RefreshTokenRequest
 import com.karhoo.sdk.api.network.request.ResetPasswordRequest
 import com.karhoo.sdk.api.network.request.TripBooking
@@ -63,8 +62,8 @@ interface   APITemplate {
 
         @Deprecated("Availabilities endpoint is deprecated")
         const val AVAILABILITY_METHOD = "/v1/quotes/availability"
-        const val QUOTES_V2_REQUEST_METHOD = "/v2/quotes"
-        const val QUOTES_V2_METHOD = "/v2/quotes/{id}"
+        const val QUOTES_REQUEST_METHOD = "/v2/quotes"
+        const val QUOTES_METHOD = "/v2/quotes/{id}"
         const val BOOKING_METHOD = "/v1/bookings"
         const val BOOKING_WITH_NONCE_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
@@ -133,10 +132,10 @@ interface   APITemplate {
     @Deprecated("Availabilities endpoint is deprecated")
     fun availabilities(@Body availabilityRequest: AvailabilityRequest): Deferred<Resource<Categories>>
 
-    @POST(QUOTES_V2_REQUEST_METHOD)
-    fun quotesv2(@Body quotesV2Request: QuotesV2Request): Deferred<Resource<QuoteId>>
+    @POST(QUOTES_REQUEST_METHOD)
+    fun quotesv2(@Body quotesRequest: QuotesRequest): Deferred<Resource<QuoteId>>
 
-    @GET(QUOTES_V2_METHOD)
+    @GET(QUOTES_METHOD)
     fun quotesv2(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
 
     @POST(BOOKING_METHOD)

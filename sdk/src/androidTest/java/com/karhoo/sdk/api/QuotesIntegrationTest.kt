@@ -11,8 +11,8 @@ import com.google.gson.Gson
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuoteSource
 import com.karhoo.sdk.api.model.QuoteType
-import com.karhoo.sdk.api.network.client.APITemplate.Companion.QUOTES_V2_REQUEST_METHOD
-import com.karhoo.sdk.api.network.client.APITemplate.Companion.QUOTES_V2_METHOD
+import com.karhoo.sdk.api.network.client.APITemplate.Companion.QUOTES_REQUEST_METHOD
+import com.karhoo.sdk.api.network.client.APITemplate.Companion.QUOTES_METHOD
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
 import com.karhoo.sdk.api.network.observable.Observer
 import com.karhoo.sdk.api.network.response.Resource
@@ -71,8 +71,8 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(4)
 
         serverRobot {
-            quoteIdResponseV2(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_V2_REQUEST_METHOD)
-            quotesResponseV2(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_V2_METHOD,
+            quoteIdResponseV2(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_REQUEST_METHOD)
+            quotesResponseV2(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_METHOD,
                             quoteId = QUOTE_ID.quoteId)
         }
 
@@ -338,8 +338,8 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            quoteIdResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, endpoint = QUOTES_V2_REQUEST_METHOD)
-            quotesResponse(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_V2_METHOD)
+            quoteIdResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, endpoint = QUOTES_REQUEST_METHOD)
+            quotesResponse(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_METHOD)
         }
 
         var result: KarhooError? = null
@@ -584,8 +584,8 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_V2_REQUEST_METHOD)
-            quotesResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, endpoint = QUOTES_V2_METHOD)
+            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_REQUEST_METHOD)
+            quotesResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, endpoint = QUOTES_METHOD)
         }
 
         var result: KarhooError? = null
@@ -624,8 +624,8 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(4)
 
         serverRobot {
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_V2_REQUEST_METHOD)
-            quotesResponse(code = HTTP_OK, response = INVALID_DATA, endpoint = QUOTES_V2_METHOD)
+            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_REQUEST_METHOD)
+            quotesResponse(code = HTTP_OK, response = INVALID_DATA, endpoint = QUOTES_METHOD)
         }
 
         var result: QuoteList? = null
@@ -833,17 +833,17 @@ class QuotesIntegrationTest {
         val scenario = "ScenarioOne"
         val stageTwo = "StageTwo"
 
-        givenThat(post(urlEqualTo(QUOTES_V2_REQUEST_METHOD))
+        givenThat(post(urlEqualTo(QUOTES_REQUEST_METHOD))
                           .inScenario(scenario)
                           .willReturn(quoteListId))
 
-        givenThat(get(urlEqualTo(QUOTES_V2_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
+        givenThat(get(urlEqualTo(QUOTES_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
                           .inScenario(scenario)
                           .whenScenarioStateIs(Scenario.STARTED)
                           .willSetStateTo(stageTwo)
                           .willReturn(quotesListError))
 
-    givenThat(get(urlEqualTo(QUOTES_V2_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
+    givenThat(get(urlEqualTo(QUOTES_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
                           .inScenario(scenario)
                           .whenScenarioStateIs(stageTwo)
                           .willReturn(quotesListSuccess))
@@ -885,9 +885,9 @@ class QuotesIntegrationTest {
 
         serverRobot {
             quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, delayInMillis = 2000, endpoint =
-            QUOTES_V2_REQUEST_METHOD)
+            QUOTES_REQUEST_METHOD)
             quotesResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON, endpoint =
-            QUOTES_V2_METHOD, delayInMillis = 2000) }
+            QUOTES_METHOD, delayInMillis = 2000) }
 
         var result: KarhooError? = null
 

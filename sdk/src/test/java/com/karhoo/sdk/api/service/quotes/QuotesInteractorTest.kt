@@ -12,7 +12,7 @@ import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.request.QuotesV2Request
+import com.karhoo.sdk.api.network.request.QuotesRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
 import com.nhaarman.mockitokotlin2.any
@@ -64,7 +64,7 @@ class QuotesInteractorTest {
     @Test
     fun `quotes returns successful response`() {
         val quotesList = QuoteList(categories = mapOf(), id = QuoteId("1234567"))
-        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
+        whenever(apiTemplate.quotesv2(any<QuotesRequest>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
         whenever(apiTemplate.quotesv2(ArgumentMatchers.anyString()))
                 .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
@@ -96,7 +96,7 @@ class QuotesInteractorTest {
         var shouldBeNull: QuoteList? = null
         var error: KarhooError? = null
 
-        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
+        whenever(apiTemplate.quotesv2(any<QuotesRequest>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
         whenever(apiTemplate.quotesv2(ArgumentMatchers.anyString()))
                 .thenReturn(CompletableDeferred(Resource.Failure(expectedError)))
@@ -128,7 +128,7 @@ class QuotesInteractorTest {
         var shouldBeNull: QuoteList? = null
         var error: KarhooError? = null
 
-        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
+        whenever(apiTemplate.quotesv2(any<QuotesRequest>()))
                 .thenReturn(CompletableDeferred(Resource.Failure(expectedError)))
 
         interactor.quotesSearch = quotesSearch
@@ -155,7 +155,7 @@ class QuotesInteractorTest {
     @Ignore("Seems to be flaky")
     @Test
     fun `repeated requests uses the same quote id`() {
-        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
+        whenever(apiTemplate.quotesv2(any<QuotesRequest>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
         whenever(apiTemplate.quotesv2(ArgumentMatchers.anyString()))
                 .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
@@ -175,7 +175,7 @@ class QuotesInteractorTest {
             delay(100)
         }
 
-        verify(apiTemplate, times(1)).quotesv2(any<QuotesV2Request>())
+        verify(apiTemplate, times(1)).quotesv2(any<QuotesRequest>())
         verify(apiTemplate, times(5)).quotesv2(ArgumentMatchers.anyString())
     }
 
@@ -211,7 +211,7 @@ class QuotesInteractorTest {
      **/
     @Test
     fun `no date scheduled gets executed`() {
-        whenever(apiTemplate.quotesv2(any<QuotesV2Request>()))
+        whenever(apiTemplate.quotesv2(any<QuotesRequest>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
         whenever(apiTemplate.quotesv2(ArgumentMatchers.anyString()))
                 .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
@@ -221,7 +221,7 @@ class QuotesInteractorTest {
             interactor.execute { }
             delay(5)
         }
-        verify(apiTemplate).quotesv2(any<QuotesV2Request>())
+        verify(apiTemplate).quotesv2(any<QuotesRequest>())
         verify(apiTemplate).quotesv2(ArgumentMatchers.anyString())
 
     }

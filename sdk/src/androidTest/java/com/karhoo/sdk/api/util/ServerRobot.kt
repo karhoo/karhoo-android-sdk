@@ -176,7 +176,7 @@ class ServerRobot {
     }
 
     fun quoteIdResponseV2(code: Int, response: Any, endpoint: String = APITemplate
-            .QUOTES_V2_REQUEST_METHOD, delayInMillis: Int = 0) {
+            .QUOTES_REQUEST_METHOD, delayInMillis: Int = 0) {
         mockPostResponse(
                 code = code,
                 response = response,
@@ -185,7 +185,7 @@ class ServerRobot {
                         )
     }
 
-    fun quotesResponseV2(code: Int, response: Any, endpoint: String = APITemplate.QUOTES_V2_METHOD,
+    fun quotesResponseV2(code: Int, response: Any, endpoint: String = APITemplate.QUOTES_METHOD,
                          delayInMillis: Int = 0, quoteId: String = QUOTE_ID.quoteId) {
         mockGetResponse(
                 code = code,
