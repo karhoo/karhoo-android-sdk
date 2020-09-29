@@ -89,10 +89,10 @@ interface   APITemplate {
         const val AUTH_USER_INFO_METHOD = "/oauth/v2/userinfo"
         const val AUTH_REFRESH_METHOD = "/oauth/v2/token"
 
-        const val GET_PROVIDERS_METHOD = "/v3/payments/providers"
-        const val GET_ADYEN_PUBLIC_KEY_METHOD = "/v3/payments/adyen/public-key"
-        const val GET_ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
-        const val GET_ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/payments"
+        const val PAYMENT_PROVIDERS_METHOD = "/v3/payments/providers"
+        const val ADYEN_PUBLIC_KEY_METHOD = "/v3/payments/adyen/public-key"
+        const val ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
+        const val ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/payments"
         const val ADYEN_PAYMENT_DETAILS = "/v3/payments/adyen/payments-details"
 
         const val IDENTIFIER_ID = "id"
@@ -194,18 +194,18 @@ interface   APITemplate {
     @GET(FARE_DETAILS)
     fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
 
-    @GET(GET_PROVIDERS_METHOD)
+    @GET(PAYMENT_PROVIDERS_METHOD)
     fun getPaymentProvider(): Deferred<Resource<PaymentProvider>>
 
-    @GET(GET_ADYEN_PUBLIC_KEY_METHOD)
+    @GET(ADYEN_PUBLIC_KEY_METHOD)
     fun getAdyenPublicKey(): Deferred<Resource<AdyenPublicKey>>
 
-    @POST(GET_ADYEN_PAYMENT_METHODS_METHOD)
+    @POST(ADYEN_PAYMENT_METHODS_METHOD)
     fun getAdyenPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
             Deferred<Resource<ResponseBody>>
 
     @Headers("Content-Type: application/json")
-    @POST(GET_ADYEN_PAYMENTS_METHOD)
+    @POST(ADYEN_PAYMENTS_METHOD)
     fun getAdyenPayments(@Body adyenPaymentsRequest: String):
             Deferred<Resource<ResponseBody>>
 

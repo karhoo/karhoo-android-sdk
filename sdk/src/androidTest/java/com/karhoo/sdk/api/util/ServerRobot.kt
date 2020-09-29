@@ -304,7 +304,7 @@ class ServerRobot {
         mockGetResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.GET_ADYEN_PUBLIC_KEY_METHOD,
+                endpoint = APITemplate.ADYEN_PUBLIC_KEY_METHOD,
                 delayInMillis = delayInMillis
                         )
     }
@@ -313,7 +313,7 @@ class ServerRobot {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.GET_ADYEN_PAYMENT_METHODS_METHOD,
+                endpoint = APITemplate.ADYEN_PAYMENT_METHODS_METHOD,
                 delayInMillis = delayInMillis
                         )
     }
@@ -322,7 +322,16 @@ class ServerRobot {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.GET_ADYEN_PAYMENTS_METHOD,
+                endpoint = APITemplate.ADYEN_PAYMENTS_METHOD,
+                delayInMillis = delayInMillis
+                        )
+    }
+
+    fun getAdyenPaymentsDetailsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.ADYEN_PAYMENT_DETAILS,
                 delayInMillis = delayInMillis
                         )
     }
@@ -360,7 +369,7 @@ class ServerRobot {
         mockGetResponse(code = code,
                         response = response,
                         delayInMillis = delayInMillis,
-                        endpoint = APITemplate.GET_PROVIDERS_METHOD)
+                        endpoint = APITemplate.PAYMENT_PROVIDERS_METHOD)
     }
 
     private fun mockPostResponse(code: Int,

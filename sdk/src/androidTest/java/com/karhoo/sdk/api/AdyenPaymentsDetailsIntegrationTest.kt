@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 @RunWith(AndroidJUnit4::class)
-class AdyenPaymentsIntegrationTest {
+class AdyenPaymentsDetailsIntegrationTest {
 
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
@@ -49,19 +49,19 @@ class AdyenPaymentsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payments are retrieved
+     * Given:   Adyen payments details are retrieved
      * When:    A successful response has been returned
      * Then:    The response payload should be valid
      **/
     @Test
     fun getAdyenPaymentsSuccess() {
         serverRobot {
-            getAdyenPaymentsResponse(HTTP_CREATED, RESPONSE)
+            getAdyenPaymentsDetailsResponse(HTTP_CREATED, RESPONSE)
         }
 
         var result: JSONObject? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
+        KarhooApi.paymentsService.getAdyenPaymentDetails(RESPONSE).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -75,19 +75,19 @@ class AdyenPaymentsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payments are retrieved
+     * Given:   Adyen payments details are retrieved
      * When:    The call is successful but with invalid data
      * Then:    An internal sdk error should be returned
      **/
     @Test
     fun invalidDataWhenGettingAdyenPaymentsReturnsInternalError() {
         serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
+            getAdyenPaymentsDetailsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
+        KarhooApi.paymentsService.getAdyenPaymentDetails(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -101,19 +101,19 @@ class AdyenPaymentsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payments are retrieved
+     * Given:   Adyen payments details are retrieved
      * When:    The call is successful but with no body
      * Then:    A blank object should be returned
      **/
     @Test
     fun blankBodyReturnsDefaultObject() {
         serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_CREATED, response = NO_BODY)
+            getAdyenPaymentsDetailsResponse(code = HTTP_CREATED, response = NO_BODY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
+        KarhooApi.paymentsService.getAdyenPaymentDetails(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -127,20 +127,20 @@ class AdyenPaymentsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payments are retrieved
+     * Given:   Adyen payments details are retrieved
      * When:    An error is returned with error payload
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR)
+            getAdyenPaymentsDetailsResponse(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR)
         }
 
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
+        KarhooApi.paymentsService.getAdyenPaymentDetails(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -154,19 +154,19 @@ class AdyenPaymentsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payments are retrieved
+     * Given:   Adyen payments details are retrieved
      * When:    An error is returned with no body payload
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithNoBodyGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_BAD_REQUEST, response = NO_BODY)
+            getAdyenPaymentsDetailsResponse(code = HTTP_BAD_REQUEST, response = NO_BODY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
+        KarhooApi.paymentsService.getAdyenPaymentDetails(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -180,19 +180,19 @@ class AdyenPaymentsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payments are retrieved
+     * Given:   Adyen payments details are retrieved
      * When:    An error is returned with an empty body
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithEmptyBodyGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_BAD_REQUEST, response = EMPTY)
+            getAdyenPaymentsDetailsResponse(code = HTTP_BAD_REQUEST, response = EMPTY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
+        KarhooApi.paymentsService.getAdyenPaymentDetails(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -206,19 +206,19 @@ class AdyenPaymentsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payments are retrieved
+     * Given:   Adyen payments details are retrieved
      * When:    An error is returned with invalid json
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithInvalidJsonGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_BAD_REQUEST, response = INVALID_JSON)
+            getAdyenPaymentsDetailsResponse(code = HTTP_BAD_REQUEST, response = INVALID_JSON)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
+        KarhooApi.paymentsService.getAdyenPaymentDetails(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -232,19 +232,19 @@ class AdyenPaymentsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payments are retrieved
+     * Given:   Adyen payments details are retrieved
      * When:    An error is returned for invalid data
      * Then:    The Karhoo error should be valid
      **/
     @Test
     fun errorResponseWithInvalidDataGetsParsedIntoKarhooError() {
         serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
+            getAdyenPaymentsDetailsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
+        KarhooApi.paymentsService.getAdyenPaymentDetails(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -258,19 +258,19 @@ class AdyenPaymentsIntegrationTest {
     }
 
     /**
-     * Given:   Adyen payments are retrieved
+     * Given:   Adyen payments details are retrieved
      * When:    The response takes too long
      * Then:    The timeout error should be returned
      **/
     @Test
     fun timeoutErrorReturnedWhenResponseTakesTooLong() {
         serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, delayInMillis = 2000)
+            getAdyenPaymentsDetailsResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, delayInMillis = 2000)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
+        KarhooApi.paymentsService.getAdyenPaymentDetails(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
