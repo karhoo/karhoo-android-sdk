@@ -49,10 +49,10 @@ class HeadersIntegrationTest {
         KarhooApi.customHeaders = TestCustomHeaders()
 
         serverRobot {
-            bookingResponse(code = HTTP_CREATED, response = TRIP_REQUESTED_DETAILS, header = Pair(header, headerval))
+            bookingResponseWithNonce(code = HTTP_CREATED, response = TRIP_REQUESTED_DETAILS, header = Pair(header, headerval))
         }
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Success -> latch.countDown()
             }
@@ -72,10 +72,10 @@ class HeadersIntegrationTest {
         KarhooApi.apiKey = apiKeyValue
 
         serverRobot {
-            bookingResponse(code = HTTP_CREATED, response = TRIP_REQUESTED_DETAILS, header = Pair(apiKeyHeader, apiKeyValue))
+            bookingResponseWithNonce(code = HTTP_CREATED, response = TRIP_REQUESTED_DETAILS, header = Pair(apiKeyHeader, apiKeyValue))
         }
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Success -> latch.countDown()
             }

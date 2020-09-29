@@ -11,3 +11,4 @@ data class TripBooking(@SerializedName("quote_id") private val quoteId: String?,
                        @SerializedName("comments") private val comments: String? = null,
                        @SerializedName("payment_nonce") val nonce: String? = null) : Parcelable
 
+
