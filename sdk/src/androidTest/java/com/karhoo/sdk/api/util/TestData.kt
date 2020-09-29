@@ -16,7 +16,6 @@ import com.karhoo.sdk.api.model.Poi
 import com.karhoo.sdk.api.model.PoiDetails
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.Price
-import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuoteSource
@@ -223,32 +222,6 @@ class TestData {
         val TRIP_STATE = TripState(TripStatus.NO_DRIVERS)
 
         const val QUOTE_LIST_ID = "129e51a-bc10-11e8-a821-0a580a0414db"
-
-        val QUOTE = Quote(availabilityId = "NTIxMjNiZDktY2M5OC00YjhkLWE5OGEtMTIyNDQ2ZDY5ZTc5O3NhbG9vbg==",
-                categoryName = "Exec",
-                currencyCode = "GBP",
-                fleetId = "someFleetId",
-                supplierName = "someFleetName",
-                highPrice = 779,
-                lowPrice = 778,
-                phoneNumber = "+123",
-                qta = 2,
-                quoteId = "someQuoteId",
-                quoteType = QuoteType.ESTIMATED,
-                logoUrl = "someLogoUrl",
-                termsAndConditions = "someTermsUrl",
-                quoteSource = QuoteSource.FLEET,
-                vehicleClass = "saloon")
-
-        val QUOTE_LIST = QuoteList(
-                id = QuoteId(QUOTE_LIST_ID),
-                categories = mapOf(
-                        Pair("Saloon", emptyList()),
-                        Pair("Taxi", emptyList()),
-                        Pair("MPV", emptyList()),
-                        Pair("Exec", listOf(QUOTE)),
-                        Pair("Electric", emptyList()),
-                        Pair("Moto", emptyList())))
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),

@@ -33,13 +33,12 @@ import com.karhoo.sdk.api.model.PoiDetails
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.Price
 import com.karhoo.sdk.api.model.Provider
-import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotePrice
 import com.karhoo.sdk.api.model.QuoteSource
 import com.karhoo.sdk.api.model.QuoteType
-import com.karhoo.sdk.api.model.QuoteV2
+import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteVehicle
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
@@ -50,7 +49,6 @@ import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicle
 import com.karhoo.sdk.api.model.VehicleAttributes
 import com.karhoo.sdk.api.model.Vehicles
-import com.karhoo.sdk.api.model.VehiclesV2
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
@@ -175,26 +173,6 @@ class ServerRobot {
                 endpoint = APITemplate.AVAILABILITY_METHOD,
                 delayInMillis = delayInMillis
                         )
-    }
-
-    fun quoteIdResponse(code: Int, response: Any, endpoint: String = APITemplate.QUOTE_REQUEST_METHOD,
-                        delayInMillis: Int = 0) {
-        mockPostResponse(
-                code = code,
-                response = response,
-                endpoint = endpoint,
-                delayInMillis = delayInMillis
-                        )
-    }
-
-    fun quotesResponse(code: Int, response: Any, endpoint: String = APITemplate.QUOTES_METHOD, delayInMillis: Int = 0,
-                       quoteId: String = QUOTE_ID.quoteId) {
-        mockGetResponse(
-                code = code,
-                response = response,
-                endpoint = endpoint.replace("{$IDENTIFIER_ID}", quoteId),
-                delayInMillis = delayInMillis
-                       )
     }
 
     fun quoteIdResponseV2(code: Int, response: Any, endpoint: String = APITemplate
@@ -429,46 +407,6 @@ class ServerRobot {
 
         val QUOTE_ID = QuoteId(quoteId = "129e51a-bc10-11e8-a821-0a580a0414db")
 
-        val QUOTE = Quote(availabilityId = "NTIxMjNiZDktY2M5OC00YjhkLWE5OGEtMTIyNDQ2ZDY5ZTc5O3NhbG9vbg==",
-                          categoryName = "Exec",
-                          currencyCode = "GBP",
-                          fleetId = "someFleetId",
-                          supplierName = "someFleetName",
-                          highPrice = 779,
-                          lowPrice = 778,
-                          phoneNumber = "+123",
-                          qta = 2,
-                          quoteId = "someQuoteId",
-                          quoteType = QuoteType.ESTIMATED,
-                          logoUrl = "someLogoUrl",
-                          termsAndConditions = "someTermsUrl",
-                          quoteSource = QuoteSource.FLEET,
-                          vehicleClass = "saloon")
-
-        val VEHICLES = Vehicles(
-                vehicles = listOf(
-                        QUOTE,
-                        QUOTE.copy(
-                                fleetId = "4f596e3f-c638-4221-9e88-b24bc7b4dea5",
-                                quoteSource = QuoteSource.FLEET,
-                                termsAndConditions = "https://karhoo.com/fleettcs/cdda3d54-2926-451f-b839-4201c9adc9f5",
-                                phoneNumber = "+447715364890",
-                                logoUrl = "https://cdn.karhoo.com/d/images/logos/cc775eda-950d-4a77-aa83-172d487a4cbf.png",
-                                quoteType = QuoteType.METERED,
-                                availabilityId = "NGY1OTZlM2YtYzYzOC00MjIxLTllODgtYjI0YmM3YjRkZWE1O3RheGk=",
-                                categoryName = "Taxi",
-                                lowPrice = 841,
-                                highPrice = 841,
-                                supplierName = "QA_base_ex_com_ex_tax_metered",
-                                vehicleClass = "taxi",
-                                qta = 2,
-                                quoteId = "eb00db4d-44bb-11e9-bdab-0a580a04005f:NGY1OTZlM2YtYzYzOC00MjIxLTllODgtYjI0YmM3YjRkZWE1O3RheGk=")
-
-                                 ),
-                status = "PROGRESSING",
-                id = QUOTE_ID.quoteId,
-                categoryNames = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"))
-
         val QUOTE_PRICE = QuotePrice(currencyCode = "GBP",
                                      highPrice = 779,
                                      lowPrice = 778)
@@ -486,7 +424,7 @@ class ServerRobot {
         val VEHICLE_ATTRIBUTES = VehicleAttributes(passengerCapacity = 4,
                                                    luggageCapacity = 2)
 
-        val QUOTE_V2 = QuoteV2(id = "someQuoteId",
+        val QUOTE_V2 = Quote(id = "someQuoteId",
                                quoteType = QuoteType.ESTIMATED,
                                quoteSource = QuoteSource.FLEET,
                                price = QUOTE_PRICE,
@@ -497,7 +435,7 @@ class ServerRobot {
 
         val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto")))
 
-        val VEHICLES_V2 = VehiclesV2(
+        val VEHICLES = Vehicles(
                 status = "PROGRESSING",
                 id = QUOTE_ID.quoteId,
                 availability = AVAILABILITY,
@@ -509,30 +447,6 @@ class ServerRobot {
                                 quoteType = QuoteType.METERED,
                                 fleet = QUOTE_FLEET.copy(fleetId = "someOtherFleetId"))
                                ))
-
-        val QUOTES = QuoteList(
-                categories = mapOf(
-                        "Saloon" to emptyList(),
-                        "Taxi" to listOf(QUOTE.copy(
-                                fleetId = "4f596e3f-c638-4221-9e88-b24bc7b4dea5",
-                                quoteSource = QuoteSource.FLEET,
-                                termsAndConditions = "https://karhoo.com/fleettcs/cdda3d54-2926-451f-b839-4201c9adc9f5",
-                                phoneNumber = "+447715364890",
-                                logoUrl = "https://cdn.karhoo.com/d/images/logos/cc775eda-950d-4a77-aa83-172d487a4cbf.png",
-                                quoteType = QuoteType.METERED,
-                                availabilityId = "NGY1OTZlM2YtYzYzOC00MjIxLTllODgtYjI0YmM3YjRkZWE1O3RheGk=",
-                                categoryName = "Taxi",
-                                lowPrice = 841,
-                                highPrice = 841,
-                                supplierName = "QA_base_ex_com_ex_tax_metered",
-                                vehicleClass = "taxi",
-                                qta = 2,
-                                quoteId = "eb00db4d-44bb-11e9-bdab-0a580a04005f:NGY1OTZlM2YtYzYzOC00MjIxLTllODgtYjI0YmM3YjRkZWE1O3RheGk=")),
-                        "MPV" to emptyList(),
-                        "Exec" to listOf(QUOTE),
-                        "Electric" to emptyList(),
-                        "Moto" to emptyList()),
-                id = QUOTE_ID)
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_ID.quoteId),

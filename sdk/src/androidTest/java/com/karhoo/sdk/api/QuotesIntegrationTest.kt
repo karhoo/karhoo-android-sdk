@@ -9,26 +9,30 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import com.google.gson.Gson
 import com.karhoo.sdk.api.model.QuoteList
-import com.karhoo.sdk.api.network.client.APITemplate
+import com.karhoo.sdk.api.model.QuoteSource
+import com.karhoo.sdk.api.model.QuoteType
+import com.karhoo.sdk.api.network.client.APITemplate.Companion.QUOTES_V2_REQUEST_METHOD
+import com.karhoo.sdk.api.network.client.APITemplate.Companion.QUOTES_V2_METHOD
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
 import com.karhoo.sdk.api.network.observable.Observer
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ResponseUtils
 import com.karhoo.sdk.api.util.ServerRobot.Companion.AVAILABILITIES
+import com.karhoo.sdk.api.util.ServerRobot.Companion.AVAILABILITY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.K3001_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
-import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTES
 import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_ID
-import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_LIST_EMPTY
+import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_V2
 import com.karhoo.sdk.api.util.ServerRobot.Companion.VEHICLES
 import com.karhoo.sdk.api.util.TestData
 import com.karhoo.sdk.api.util.serverRobot
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -58,48 +62,6 @@ class QuotesIntegrationTest {
 
     /**
      * Given:   A quote search has been made
-     * When:    Error 401 with valid error json responses for Availabilities
-     * Then:    The correctly parsed error should be returned
-     * And:     The endpoint was polled the correct number of times
-     **/
-    @Test
-    fun availabilitiesErrorResponseGetsParsedIntoKarhooError() {
-        val latch = CountDownLatch(1)
-
-        serverRobot {
-            availabilitiesResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
-        }
-
-        var result: KarhooError? = null
-
-        val observer = object : Observer<Resource<QuoteList>> {
-            override fun onValueChanged(value: Resource<QuoteList>) {
-                when (value) {
-                    is Resource.Failure -> {
-                        result = value.error
-                        latch.countDown()
-                    }
-                }
-            }
-        }
-
-        KarhooApi.quotesService.quotes(TestData.QUOTE_SEARCH)
-                .observable()
-                .apply {
-                    subscribe(observer, 300L)
-                    latch.await(1000L, TimeUnit.MILLISECONDS)
-                    unsubscribe(observer)
-                }
-
-
-        assertEquals(0, latch.count)
-        assertEquals(KarhooError.GeneralRequestError, result)
-    }
-
-    /**
-     * Given:   A quote search has been made
      * When:    Success 200 responses
      * Then:    The correctly parsed quotes list is returned
      * And:     The endpoint was polled the correct number of times
@@ -109,9 +71,9 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(4)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
-            quotesResponse(code = HTTP_OK, response = VEHICLES, quoteId = QUOTE_ID.quoteId)
+            quoteIdResponseV2(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_V2_REQUEST_METHOD)
+            quotesResponseV2(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_V2_METHOD,
+                            quoteId = QUOTE_ID.quoteId)
         }
 
         var result: QuoteList? = null
@@ -141,7 +103,19 @@ class QuotesIntegrationTest {
 
 
         assertEquals(0, latch.count)
-        assertEquals(QUOTES, result)
+        assertNotNull(result)
+        assertEquals(AVAILABILITY.vehicles.classes.size, result?.categories?.size)
+
+        val saloonQuotes = result?.categories?.get("Saloon")
+        assertEquals(VEHICLES.quotes.size, saloonQuotes?.size)
+        assertEquals(QUOTE_V2.id, saloonQuotes?.get(0)?.id)
+        assertEquals(QUOTE_V2.fleet, saloonQuotes?.get(0)?.fleet)
+        assertEquals(QUOTE_V2.quoteSource, saloonQuotes?.get(0)?.quoteSource)
+        assertEquals(QUOTE_V2.quoteType, saloonQuotes?.get(0)?.quoteType)
+        assertEquals("someOtherQuoteId", saloonQuotes?.get(1)?.id)
+        assertEquals("someOtherFleetId", saloonQuotes?.get(1)?.fleet?.fleetId)
+        assertEquals(QuoteSource.FLEET, saloonQuotes?.get(1)?.quoteSource)
+        assertEquals(QuoteType.METERED, saloonQuotes?.get(1)?.quoteType)
     }
 
     /**
@@ -364,9 +338,8 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
-            quoteIdResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR)
-            quotesResponse(code = HTTP_OK, response = VEHICLES)
+            quoteIdResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, endpoint = QUOTES_V2_REQUEST_METHOD)
+            quotesResponse(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_V2_METHOD)
         }
 
         var result: KarhooError? = null
@@ -611,9 +584,8 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
-            quotesResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR)
+            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_V2_REQUEST_METHOD)
+            quotesResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, endpoint = QUOTES_V2_METHOD)
         }
 
         var result: KarhooError? = null
@@ -648,13 +620,12 @@ class QuotesIntegrationTest {
      * And:     The endpoint was polled the correct number of times
      **/
     @Test
-    fun quoteListInvalidDataReturnsEmptyCategories() {
+    fun invalidQuoteDataReturnsEmptyCategoriesList() {
         val latch = CountDownLatch(4)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID)
-            quotesResponse(code = HTTP_OK, response = INVALID_DATA)
+            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_V2_REQUEST_METHOD)
+            quotesResponse(code = HTTP_OK, response = INVALID_DATA, endpoint = QUOTES_V2_METHOD)
         }
 
         var result: QuoteList? = null
@@ -679,8 +650,7 @@ class QuotesIntegrationTest {
                     unsubscribe(observer)
                 }
 
-        assertEquals(0, latch.count)
-        assertEquals(result, QUOTE_LIST_EMPTY)
+        assertEquals(0, result?.categories?.size)
     }
 
     /**
@@ -856,7 +826,6 @@ class QuotesIntegrationTest {
     fun quoteListExpiryRefreshesProcess() {
         val latch = CountDownLatch(1)
 
-        val availability = ResponseUtils(httpCode = HTTP_OK, response = Gson().toJson(AVAILABILITIES)).createResponse()
         val quoteListId = ResponseUtils(httpCode = HTTP_OK, response = Gson().toJson(QUOTE_ID)).createResponse()
         val quotesListSuccess = ResponseUtils(httpCode = HTTP_OK, response = Gson().toJson(VEHICLES)).createResponse()
         val quotesListError = ResponseUtils(httpCode = HTTP_UNAUTHORIZED, response = Gson().toJson(K3001_ERROR)).createResponse()
@@ -864,25 +833,20 @@ class QuotesIntegrationTest {
         val scenario = "ScenarioOne"
         val stageTwo = "StageTwo"
 
-        givenThat(post(urlEqualTo(APITemplate.AVAILABILITY_METHOD))
-                .inScenario(scenario)
-                .whenScenarioStateIs(Scenario.STARTED)
-                .willReturn(availability))
+        givenThat(post(urlEqualTo(QUOTES_V2_REQUEST_METHOD))
+                          .inScenario(scenario)
+                          .willReturn(quoteListId))
 
-        givenThat(post(urlEqualTo(APITemplate.QUOTE_REQUEST_METHOD))
-                .inScenario(scenario)
-                .willReturn(quoteListId))
+        givenThat(get(urlEqualTo(QUOTES_V2_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
+                          .inScenario(scenario)
+                          .whenScenarioStateIs(Scenario.STARTED)
+                          .willSetStateTo(stageTwo)
+                          .willReturn(quotesListError))
 
-        givenThat(get(urlEqualTo(APITemplate.QUOTES_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
-                .inScenario(scenario)
-                .whenScenarioStateIs(Scenario.STARTED)
-                .willSetStateTo(stageTwo)
-                .willReturn(quotesListError))
-
-        givenThat(get(urlEqualTo(APITemplate.QUOTES_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
-                .inScenario(scenario)
-                .whenScenarioStateIs(stageTwo)
-                .willReturn(quotesListSuccess))
+    givenThat(get(urlEqualTo(QUOTES_V2_METHOD.replace("{$IDENTIFIER_ID}", TestData.QUOTE_LIST_ID)))
+                          .inScenario(scenario)
+                          .whenScenarioStateIs(stageTwo)
+                          .willReturn(quotesListSuccess))
 
 
         var result: KarhooError? = null
@@ -920,10 +884,10 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(1)
 
         serverRobot {
-            availabilitiesResponse(code = HTTP_OK, response = AVAILABILITIES, delayInMillis = 2000)
-            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, delayInMillis = 2000)
-            quotesResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON, delayInMillis = 2000)
-        }
+            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, delayInMillis = 2000, endpoint =
+            QUOTES_V2_REQUEST_METHOD)
+            quotesResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON, endpoint =
+            QUOTES_V2_METHOD, delayInMillis = 2000) }
 
         var result: KarhooError? = null
 

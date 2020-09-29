@@ -2,15 +2,14 @@ package com.karhoo.sdk.api.service.quotes
 
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.Categories
-import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
+import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.request.AvailabilityRequest
-import com.karhoo.sdk.api.network.request.QuotesRequest
+import com.karhoo.sdk.api.network.request.QuoteRequestPoint
+import com.karhoo.sdk.api.network.request.QuotesV2Request
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BasePollCallInteractor
 import kotlinx.coroutines.CompletableDeferred
@@ -26,11 +25,10 @@ import kotlin.coroutines.CoroutineContext
 
 internal class QuotesInteractor @Inject constructor(credentialsManager: CredentialsManager,
                                                     private val apiTemplate: APITemplate,
-                                                    context: CoroutineContext = Main)
-    : BasePollCallInteractor<QuoteList>(true, credentialsManager, apiTemplate, context) {
+                                                    context: CoroutineContext = Main) :
+        BasePollCallInteractor<QuoteList>(true, credentialsManager, apiTemplate, context) {
 
     internal var quotesSearch: QuotesSearch? = null
-    private var categories: List<String> = mutableListOf()
     private var vehicles: Vehicles? = null
     private var quoteId: QuoteId? = null
 
@@ -38,7 +36,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
         quotesSearch?.let { search ->
             quoteId?.let { quote ->
                 return GlobalScope.async {
-                    val result = quoteList(Resource.Success(Categories(categoryNames = categories)), quotes(quote).await())
+                    val result = quoteList(quotes(quote).await())
                     if (result is Resource.Failure && result.error == KarhooError.CouldNotGetEstimates) {
                         quoteId = null
                         createRequest().await()
@@ -49,7 +47,6 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
             } ?: run {
                 return GlobalScope.async {
                     quoteList(
-                            categoriesResource = availability(createAvailabilityRequest(search)).await(),
                             quotesResource = quotes(createQuoteRequest(search)).await())
                 }
             }
@@ -58,58 +55,52 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
         }
     }
 
-    private fun createAvailabilityRequest(quotesSearch: QuotesSearch): AvailabilityRequest {
-        return AvailabilityRequest(
-                originPlaceId = quotesSearch.origin.placeId,
-                destinationPlaceId = quotesSearch.destination.placeId,
-                dateScheduled = quotesSearch.dateScheduled)
-    }
-
-    private fun createQuoteRequest(quotesSearch: QuotesSearch): QuotesRequest {
+    private fun createQuoteRequest(quotesSearch: QuotesSearch): QuotesV2Request? {
         val dateScheduled: String? = quotesSearch.dateScheduled?.let {
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm").apply {
                 timeZone = TimeZone.getTimeZone(quotesSearch.origin.timezone)
             }.format(it)
         }
 
-        return QuotesRequest(
-                originPlaceId = quotesSearch.origin.placeId,
-                destinationPlaceId = quotesSearch.destination.placeId,
+        val originPosition = quotesSearch.origin.position?.let { it } ?: return null
+        val destinationPosition = quotesSearch.destination.position?.let { it } ?: return null
+
+        return QuotesV2Request(
+                origin = QuoteRequestPoint(latitude = originPosition.latitude.toString(),
+                                           longitude = originPosition.longitude.toString(),
+                                           displayAddress = quotesSearch.origin.displayAddress),
+                destination = QuoteRequestPoint(latitude = destinationPosition.latitude.toString(),
+                                                longitude = destinationPosition.longitude.toString(),
+                                                displayAddress = quotesSearch.destination.displayAddress),
                 dateScheduled = dateScheduled)
     }
 
-    private fun quoteList(categoriesResource: Resource<Categories>, quotesResource: Resource<Vehicles>): Resource<QuoteList> {
-        when (categoriesResource) {
-            is Resource.Success -> this.categories = categoriesResource.data.categoryNames.orEmpty()
-            is Resource.Failure -> return Resource.Failure(categoriesResource.error)
-        }
-
+    private fun quoteList(quotesResource: Resource<Vehicles>): Resource<QuoteList> {
         when (quotesResource) {
             is Resource.Success -> this.vehicles = quotesResource.data
             is Resource.Failure -> return Resource.Failure(quotesResource.error)
         }
 
-        categories.let {
-            val vehicles = Vehicles(
-                    categoryNames = it,
-                    vehicles = vehicles?.vehicles ?: emptyList())
+        this.vehicles?.let {
 
             val quotesMap = mutableMapOf<String, List<Quote>>()
-            it.forEach { category ->
-                val filteredVehicles = vehicles.vehicles.filter { it.categoryName == category }
+            val categoryNames = it.availability.vehicles.classes
+
+            categoryNames.forEach { category ->
+                val filteredVehicles: List<Quote> = it.quotes.filter { it.vehicle.vehicleClass ==
+                        category }
                 quotesMap[category] = filteredVehicles
             }
             return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap))
+        } ?: return Resource.Failure(error = KarhooError.InternalSDKError)
+    }
+
+    private fun quotes(request: QuotesV2Request?): Deferred<Resource<Vehicles>> {
+        if (request == null) {
+            return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }
-    }
-
-    private fun availability(request: AvailabilityRequest): Deferred<Resource<Categories>> {
-        return apiTemplate.availabilities(request)
-    }
-
-    private fun quotes(request: QuotesRequest): Deferred<Resource<Vehicles>> {
         return runBlocking {
-            val quoteIdResult = apiTemplate.quotes(request).await()
+            val quoteIdResult = apiTemplate.quotesv2(request).await()
             when (quoteIdResult) {
                 is Resource.Success -> quotes(quoteIdResult.data)
                 is Resource.Failure -> async { Resource.Failure<Vehicles>(quoteIdResult.error) }
@@ -119,7 +110,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
 
     private fun quotes(quoteId: QuoteId): Deferred<Resource<Vehicles>> {
         this.quoteId = quoteId
-        return apiTemplate.quotes(quoteId.quoteId)
+        return apiTemplate.quotesv2(quoteId.quoteId)
     }
 
 }
