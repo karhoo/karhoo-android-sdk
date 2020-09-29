@@ -71,8 +71,8 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(4)
 
         serverRobot {
-            quoteIdResponseV2(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_REQUEST_METHOD)
-            quotesResponseV2(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_METHOD,
+            quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_REQUEST_METHOD)
+            quotesResponse(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_METHOD,
                             quoteId = QUOTE_ID.quoteId)
         }
 
