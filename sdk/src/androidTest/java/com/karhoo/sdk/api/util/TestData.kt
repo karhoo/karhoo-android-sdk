@@ -224,21 +224,14 @@ class TestData {
 
         const val QUOTE_LIST_ID = "129e51a-bc10-11e8-a821-0a580a0414db"
 
-        val QUOTE = Quote(availabilityId = "NTIxMjNiZDktY2M5OC00YjhkLWE5OGEtMTIyNDQ2ZDY5ZTc5O3NhbG9vbg==",
-                categoryName = "Exec",
-                currencyCode = "GBP",
-                fleetId = "someFleetId",
-                supplierName = "someFleetName",
-                highPrice = 779,
-                lowPrice = 778,
-                phoneNumber = "+123",
-                qta = 2,
-                quoteId = "someQuoteId",
+        val QUOTE = Quote(id = "someQuoteId",
                 quoteType = QuoteType.ESTIMATED,
-                logoUrl = "someLogoUrl",
-                termsAndConditions = "someTermsUrl",
                 quoteSource = QuoteSource.FLEET,
-                vehicleClass = "saloon")
+                price = ServerRobot.QUOTE_PRICE,
+                fleet = ServerRobot.QUOTE_FLEET,
+                pickupType = PickupType.CURBSIDE,
+                vehicle = ServerRobot.QUOTE_VEHICLE,
+                vehicleAttributes = ServerRobot.VEHICLE_ATTRIBUTES)
 
         val QUOTE_LIST = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),
