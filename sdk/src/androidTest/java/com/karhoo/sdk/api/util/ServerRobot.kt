@@ -217,11 +217,22 @@ class ServerRobot {
                        )
     }
 
-    fun bookingResponse(code: Int, response: Any, delayInMillis: Int = 0, header: Pair<String, String> = Pair("", "")) {
+    fun bookingResponseWithNonce(code: Int, response: Any, delayInMillis: Int = 0, header: Pair<String, String> = Pair("", "")) {
         mockPostResponse(
                 code = code,
                 response = response,
                 endpoint = APITemplate.BOOKING_WITH_NONCE_METHOD,
+                delayInMillis = delayInMillis,
+                header = header
+                        )
+    }
+
+    fun bookingResponseWithoutNonce(code: Int, response: Any, delayInMillis: Int = 0, header:
+    Pair<String, String> = Pair("", "")) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.BOOKING_METHOD,
                 delayInMillis = delayInMillis,
                 header = header
                         )

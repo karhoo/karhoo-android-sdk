@@ -66,7 +66,14 @@ class TestData {
 
         const val BOOKING_ID = "BK123"
 
-        val BOOK_TRIP = TripBooking(
+        val BOOK_TRIP_WITH_NONCE = TripBooking(
+                nonce = "123ABC",
+                quoteId = "1234567890",
+                passengers = Passengers(
+                        additionalPassengers = 1,
+                        passengerDetails = listOf()))
+
+        val BOOK_TRIP_INVOICE = TripBooking(
                 quoteId = "1234567890",
                 passengers = Passengers(
                         additionalPassengers = 1,
