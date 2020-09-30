@@ -25,8 +25,8 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.K3001_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_ID
-import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_V2
-import com.karhoo.sdk.api.util.ServerRobot.Companion.VEHICLES_V2
+import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE
+import com.karhoo.sdk.api.util.ServerRobot.Companion.VEHICLES
 import com.karhoo.sdk.api.util.TestData
 import com.karhoo.sdk.api.util.serverRobot
 import org.junit.After
@@ -71,7 +71,7 @@ class QuotesIntegrationTest {
 
         serverRobot {
             quoteIdResponse(code = HTTP_OK, response = QUOTE_ID, endpoint = QUOTES_REQUEST_METHOD)
-            quotesResponse(code = HTTP_OK, response = VEHICLES_V2, endpoint = QUOTES_METHOD,
+            quotesResponse(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_METHOD,
                             quoteId = QUOTE_ID.quoteId)
         }
 
@@ -106,11 +106,11 @@ class QuotesIntegrationTest {
         assertEquals(AVAILABILITY.vehicles.classes.size, result?.categories?.size)
 
         val saloonQuotes = result?.categories?.get("Saloon")
-        assertEquals(VEHICLES_V2.quotes.size, saloonQuotes?.size)
-        assertEquals(QUOTE_V2.id, saloonQuotes?.get(0)?.id)
-        assertEquals(QUOTE_V2.fleet, saloonQuotes?.get(0)?.fleet)
-        assertEquals(QUOTE_V2.quoteSource, saloonQuotes?.get(0)?.quoteSource)
-        assertEquals(QUOTE_V2.quoteType, saloonQuotes?.get(0)?.quoteType)
+        assertEquals(VEHICLES.quotes.size, saloonQuotes?.size)
+        assertEquals(QUOTE.id, saloonQuotes?.get(0)?.id)
+        assertEquals(QUOTE.fleet, saloonQuotes?.get(0)?.fleet)
+        assertEquals(QUOTE.quoteSource, saloonQuotes?.get(0)?.quoteSource)
+        assertEquals(QUOTE.quoteType, saloonQuotes?.get(0)?.quoteType)
         assertEquals("someOtherQuoteId", saloonQuotes?.get(1)?.id)
         assertEquals("someOtherFleetId", saloonQuotes?.get(1)?.fleet?.fleetId)
         assertEquals(QuoteSource.FLEET, saloonQuotes?.get(1)?.quoteSource)
@@ -129,7 +129,7 @@ class QuotesIntegrationTest {
 
         serverRobot {
             quoteIdResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, endpoint = QUOTES_REQUEST_METHOD)
-            quotesResponse(code = HTTP_OK, response = VEHICLES_V2, endpoint = QUOTES_METHOD)
+            quotesResponse(code = HTTP_OK, response = VEHICLES, endpoint = QUOTES_METHOD)
         }
 
         var result: KarhooError? = null
@@ -169,7 +169,7 @@ class QuotesIntegrationTest {
 
         serverRobot {
             quoteIdResponse(code = HTTP_OK, response = INVALID_DATA)
-            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
+            quotesResponse(code = HTTP_OK, response = VEHICLES)
         }
 
         var result: KarhooError? = null
@@ -210,7 +210,7 @@ class QuotesIntegrationTest {
 
         serverRobot {
             quoteIdResponse(code = HTTP_OK, response = INVALID_JSON)
-            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
+            quotesResponse(code = HTTP_OK, response = VEHICLES)
         }
 
         var result: KarhooError? = null
@@ -250,7 +250,7 @@ class QuotesIntegrationTest {
 
         serverRobot {
             quoteIdResponse(code = HTTP_OK, response = NO_BODY)
-            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
+            quotesResponse(code = HTTP_OK, response = VEHICLES)
         }
 
         var result: KarhooError? = null
@@ -290,7 +290,7 @@ class QuotesIntegrationTest {
 
         serverRobot {
             quoteIdResponse(code = HTTP_UNAUTHORIZED, response = NO_BODY)
-            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
+            quotesResponse(code = HTTP_OK, response = VEHICLES)
         }
 
         var result: KarhooError? = null
@@ -330,7 +330,7 @@ class QuotesIntegrationTest {
 
         serverRobot {
             quoteIdResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON)
-            quotesResponse(code = HTTP_OK, response = VEHICLES_V2)
+            quotesResponse(code = HTTP_OK, response = VEHICLES)
         }
 
         var result: KarhooError? = null
@@ -608,7 +608,7 @@ class QuotesIntegrationTest {
         val latch = CountDownLatch(1)
 
         val quoteListId = ResponseUtils(httpCode = HTTP_OK, response = Gson().toJson(QUOTE_ID)).createResponse()
-        val quotesListSuccess = ResponseUtils(httpCode = HTTP_OK, response = Gson().toJson(VEHICLES_V2)).createResponse()
+        val quotesListSuccess = ResponseUtils(httpCode = HTTP_OK, response = Gson().toJson(VEHICLES)).createResponse()
         val quotesListError = ResponseUtils(httpCode = HTTP_UNAUTHORIZED, response = Gson().toJson(K3001_ERROR)).createResponse()
 
         val scenario = "ScenarioOne"
