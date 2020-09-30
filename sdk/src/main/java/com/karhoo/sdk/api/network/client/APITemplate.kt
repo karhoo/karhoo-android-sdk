@@ -2,7 +2,6 @@ package com.karhoo.sdk.api.network.client
 
 import com.karhoo.sdk.api.KarhooEnvironmentDetails
 import com.karhoo.sdk.api.model.BraintreeSDKToken
-import com.karhoo.sdk.api.model.Categories
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
@@ -16,18 +15,15 @@ import com.karhoo.sdk.api.model.TripList
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicles
-import com.karhoo.sdk.api.model.VehiclesV2
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
-import com.karhoo.sdk.api.network.request.AvailabilityRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
 import com.karhoo.sdk.api.network.request.QuotesRequest
-import com.karhoo.sdk.api.network.request.QuotesV2Request
 import com.karhoo.sdk.api.network.request.RefreshTokenRequest
 import com.karhoo.sdk.api.network.request.ResetPasswordRequest
 import com.karhoo.sdk.api.network.request.TripBooking
@@ -62,12 +58,8 @@ interface   APITemplate {
         const val PLACE_DETAILS_METHOD = "/v1/locations/place-details"
         const val REVERSE_GEO_METHOD = "/v1/locations/reverse-geocode"
 
-        @Deprecated("Availabilities endpoint is deprecated")
-        const val AVAILABILITY_METHOD = "/v1/quotes/availability"
-        const val QUOTE_REQUEST_METHOD = "/v1/quotes"
-        const val QUOTES_METHOD = "/v1/quotes/{id}"
-        const val QUOTES_V2_REQUEST_METHOD = "/v2/quotes"
-        const val QUOTES_V2_METHOD = "/v2/quotes/{id}"
+        const val QUOTES_REQUEST_METHOD = "/v2/quotes"
+        const val QUOTES_METHOD = "/v2/quotes/{id}"
         const val BOOKING_METHOD = "/v1/bookings"
         const val BOOKING_WITH_NONCE_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
@@ -132,21 +124,11 @@ interface   APITemplate {
     @GET(REVERSE_GEO_METHOD)
     fun reverseGeocode(@Query(IDENTIFIER_LATITUDE) latitude: Double, @Query(IDENTIFIER_LONGITUDE) longitude: Double): Deferred<Resource<LocationInfo>>
 
-    @POST(AVAILABILITY_METHOD)
-    @Deprecated("Availabilities endpoint is deprecated")
-    fun availabilities(@Body availabilityRequest: AvailabilityRequest): Deferred<Resource<Categories>>
-
-    @POST(QUOTE_REQUEST_METHOD)
+    @POST(QUOTES_REQUEST_METHOD)
     fun quotes(@Body quotesRequest: QuotesRequest): Deferred<Resource<QuoteId>>
 
     @GET(QUOTES_METHOD)
     fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
-
-    @POST(QUOTES_V2_REQUEST_METHOD)
-    fun quotesv2(@Body quotesV2Request: QuotesV2Request): Deferred<Resource<QuoteId>>
-
-    @GET(QUOTES_V2_METHOD)
-    fun quotesv2(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<VehiclesV2>>
 
     @POST(BOOKING_METHOD)
     fun book(): Deferred<Resource<TripInfo>>
