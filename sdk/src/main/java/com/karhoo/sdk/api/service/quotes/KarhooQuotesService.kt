@@ -15,7 +15,7 @@ class KarhooQuotesService : QuotesService {
     @Inject
     internal lateinit var apiTemplate: APITemplate
 
-    override fun quotesV2(quotesSearch: QuotesSearch): PollCall<QuoteList> = QuotesInteractor(
+    override fun quotes(quotesSearch: QuotesSearch): PollCall<QuoteList> = QuotesInteractor(
             credentialsManager = credentialsManager,
             apiTemplate = apiTemplate).apply {
         this.quotesSearch = quotesSearch

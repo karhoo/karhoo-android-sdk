@@ -6,5 +6,5 @@ import com.karhoo.sdk.call.PollCall
 
 interface QuotesService {
 
-    fun quotesV2(quotesSearch: QuotesSearch): PollCall<QuoteList>
+    fun quotes(quotesSearch: QuotesSearch): PollCall<QuoteList>
 }

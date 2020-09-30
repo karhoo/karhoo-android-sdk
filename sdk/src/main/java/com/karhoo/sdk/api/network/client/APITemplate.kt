@@ -23,7 +23,7 @@ import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
-import com.karhoo.sdk.api.network.request.QuotesV2Request
+import com.karhoo.sdk.api.network.request.QuotesRequest
 import com.karhoo.sdk.api.network.request.RefreshTokenRequest
 import com.karhoo.sdk.api.network.request.ResetPasswordRequest
 import com.karhoo.sdk.api.network.request.TripBooking
@@ -58,8 +58,8 @@ interface   APITemplate {
         const val PLACE_DETAILS_METHOD = "/v1/locations/place-details"
         const val REVERSE_GEO_METHOD = "/v1/locations/reverse-geocode"
 
-        const val QUOTES_V2_REQUEST_METHOD = "/v2/quotes"
-        const val QUOTES_V2_METHOD = "/v2/quotes/{id}"
+        const val QUOTES_REQUEST_METHOD = "/v2/quotes"
+        const val QUOTES_METHOD = "/v2/quotes/{id}"
         const val BOOKING_METHOD = "/v1/bookings"
         const val BOOKING_WITH_NONCE_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
@@ -124,11 +124,11 @@ interface   APITemplate {
     @GET(REVERSE_GEO_METHOD)
     fun reverseGeocode(@Query(IDENTIFIER_LATITUDE) latitude: Double, @Query(IDENTIFIER_LONGITUDE) longitude: Double): Deferred<Resource<LocationInfo>>
 
-    @POST(QUOTES_V2_REQUEST_METHOD)
-    fun quotesv2(@Body quotesV2Request: QuotesV2Request): Deferred<Resource<QuoteId>>
+    @POST(QUOTES_REQUEST_METHOD)
+    fun quotes(@Body quotesRequest: QuotesRequest): Deferred<Resource<QuoteId>>
 
-    @GET(QUOTES_V2_METHOD)
-    fun quotesv2(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
+    @GET(QUOTES_METHOD)
+    fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
 
     @POST(BOOKING_METHOD)
     fun book(): Deferred<Resource<TripInfo>>

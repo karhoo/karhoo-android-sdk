@@ -9,7 +9,7 @@ import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.QuoteRequestPoint
-import com.karhoo.sdk.api.network.request.QuotesV2Request
+import com.karhoo.sdk.api.network.request.QuotesRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BasePollCallInteractor
 import kotlinx.coroutines.CompletableDeferred
@@ -55,7 +55,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
         }
     }
 
-    private fun createQuoteRequest(quotesSearch: QuotesSearch): QuotesV2Request? {
+    private fun createQuoteRequest(quotesSearch: QuotesSearch): QuotesRequest? {
         val dateScheduled: String? = quotesSearch.dateScheduled?.let {
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm").apply {
                 timeZone = TimeZone.getTimeZone(quotesSearch.origin.timezone)
@@ -65,7 +65,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
         val originPosition = quotesSearch.origin.position?.let { it } ?: return null
         val destinationPosition = quotesSearch.destination.position?.let { it } ?: return null
 
-        return QuotesV2Request(
+        return QuotesRequest(
                 origin = QuoteRequestPoint(latitude = originPosition.latitude.toString(),
                                            longitude = originPosition.longitude.toString(),
                                            displayAddress = quotesSearch.origin.displayAddress),
@@ -95,12 +95,12 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
         } ?: return Resource.Failure(error = KarhooError.InternalSDKError)
     }
 
-    private fun quotes(request: QuotesV2Request?): Deferred<Resource<Vehicles>> {
+    private fun quotes(request: QuotesRequest?): Deferred<Resource<Vehicles>> {
         if (request == null) {
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }
         return runBlocking {
-            val quoteIdResult = apiTemplate.quotesv2(request).await()
+            val quoteIdResult = apiTemplate.quotes(request).await()
             when (quoteIdResult) {
                 is Resource.Success -> quotes(quoteIdResult.data)
                 is Resource.Failure -> async { Resource.Failure<Vehicles>(quoteIdResult.error) }
@@ -110,7 +110,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
 
     private fun quotes(quoteId: QuoteId): Deferred<Resource<Vehicles>> {
         this.quoteId = quoteId
-        return apiTemplate.quotesv2(quoteId.quoteId)
+        return apiTemplate.quotes(quoteId.quoteId)
     }
 
 }

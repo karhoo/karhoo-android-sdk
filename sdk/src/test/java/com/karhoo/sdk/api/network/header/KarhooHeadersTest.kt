@@ -55,7 +55,7 @@ class KarhooHeadersTest {
      */
     @Test
     fun `making a booking request uses the same id as quote`() {
-        val quoteCorrelationId = headers.generateCorrelationId(APITemplate.QUOTE_REQUEST_METHOD)
+        val quoteCorrelationId = headers.generateCorrelationId(APITemplate.QUOTES_REQUEST_METHOD)
         val bookingCorrelationId = headers.generateCorrelationId(APITemplate.BOOKING_WITH_NONCE_METHOD)
 
         assertEquals(quoteCorrelationId, bookingCorrelationId)
@@ -68,8 +68,8 @@ class KarhooHeadersTest {
      */
     @Test
     fun `multiple quote requests generate different ids`() {
-        val quoteCorrelationIdOne = headers.generateCorrelationId(APITemplate.QUOTE_REQUEST_METHOD)
-        val quoteCorrelationIdTwo = headers.generateCorrelationId(APITemplate.QUOTE_REQUEST_METHOD)
+        val quoteCorrelationIdOne = headers.generateCorrelationId(APITemplate.QUOTES_REQUEST_METHOD)
+        val quoteCorrelationIdTwo = headers.generateCorrelationId(APITemplate.QUOTES_REQUEST_METHOD)
 
         assertNotSame(quoteCorrelationIdOne, quoteCorrelationIdTwo)
     }
