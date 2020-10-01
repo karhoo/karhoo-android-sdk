@@ -34,7 +34,7 @@ platform :android do
   lane :slack_result do |values|
     message_text = values[:message]
     slack(
-      channel: "#test_circleci",
+      channel: "#mobile_circleci_results",
       message: message_text,
       success: values[:success]
     )
