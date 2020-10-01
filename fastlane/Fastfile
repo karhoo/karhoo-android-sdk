@@ -7,6 +7,7 @@ default_platform :android
 platform :android do
   before_all do
     ENV["SLACK_URL"] = ""
+    setup_circle_ci
   end
 
   desc "Runs all the tests"
@@ -15,8 +16,8 @@ platform :android do
     #slack(message: "*Karhoo Android NSDK* passed unit tests")
   end
 
-  desc "Runs detekt"
-  lane :detekt do
+  desc "Runs lint and detekt"
+  lane :lint do
     gradle(task: "lintRelease")
     gradle(task: "detekt")
     #slack(message: "*Karhoo Android NSDK* passed detekt and lint")
