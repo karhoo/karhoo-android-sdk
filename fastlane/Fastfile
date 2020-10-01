@@ -1,6 +1,6 @@
 FASTLANE_HIDE_CHANGELOG = true
 FASTLANE_SKIP_UPDATE_CHECK = true
-fastlane_version "2.62.1"
+fastlane_version "2.85.0"
 
 default_platform :android
 
@@ -11,10 +11,15 @@ platform :android do
 
   desc "Runs all the tests"
   lane :test do
-    gradle(task: "test")
-    gradle(task: "testDebugUnitTestCoverage")
-    gradle(task: "connectedAndroidTest")
-    slack(message: "*Karhoo Android NSDK* Passed unit and integrations tests for SDK")
+    gradle(task: "testDebug")
+    #slack(message: "*Karhoo Android NSDK* passed unit tests")
+  end
+
+  desc "Runs detekt"
+  lane :detekt do
+    gradle(task: "lintRelease")
+    gradle(task: "detekt")
+    #slack(message: "*Karhoo Android NSDK* passed detekt and lint")
   end
 
   desc "New Build"
@@ -25,9 +30,9 @@ platform :android do
 
 
   after_all do |lane|
-    slack(
-      message: "*Karhoo NSDK* has passed unit and integration tests"
-    )
+    #slack(
+    #  message: "*Karhoo NSDK* has passed unit tests"
+    #)
   end
 
   error do |lane, exception|
