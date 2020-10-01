@@ -22,7 +22,7 @@ jobs:
             - vendor/bundle
       - run:
           name: Run unit test
-          command: bundle exec fastlane $FASTLANE_LANE_LINT
+          command: bundle exec fastlane $FASTLANE_LANE_TEST
       - run:
           name: Run linting
           command: bundle exec fastlane $FASTLANE_LANE_LINT
