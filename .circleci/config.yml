@@ -5,8 +5,8 @@ jobs:
       - image: circleci/android:api-29
     working_directory: ~/project
     environment:
-      - FASTLANE_LANE_LINT: lint
-      - FASTLANE_LANE_TEST: test
+      - FASTLANE_LANE_LINT: linting
+      - FASTLANE_LANE_TEST: unit_tests
       - JAVA_TOOL_OPTIONS: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=80"
       - GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dkotlin.incremental=false"
       - TERM: dumb
@@ -20,10 +20,10 @@ jobs:
           paths:
             - vendor/bundle
       - run:
-          name: Build test and lint
+          name: Run unit test
           command: bundle exec fastlane $FASTLANE_LANE_LINT
       - run:
-          name: Build Detekt
+          name: Run linting
           command: bundle exec fastlane $FASTLANE_LANE_LINT
       - run:
           name: Save test results
