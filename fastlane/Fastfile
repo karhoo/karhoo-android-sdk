@@ -6,7 +6,7 @@ default_platform :android
 
 platform :android do
   before_all do
-    ENV["SLACK_URL"] = ""
+    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
     setup_circle_ci
   end
 
@@ -35,11 +35,18 @@ platform :android do
     gradle(task: "install")
   end
 
+  lane :slack_test do
+    slack(
+      channel: ""#test_circleci",
+      message: "*Karhoo NSDK* has passed unit tests"
+    )
+  end
 
   after_all do |lane|
-    #slack(
-    #  message: "*Karhoo NSDK* has passed unit tests"
-    #)
+    slack(
+      channel: ""#test_circleci",
+      message: "*Karhoo NSDK* has passed unit tests"
+    )
   end
 
   error do |lane, exception|
