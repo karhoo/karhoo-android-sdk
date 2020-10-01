@@ -13,7 +13,8 @@ platform :android do
   lane :test do
     gradle(task: "test")
     gradle(task: "testDebugUnitTestCoverage")
-    slack(message: "*Karhoo Android* Passed Unit Test for SDK")
+    gradle(task: "connectedAndroidTest")
+    slack(message: "*Karhoo Android NSDK* Passed unit and integrations tests for SDK")
   end
 
   desc "New Build"
@@ -25,7 +26,7 @@ platform :android do
 
   after_all do |lane|
     slack(
-      message: "*Karhoo SDK* has passed unit test and has been installed"
+      message: "*Karhoo NSDK* has passed unit and integration tests"
     )
   end
 

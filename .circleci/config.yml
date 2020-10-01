@@ -22,15 +22,31 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "build.gradle" }}
       - run:
-          name: Build test and lint
-          command: |
-                    sudo chmod +x ./gradlew 
-                    ./gradlew testDebug connectedAndroidTest lintRelease
+          name: Lists installed targets
+          command: android list target
+          environment:
+          TERM: dumb
       - run:
-          name: Build Detekt
+          name: Show list of system-images
+          command: sdkmanager --list --verbose | grep system-images
+      - run:
+          name: Setup Emulator
+          command: sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a"
+      - run:
+          name: Launch Emulator
           command: |
-                    sudo chmod +x ./gradlew
-                    ./gradlew detekt
+            cd ${ANDROID_HOME}/emulator;ls
+            export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib
+            emulator -avd test -no-window -noaudio -no-boot-anim -no-window -accel on
+          background: true
+      - run:
+          name: Wait emulator
+          command: |
+            circle-android wait-for-boot
+            adb shell input keyevent 82
+      - run:
+          name: Run Espresso UI Tests
+          command: ./gradlew :app:connectedDebugAndroidTest
       - run:
           name: Save test results
           command: |
