@@ -37,3 +37,6 @@ proguard-project.txt
 sample_client/proguard-project.txt
 tests/proguard-project.txt
 tests/test_cases/proguard-project.txt
+
+# Fastlane
+/fastlane/.env
