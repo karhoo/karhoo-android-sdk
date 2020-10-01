@@ -16,21 +16,26 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## Android
-### android test
+### android unit_tests
 ```
-fastlane android test
+fastlane android unit_tests
 ```
-Runs all the tests
-### android detekt
+Runs all the unit tests
+### android linting
 ```
-fastlane android detekt
+fastlane android linting
 ```
-Runs detekt
+Runs lint and detekt
 ### android beta
 ```
 fastlane android beta
 ```
 New Build
+### android slack_test
+```
+fastlane android slack_test
+```
+Message
 
 ----
 

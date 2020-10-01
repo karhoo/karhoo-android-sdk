@@ -13,8 +13,8 @@ platform :android do
   desc "Runs all the unit tests"
   lane :unit_tests do
     gradle(task: "testDebug")
-    #slack(
-        channel: #mobile-pull-requests,
+    slack(
+        channel: "#test_circleci",
         message: "*Karhoo Android NSDK* passed unit tests"
     )
   end
@@ -23,8 +23,8 @@ platform :android do
   lane :linting do
     gradle(task: "lintRelease")
     gradle(task: "detekt")
-    #slack(
-        channel: #mobile-pull-requests,
+    slack(
+        channel: "#test_circleci",
         message: "*Karhoo Android NSDK* passed detekt and lint"
     )
   end
@@ -35,17 +35,18 @@ platform :android do
     gradle(task: "install")
   end
 
+  desc "Messaging test"
   lane :slack_test do
     slack(
-      channel: ""#test_circleci",
+      channel: "#test_circleci",
       message: "*Karhoo NSDK* has passed unit tests"
     )
   end
 
   after_all do |lane|
     slack(
-      channel: ""#test_circleci",
-      message: "*Karhoo NSDK* has passed unit tests"
+      channel: "#test_circleci",
+      message: "*Karhoo NSDK* has passed linting and unit tests"
     )
   end
 
