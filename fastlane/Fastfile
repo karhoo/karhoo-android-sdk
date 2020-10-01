@@ -6,27 +6,21 @@ default_platform :android
 
 platform :android do
   before_all do
-    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
+    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
     setup_circle_ci
   end
 
   desc "Runs all the unit tests"
   lane :unit_tests do
     gradle(task: "testDebug")
-    slack(
-        channel: "#test_circleci",
-        message: "*Karhoo Android NSDK* passed unit tests"
-    )
+    slack_result(message: "*Karhoo Android NSDK* passed unit testing")
   end
 
   desc "Runs lint and detekt"
   lane :linting do
     gradle(task: "lintRelease")
     gradle(task: "detekt")
-    slack(
-        channel: "#test_circleci",
-        message: "*Karhoo Android NSDK* passed detekt and lint"
-    )
+    slack_result(message: "*Karhoo Android NSDK* passed detekt and lint")
   end
 
   desc "New Build"
@@ -35,26 +29,27 @@ platform :android do
     gradle(task: "install")
   end
 
-  desc "Messaging test"
-  lane :slack_test do
+  desc "Messaging"
+  lane :slack_result do |values|
+    message_text = values[:message]
     slack(
       channel: "#test_circleci",
-      message: "*Karhoo NSDK* has passed unit tests"
+      message: message_text,
+      success: values[:success]
     )
   end
 
   after_all do |lane|
-    slack(
-      channel: "#test_circleci",
-      message: "*Karhoo NSDK* has passed linting and unit tests"
+    slack_result(
+      message: "*Karhoo Android NSDK* passed all checks",
+      success: true
     )
   end
 
   error do |lane, exception|
-    slack(
+    slack_result(
       message: exception.message,
       success: false
     )
   end
 end
-

@@ -5,27 +5,42 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: Verifying fastlane version" time="0.000439">
+      <testcase classname="fastlane.lanes" name="0: Verifying fastlane version" time="0.000568">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.00022">
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.000195">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: setup_circle_ci" time="0.000806">
+      <testcase classname="fastlane.lanes" name="2: setup_circle_ci" time="0.00078">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: slack" time="1.250581">
+      <testcase classname="fastlane.lanes" name="3: testDebug" time="1.44318">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: slack" time="0.345186">
+      <testcase classname="fastlane.lanes" name="4: Switch to android slack_result lane" time="0.000326">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: slack" time="0.450636">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="6: Switch to android slack_result lane" time="0.00025">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="7: slack" time="0.369757">
         
       </testcase>
     

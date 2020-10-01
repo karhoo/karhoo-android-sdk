@@ -31,11 +31,11 @@ Runs lint and detekt
 fastlane android beta
 ```
 New Build
-### android slack_test
+### android slack_result
 ```
-fastlane android slack_test
+fastlane android slack_result
 ```
-Message
+Messaging
 
 ----
 
