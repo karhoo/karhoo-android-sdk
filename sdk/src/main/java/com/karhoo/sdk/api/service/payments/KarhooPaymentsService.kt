@@ -1,5 +1,6 @@
 package com.karhoo.sdk.api.service.payments
 
+import com.karhoo.sdk.api.KarhooApi
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.BraintreeSDKToken
@@ -38,7 +39,7 @@ class KarhooPaymentsService : PaymentsService {
         this.nonceRequest = request
     }
 
-    override fun getPaymentProvider(): Call<PaymentProvider> = PaymentProviderInteractor(credentialsManager, userManager, apiTemplate).apply {}
+    override fun getPaymentProvider(): Call<PaymentProvider> = PaymentProviderInteractor(credentialsManager, userManager, apiTemplate, KarhooApi.paymentsService).apply {}
 
     override fun getAdyenPublicKey(): Call<AdyenPublicKey> = AdyenPublicKeyInteractor(credentialsManager, apiTemplate).apply {}
 

@@ -61,17 +61,6 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
         }
     }
 
-    private fun fetchUserCardDetails(user: UserInfo) {
-        val nonceRequest = NonceRequest(payer = Payer(
-                id = user.userId,
-                email = user.email,
-                firstName = user.firstName,
-                lastName = user.lastName),
-                                        organisationId = user.organisations.first().id
-                                       )
-        paymentsService.getNonce(nonceRequest).execute { }
-    }
-
     private fun checkIfRolesAreValidAndSave(userInfo: UserInfo): Resource<UserInfo> {
         userInfo.organisations.forEach {
             it.roles?.let { roles ->
@@ -88,10 +77,8 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
 
     private fun onSuccessfulUser(userInfo: UserInfo) {
         analytics.userInfo = userInfo
-        paymentsService.getPaymentProvider().execute {}
-        //TODO only call this for Braintree users
-        fetchUserCardDetails(userInfo)
         userManager.saveUser(userInfo)
+        paymentsService.getPaymentProvider().execute {}
     }
 
     private fun onSuccessfulCredentials(credentials: Credentials) {

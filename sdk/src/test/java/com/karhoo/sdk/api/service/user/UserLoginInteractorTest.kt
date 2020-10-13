@@ -37,7 +37,6 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
     private var userManager: UserManager = mock()
     private var analytics: Analytics = mock()
     private var paymentService: PaymentsService = mock()
-    private var paymentsCall: Call<PaymentsNonce> = mock()
     private var paymentProviderCall: Call<PaymentProvider> = mock()
 
     @Captor
@@ -83,8 +82,6 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
                 .thenReturn(CompletableDeferred(Resource.Success(credentials)))
         whenever(apiTemplate.userProfile())
                 .thenReturn(CompletableDeferred(Resource.Success(userInfo)))
-        whenever(paymentService.getNonce(any()))
-                .thenReturn(paymentsCall)
         whenever(paymentService.getPaymentProvider())
                 .thenReturn(paymentProviderCall)
 
@@ -117,8 +114,6 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
                 .thenReturn(CompletableDeferred(Resource.Success(credentials)))
         whenever(apiTemplate.userProfile())
                 .thenReturn(CompletableDeferred(Resource.Success(userInfo)))
-        whenever(paymentService.getNonce(any()))
-                .thenReturn(paymentsCall)
         whenever(paymentService.getPaymentProvider())
                 .thenReturn(paymentProviderCall)
 
