@@ -9,6 +9,7 @@ import com.karhoo.sdk.api.datastore.user.UserStore
 import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.client.APITemplate
+import com.karhoo.sdk.api.network.request.RefreshTokenRequest
 import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
@@ -67,6 +68,10 @@ class KarhooUserService : UserService {
 
     override fun logout() {
         userStore.removeCurrentUser()
+    }
+
+    override fun clearRefreshToken() {
+        apiTemplate.clearRefreshToken(RefreshTokenRequest(credentialsManager.credentials.refreshToken))
     }
 
     private fun authSettingCheck() {

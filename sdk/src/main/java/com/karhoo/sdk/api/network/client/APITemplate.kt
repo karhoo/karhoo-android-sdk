@@ -35,6 +35,7 @@ import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -102,6 +103,9 @@ interface   APITemplate {
 
     @POST(TOKEN_REFRESH_METHOD)
     fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Deferred<Resource<Credentials>>
+
+    @DELETE(TOKEN_REFRESH_METHOD)
+    fun clearRefreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Deferred<Resource<Credentials>>
 
     @POST(PASSWORD_RESET_METHOD)
     fun passwordReset(@Body resetPasswordRequest: ResetPasswordRequest): Deferred<Resource<Void>>

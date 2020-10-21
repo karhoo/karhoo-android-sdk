@@ -8,13 +8,16 @@ import com.karhoo.sdk.api.datastore.user.KarhooUserStore
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.network.client.APITemplate
+import com.karhoo.sdk.api.network.request.RefreshTokenRequest
 import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -138,6 +141,17 @@ class KarhooUserServiceTest {
     fun `logout user fires call to remove user from user store`() {
         service.logout()
         verify(userStore).removeCurrentUser()
+    }
+
+    /**
+     * Given: A request is made to log out a user
+     * When: The call is made
+     * Then: The refreshToken should be cleared
+     */
+    @Test
+    fun `logout user fires call to remove refreshToken from credentials manager`() {
+        service.clearRefreshToken()
+        verify(apiTemplate).clearRefreshToken(RefreshTokenRequest(credentialsManager.credentials.refreshToken))
     }
 
     /**
