@@ -147,7 +147,7 @@ class KarhooUserServiceTest {
     fun `logout user fires call to remove user from user store`() {
         service.logout()
         verify(userStore).removeCurrentUser()
-        verify(apiTemplate).clearRefreshToken(any())
+        verify(apiTemplate).clearRefreshToken()
     }
 
     /**
@@ -158,7 +158,7 @@ class KarhooUserServiceTest {
     @Test
     fun `logout user fires call to remove refreshToken from credentials manager`() {
         service.clearRefreshToken()
-        verify(apiTemplate).clearRefreshToken(RefreshTokenRequest(credentialsManager.credentials.refreshToken))
+        verify(apiTemplate).clearRefreshToken()
     }
 
     /**

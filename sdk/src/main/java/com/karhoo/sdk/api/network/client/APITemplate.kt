@@ -105,7 +105,7 @@ interface   APITemplate {
     fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Deferred<Resource<Credentials>>
 
     @DELETE(TOKEN_REFRESH_METHOD)
-    fun clearRefreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Deferred<Resource<Credentials>>
+    fun clearRefreshToken()
 
     @POST(PASSWORD_RESET_METHOD)
     fun passwordReset(@Body resetPasswordRequest: ResetPasswordRequest): Deferred<Resource<Void>>
