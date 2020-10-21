@@ -7,14 +7,19 @@ import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.KarhooUserStore
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.AuthenticationMethod
+import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.network.client.APITemplate
+import com.karhoo.sdk.api.network.request.RefreshTokenRequest
 import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,6 +52,7 @@ class KarhooUserServiceTest {
     private val userStore: KarhooUserStore = mock()
     // Needed for InjectMocks
     private val credentialsManager: CredentialsManager = mock()
+    val credientials: Credentials = mock()
     private val userManager: UserManager = mock()
     private val apiTemplate: APITemplate = mock()
     private val analytics: Analytics = mock()
@@ -58,6 +64,9 @@ class KarhooUserServiceTest {
     fun setUp() {
         KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
                                                                                    applicationContext, authenticationMethod = AuthenticationMethod.KarhooUser()))
+
+        whenever(credentialsManager.credentials).thenReturn(credientials)
+        whenever(credientials.refreshToken).thenReturn("1234")
     }
 
     /**
@@ -138,6 +147,18 @@ class KarhooUserServiceTest {
     fun `logout user fires call to remove user from user store`() {
         service.logout()
         verify(userStore).removeCurrentUser()
+        verify(apiTemplate).clearRefreshToken(any())
+    }
+
+    /**
+     * Given: A request is made to log out a user
+     * When: The call is made
+     * Then: The refreshToken should be cleared
+     */
+    @Test
+    fun `logout user fires call to remove refreshToken from credentials manager`() {
+        service.clearRefreshToken()
+        verify(apiTemplate).clearRefreshToken(RefreshTokenRequest(credentialsManager.credentials.refreshToken))
     }
 
     /**

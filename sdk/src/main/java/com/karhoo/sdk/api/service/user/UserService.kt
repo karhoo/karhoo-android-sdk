@@ -18,4 +18,6 @@ interface UserService {
 
     fun logout()
 
+    fun clearRefreshToken()
+
 }
