@@ -39,6 +39,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -104,8 +105,8 @@ interface   APITemplate {
     @POST(TOKEN_REFRESH_METHOD)
     fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Deferred<Resource<Credentials>>
 
-    @DELETE(TOKEN_REFRESH_METHOD)
-    fun clearRefreshToken()
+    @HTTP(method = "DELETE", path = TOKEN_REFRESH_METHOD, hasBody = true)
+    fun clearRefreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Deferred<Resource<Credentials>>
 
     @POST(PASSWORD_RESET_METHOD)
     fun passwordReset(@Body resetPasswordRequest: ResetPasswordRequest): Deferred<Resource<Void>>

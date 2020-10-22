@@ -72,7 +72,8 @@ class KarhooUserService : UserService {
     }
 
     override fun clearRefreshToken() {
-        apiTemplate.clearRefreshToken()
+        val request = RefreshTokenRequest(credentialsManager.credentials.refreshToken)
+        apiTemplate.clearRefreshToken(request)
     }
 
     private fun authSettingCheck() {
