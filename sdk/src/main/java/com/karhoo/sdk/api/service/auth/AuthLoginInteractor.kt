@@ -9,6 +9,7 @@ import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BaseCallInteractor
+import com.karhoo.sdk.api.service.payments.PaymentsService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers.Main
@@ -20,6 +21,7 @@ import kotlin.coroutines.CoroutineContext
 internal class AuthLoginInteractor @Inject constructor(private val credentialsManager: CredentialsManager,
                                                        private val userManager: UserManager,
                                                        private val apiTemplate: APITemplate,
+                                                       private val paymentsService: PaymentsService,
                                                        private val context: CoroutineContext = Main)
     : BaseCallInteractor<UserInfo>(false, credentialsManager, apiTemplate, context) {
 
@@ -56,6 +58,9 @@ internal class AuthLoginInteractor @Inject constructor(private val credentialsMa
         return when (val user = apiTemplate.authUserInfo().await()) {
             is Resource.Success -> {
                 userManager.saveUser(user.data)
+                paymentsService.getPaymentProvider().execute {
+                    //TODO: add braintree check here
+                }
                 Resource.Success(user.data)
             }
             is Resource.Failure -> Resource.Failure(user.error)
