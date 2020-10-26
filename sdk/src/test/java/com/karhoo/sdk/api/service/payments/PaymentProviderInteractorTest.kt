@@ -54,7 +54,7 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
     fun `unsuccessful selection of payment provider returns an error`() {
         var shouldBeNull: PaymentProvider? = null
         var error: KarhooError? = null
-        var expectedError: KarhooError = KarhooError.InternalSDKError
+        val expectedError: KarhooError = KarhooError.InternalSDKError
 
 
         whenever(apiTemplate.getPaymentProvider())
@@ -70,7 +70,7 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
             delay(5)
         }
 
-        assertEquals(KarhooError.InternalSDKError, error)
+        assertEquals(expectedError, error)
         assertNull(shouldBeNull)
     }
 
@@ -139,5 +139,36 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
         }
 
         assertEquals(adyenProvider, paymentProvider)
+    }
+
+    /**
+     * Given:   A request is made to get payment provider methods
+     * When:    The call is successful
+     * And:     The user is a guest Braintree user
+     * Then:    A call is made to get the nonce
+     **/
+    @Test
+    fun `no nonce call made for guest Braintree users`() {
+        whenever(apiTemplate.getPaymentProvider())
+                .thenReturn(CompletableDeferred(Resource.Success(braintreeProvider)))
+        whenever(userManager.user).thenReturn(userInfo)
+        whenever(userInfo.organisations).thenReturn(emptyList())
+
+        var paymentProvider: PaymentProvider? = null
+
+        runBlocking {
+            interactor.execute {
+                when (it) {
+                    is Resource.Success -> {
+                        verify(userManager).paymentProvider = it.data.provider
+                        verify(paymentService, never()).getNonce(any())
+                        paymentProvider = it.data
+                    }
+                }
+            }
+            delay(20)
+        }
+
+        assertEquals(braintreeProvider, paymentProvider)
     }
 }

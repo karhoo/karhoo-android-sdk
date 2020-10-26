@@ -1,6 +1,5 @@
 package com.karhoo.sdk.api.service.payments
 
-import android.util.Log
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.PaymentProvider
