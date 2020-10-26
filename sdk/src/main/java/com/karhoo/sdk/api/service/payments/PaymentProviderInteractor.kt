@@ -1,6 +1,5 @@
 package com.karhoo.sdk.api.service.payments
 
-import android.util.Log
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.PaymentProvider
@@ -36,7 +35,8 @@ internal class PaymentProviderInteractor @Inject constructor(credentialsManager:
             is Resource.Success -> {
                 val paymentProvider = result.data.provider
                 userManager.paymentProvider = paymentProvider
-                if (paymentProvider.id.equals("Braintree", true)) {
+                if (paymentProvider.id.equals("Braintree", true)
+                        && userManager.user.organisations.isNotEmpty()) {
                     fetchUserCardDetails(user = userManager.user)
                 }
                 Resource.Success(data = result.data)
