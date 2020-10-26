@@ -206,6 +206,7 @@ class AuthLoginInteractorTest {
         }
 
         verify(userManager, atLeastOnce()).saveUser(userInfo)
+        verify(paymentsService, atLeastOnce()).getPaymentProvider()
     }
 
     /**
@@ -234,6 +235,7 @@ class AuthLoginInteractorTest {
         }
 
         verify(userManager, never()).saveUser(any())
+        verify(paymentsService, never()).getPaymentProvider()
         assertEquals(KarhooError.GeneralRequestError, error)
         assertNull(shouldBeNull)
     }

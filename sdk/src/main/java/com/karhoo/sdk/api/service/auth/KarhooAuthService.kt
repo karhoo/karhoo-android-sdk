@@ -1,5 +1,6 @@
 package com.karhoo.sdk.api.service.auth
 
+import com.karhoo.sdk.api.KarhooApi
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.datastore.user.UserStore
@@ -23,12 +24,9 @@ class KarhooAuthService : AuthService {
     @Inject
     internal lateinit var userManager: UserManager
 
-    @Inject
-    internal lateinit var paymentsService: PaymentsService
-
     override fun login(token: String): Call<UserInfo> = AuthLoginInteractor(credentialsManager = credentialsManager,
-            apiTemplate = apiTemplate,
-            userManager = userManager, paymentsService = paymentsService).apply {
+            apiTemplate = apiTemplate, userManager = userManager, paymentsService = KarhooApi.paymentsService)
+            .apply {
         this.token = token
     }
 
