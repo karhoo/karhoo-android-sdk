@@ -58,9 +58,7 @@ internal class AuthLoginInteractor @Inject constructor(private val credentialsMa
         return when (val user = apiTemplate.authUserInfo().await()) {
             is Resource.Success -> {
                 userManager.saveUser(user.data)
-                paymentsService.getPaymentProvider().execute {
-                    //TODO: add braintree check here
-                }
+                paymentsService.getPaymentProvider().execute { }
                 Resource.Success(user.data)
             }
             is Resource.Failure -> Resource.Failure(user.error)
