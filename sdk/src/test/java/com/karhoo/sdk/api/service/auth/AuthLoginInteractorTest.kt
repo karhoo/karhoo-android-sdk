@@ -10,6 +10,7 @@ import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
+import com.karhoo.sdk.api.service.payments.PaymentsService
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.atLeastOnce
@@ -40,6 +41,7 @@ class AuthLoginInteractorTest {
     private val credentialsManager: CredentialsManager = mock()
     private val userManager: UserManager = mock()
     private val apiTemplate: APITemplate = mock()
+    private val paymentsService: PaymentsService = mock()
     private val context: CoroutineContext = Dispatchers.Unconfined
     private val applicationContext: Context = mock()
     private val userInfo: UserInfo = mock()
@@ -61,7 +63,7 @@ class AuthLoginInteractorTest {
     fun setUp() {
         KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
                                                                                    applicationContext, authenticationMethod = AuthenticationMethod.TokenExchange("clientId", "scope")))
-        interactor = AuthLoginInteractor(credentialsManager, userManager, apiTemplate, context)
+        interactor = AuthLoginInteractor(credentialsManager, userManager, apiTemplate, paymentsService, context)
     }
 
     @After
@@ -81,7 +83,7 @@ class AuthLoginInteractorTest {
 
         KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
                                                                                    applicationContext, authenticationMethod = AuthenticationMethod.KarhooUser()))
-        interactor = AuthLoginInteractor(credentialsManager, userManager, apiTemplate, context)
+        interactor = AuthLoginInteractor(credentialsManager, userManager, apiTemplate, paymentsService, context)
 
         runBlocking {
             interactor.execute { result ->
@@ -120,7 +122,7 @@ class AuthLoginInteractorTest {
 
         KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
                                                                                    applicationContext, authenticationMethod = AuthenticationMethod.TokenExchange("", "scope")))
-        interactor = AuthLoginInteractor(credentialsManager, userManager, apiTemplate, context)
+        interactor = AuthLoginInteractor(credentialsManager, userManager, apiTemplate, paymentsService, context)
 
         runBlocking {
             interactor.execute {}

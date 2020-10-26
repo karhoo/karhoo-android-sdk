@@ -4,6 +4,7 @@ import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.datastore.user.UserStore
 import com.karhoo.sdk.api.network.client.APITemplate
+import com.karhoo.sdk.api.service.payments.PaymentsService
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -20,6 +21,7 @@ class KarhooAuthServiceTest {
     private val userManager: UserManager = mock()
     private val apiTemplate: APITemplate = mock()
     private val userStore: UserStore = mock()
+    private val paymentsservice: PaymentsService = mock()
 
     @InjectMocks
     private lateinit var service: KarhooAuthService
