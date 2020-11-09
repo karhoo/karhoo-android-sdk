@@ -2,14 +2,12 @@ package com.karhoo.sdk.api.service.quotes
 
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.Coverage
+import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
-import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.api.network.request.QuoteRequestPoint
 import com.karhoo.sdk.api.network.request.QuotesRequest
 import com.karhoo.sdk.api.network.response.Resource
@@ -89,8 +87,10 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
             val categoryNames = it.availability.vehicles.classes
 
             categoryNames.forEach { category ->
-                val filteredVehicles: List<Quote> = it.quotes.filter { it.vehicle.vehicleClass ==
-                        category }
+                val filteredVehicles: List<Quote> = it.quotes.filter {
+                    it.vehicle.vehicleClass ==
+                            category
+                }
                 quotesMap[category] = filteredVehicles
             }
             return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap))

@@ -689,8 +689,6 @@ class ServerRobot {
 
         val COVERAGE_OK = Coverage(true)
 
-        val NO_COVERAGE = Coverage(false)
-
         /**
          *
          * Errors
