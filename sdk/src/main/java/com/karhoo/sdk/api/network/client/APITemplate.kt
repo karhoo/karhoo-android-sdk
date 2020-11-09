@@ -78,7 +78,7 @@ interface   APITemplate {
         const val ADD_CARD_METHOD = "/v2/payments/payment-methods/braintree/add-payment-details"
         const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-payment-method"
         const val FARE_DETAILS = "/v1/fares/trip/{id}"
-        const val CHECK_COVERAGE = "v2/quotes/coverage"
+        const val CHECK_COVERAGE = "/v2/quotes/coverage"
 
         const val AUTH_TOKEN_METHOD = "/karhoo/anonymous/token-exchange"
         const val AUTH_REVOKE_METHOD = "/oauth/v2/revoke"
@@ -96,6 +96,7 @@ interface   APITemplate {
         const val IDENTIFIER_LONGITUDE = "longitude"
         const val IDENTIFIER_ORG = "organisation_id"
         const val IDENTIFIER_CURRENCY = "currency"
+        const val IDENTIFIER_DATE_SCHEDULED = "local_time_of_pickup"
 
         private fun authHost() = KarhooEnvironmentDetails.current().authHost
     }
@@ -138,7 +139,9 @@ interface   APITemplate {
     fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
 
     @GET(CHECK_COVERAGE)
-    fun checkCoverage(@Body coverageRequest: CoverageRequest): Deferred<Resource<Coverage>>
+    fun checkCoverage(@Query(IDENTIFIER_LATITUDE) latitude: String, @Query(IDENTIFIER_LONGITUDE)
+    longitude: String, @Query(IDENTIFIER_DATE_SCHEDULED) dateScheduled: String?):
+            Deferred<Resource<Coverage>>
 
     @POST(BOOKING_METHOD)
     fun book(): Deferred<Resource<TripInfo>>
