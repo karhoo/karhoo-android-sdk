@@ -6,12 +6,15 @@ import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 
@@ -27,46 +30,82 @@ class CheckCoverageInteractorTest : BaseKarhooUserInteractorTest() {
     }
 
     /**
-     * Given:   A request is made to check the coverage of an area
-     * When:    The request has been executed
-     * Then:    An api call should be made to check the coverage
-     **/
-    @Test
-    fun checkingCoverageMakesAnAPICallToCheckCoverage() {
-        val coverageResponse = Coverage()
-        whenever(apiTemplate.checkCoverage(any()))
-                .thenReturn(CompletableDeferred(Resource.Success(data = coverageResponse)))
-        interactor.coverageRequest = CoverageRequest("51.5549° N", "0.1084° W", "")
-
-        var coverageInfo: Coverage? = null
-
-    }
-
-    //    /**
-    //     * Given:   A request is made to check fleet coverage of an area
-    //     * When:    There is coverage in the area
-    //     * Then:    A successful response is returned
-    //     **/
-    //    @Test
-    //    fun  checkCoverageReturnsASuccessfulResponse() {
-    //
-    //    }
-
-    /**
      * Given:   A request is made to check fleet coverage of an area
-     * When:    There is no coverage in the area
-     * Then:    An Internal SDK error is returned
+     * When:    There is coverage in the area
+     * Then:    A successful response is returned
      **/
     @Test
     fun checkCoverageReturnsASuccessfulResponse() {
-        var shouldBeNull: CoverageRequest? = null
+        val latitude = "51.532156"
+        val longitude = "0.123838"
+        val dateScheduled = ""
+        val coverageInfo = Coverage(true)
+        whenever(apiTemplate.checkCoverage(latitude, longitude, dateScheduled))
+                .thenReturn(CompletableDeferred(Resource.Success(coverageInfo)))
+        interactor.coverageRequest = CoverageRequest(latitude, longitude, dateScheduled)
+
+        var returnedCoverageInfo: Coverage? = null
+        runBlocking {
+            interactor.execute { result ->
+                when (result) {
+                    is Resource.Success -> returnedCoverageInfo = result.data
+                    is Resource.Failure -> fail()
+                }
+            }
+            delay(5)
+        }
+        assertNotNull(returnedCoverageInfo)
+        assertEquals(coverageInfo, returnedCoverageInfo)
+        verify(apiTemplate).checkCoverage(latitude, longitude, dateScheduled)
+
+    }
+
+        /**
+         * Given:   A request is made to check fleet coverage of an area
+         * When:    There is no coverage in the area
+         * Then:    A negative response is returned
+         **/
+        @Test
+        fun  checkCoverageReturnsANegativeResponse() {
+            val latitude = "51.532156"
+            val longitude = "0.123838"
+            val dateScheduled = ""
+            val coverageInfo = Coverage(false)
+            whenever(apiTemplate.checkCoverage(latitude, longitude, dateScheduled))
+                    .thenReturn(CompletableDeferred(Resource.Success(coverageInfo)))
+            interactor.coverageRequest = CoverageRequest(latitude, longitude, dateScheduled)
+
+            var returnedCoverageInfo: Coverage? = null
+            runBlocking {
+                interactor.execute { result ->
+                    when (result) {
+                        is Resource.Success -> returnedCoverageInfo = result.data
+                        is Resource.Failure -> fail()
+                    }
+                }
+                delay(5)
+            }
+            assertNotNull(returnedCoverageInfo)
+            assertEquals(coverageInfo, returnedCoverageInfo)
+            verify(apiTemplate).checkCoverage(latitude, longitude, dateScheduled)
+
+        }
+
+    /**
+     * Given:   Lat long is not set
+     * When:    A request is made to check coverage
+     * Then:    An Internal SDK error is returned
+     **/
+    @Test
+    fun checkCoverageReturnsAnErrorIfNoLatLongAreGiven() {
+        var shouldBeNull: Coverage? = null
         var error: KarhooError? = null
 
         runBlocking {
             interactor.execute { result ->
                 when (result) {
-                    is Resource.Success -> result.data
-                    is Resource.Failure -> result.error
+                    is Resource.Success -> shouldBeNull = result.data
+                    is Resource.Failure -> error = result.error
                 }
             }
             delay(5)

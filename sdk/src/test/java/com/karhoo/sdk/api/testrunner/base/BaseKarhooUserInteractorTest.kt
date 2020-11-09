@@ -28,9 +28,4 @@ open class BaseKarhooUserInteractorTest {
                                                                                    applicationContext,
                                                                                    authenticationMethod = AuthenticationMethod.KarhooUser()))
     }
-
-    @Test
-    fun emptyTest() {
-        assert(true)
-    }
 }
