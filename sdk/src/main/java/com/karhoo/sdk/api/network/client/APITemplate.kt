@@ -20,6 +20,7 @@ import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
+import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
@@ -31,6 +32,7 @@ import com.karhoo.sdk.api.network.request.TripSearch
 import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
+import com.karhoo.sdk.api.model.Coverage
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
@@ -76,6 +78,7 @@ interface   APITemplate {
         const val ADD_CARD_METHOD = "/v2/payments/payment-methods/braintree/add-payment-details"
         const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-payment-method"
         const val FARE_DETAILS = "/v1/fares/trip/{id}"
+        const val CHECK_COVERAGE = "/v2/quotes/coverage"
 
         const val AUTH_TOKEN_METHOD = "/karhoo/anonymous/token-exchange"
         const val AUTH_REVOKE_METHOD = "/oauth/v2/revoke"
@@ -93,6 +96,7 @@ interface   APITemplate {
         const val IDENTIFIER_LONGITUDE = "longitude"
         const val IDENTIFIER_ORG = "organisation_id"
         const val IDENTIFIER_CURRENCY = "currency"
+        const val IDENTIFIER_DATE_SCHEDULED = "local_time_of_pickup"
 
         private fun authHost() = KarhooEnvironmentDetails.current().authHost
     }
@@ -133,6 +137,11 @@ interface   APITemplate {
 
     @GET(QUOTES_METHOD)
     fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
+
+    @GET(CHECK_COVERAGE)
+    fun checkCoverage(@Query(IDENTIFIER_LATITUDE) latitude: String, @Query(IDENTIFIER_LONGITUDE)
+    longitude: String, @Query(IDENTIFIER_DATE_SCHEDULED) dateScheduled: String?):
+            Deferred<Resource<Coverage>>
 
     @POST(BOOKING_METHOD)
     fun book(): Deferred<Resource<TripInfo>>
@@ -215,4 +224,5 @@ interface   APITemplate {
     @POST
     @FormUrlEncoded
     fun authRefresh(@FieldMap(encoded = true) params: Map<String, String>, @Url url: String = authHost() + AUTH_REFRESH_METHOD): Deferred<Resource<Credentials>>
+
 }

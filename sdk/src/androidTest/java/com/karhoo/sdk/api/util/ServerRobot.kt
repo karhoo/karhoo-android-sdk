@@ -13,6 +13,7 @@ import com.karhoo.sdk.api.model.AvailabilityVehicle
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.Categories
+import com.karhoo.sdk.api.model.Coverage
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.Driver
 import com.karhoo.sdk.api.model.DriverTrackingInfo
@@ -52,6 +53,7 @@ import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
+import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.api.network.request.QuoteQTA
 import java.util.Date
 
@@ -351,6 +353,13 @@ class ServerRobot {
                         delayInMillis = delayInMillis,
                         endpoint = APITemplate.PAYMENT_PROVIDERS_METHOD)
     }
+    
+    fun getCheckCoverageResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockGetResponse(code = code,
+                        response = response,
+                        delayInMillis = delayInMillis,
+                        endpoint = APITemplate.CHECK_COVERAGE)
+    }
 
     private fun mockPostResponse(code: Int,
                                  response: Any,
@@ -570,6 +579,9 @@ class ServerRobot {
                                                                      instructions = "I am near by",
                                                                      pickupType = PickupType.CURBSIDE))
 
+        const val LAT = "51.532156"
+        const val LONG = "0.123838"
+
         /**
          *
          * Driver Tracking
@@ -669,6 +681,16 @@ class ServerRobot {
                 breakdown = FARE_BREAKDOWN)
 
         val ADYEN_PUBLIC_KEY = AdyenPublicKey(publicKey = "12234455")
+
+        /**
+         *
+         * Coverage
+         *
+         */
+
+        val COVERAGE_OK = Coverage(true)
+
+        val COVERAGE_REQUEST = CoverageRequest(LAT, LONG, "")
 
         /**
          *
