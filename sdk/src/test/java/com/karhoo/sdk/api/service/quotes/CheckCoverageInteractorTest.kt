@@ -21,6 +21,18 @@ class CheckCoverageInteractorTest : BaseKarhooUserInteractorTest() {
 
     internal lateinit var interactor: CheckCoverageInteractor
 
+    private val latitude = "51.532156"
+
+    private val longitude = "0.123838"
+
+    private val dateScheduled = ""
+
+    private val coverageRequest = CoverageRequest(
+            latitude = latitude,
+            longitude = longitude,
+            dateScheduled = dateScheduled
+                                                 )
+
     @Before
     override fun setUp() {
         super.setUp()
@@ -35,13 +47,10 @@ class CheckCoverageInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun checkCoverageReturnsASuccessfulResponse() {
-        val latitude = "51.532156"
-        val longitude = "0.123838"
-        val dateScheduled = ""
         val coverageInfo = Coverage(true)
         whenever(apiTemplate.checkCoverage(latitude, longitude, dateScheduled))
                 .thenReturn(CompletableDeferred(Resource.Success(coverageInfo)))
-        interactor.coverageRequest = CoverageRequest(latitude, longitude, dateScheduled)
+        interactor.coverageRequest = coverageRequest
 
         var returnedCoverageInfo: Coverage? = null
         runBlocking {
@@ -66,13 +75,10 @@ class CheckCoverageInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun checkCoverageReturnsANegativeResponse() {
-        val latitude = "51.532156"
-        val longitude = "0.123838"
-        val dateScheduled = ""
         val coverageInfo = Coverage(false)
         whenever(apiTemplate.checkCoverage(latitude, longitude, dateScheduled))
                 .thenReturn(CompletableDeferred(Resource.Success(coverageInfo)))
-        interactor.coverageRequest = CoverageRequest(latitude, longitude, dateScheduled)
+        interactor.coverageRequest = coverageRequest
 
         var returnedCoverageInfo: Coverage? = null
         runBlocking {

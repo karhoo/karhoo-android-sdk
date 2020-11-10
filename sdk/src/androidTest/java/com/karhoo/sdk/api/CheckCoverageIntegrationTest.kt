@@ -7,6 +7,7 @@ import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import com.karhoo.sdk.api.util.ServerRobot.Companion.COVERAGE_OK
+import com.karhoo.sdk.api.util.ServerRobot.Companion.COVERAGE_REQUEST
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
@@ -57,7 +58,7 @@ class CheckCoverageIntegrationTest {
         }
         var result: Coverage? = null
 
-        KarhooApi.quotesService.checkCoverage(CoverageRequest(LAT, LONG, "")).execute {
+        KarhooApi.quotesService.checkCoverage(COVERAGE_REQUEST).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -83,7 +84,7 @@ class CheckCoverageIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.checkCoverage(CoverageRequest(LAT, LONG, "")).execute {
+        KarhooApi.quotesService.checkCoverage(COVERAGE_REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -109,7 +110,7 @@ class CheckCoverageIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.checkCoverage(CoverageRequest(LAT, LONG, "")).execute {
+        KarhooApi.quotesService.checkCoverage(COVERAGE_REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -135,7 +136,7 @@ class CheckCoverageIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.checkCoverage(CoverageRequest(LAT, LONG, "")).execute {
+        KarhooApi.quotesService.checkCoverage(COVERAGE_REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -161,7 +162,7 @@ class CheckCoverageIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.checkCoverage(CoverageRequest(LAT, LONG, "")).execute {
+        KarhooApi.quotesService.checkCoverage(COVERAGE_REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -187,7 +188,7 @@ class CheckCoverageIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.checkCoverage(CoverageRequest(LAT, LONG, "")).execute {
+        KarhooApi.quotesService.checkCoverage(COVERAGE_REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -213,7 +214,7 @@ class CheckCoverageIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.checkCoverage(CoverageRequest(LAT, LONG, "")).execute {
+        KarhooApi.quotesService.checkCoverage(COVERAGE_REQUEST).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error

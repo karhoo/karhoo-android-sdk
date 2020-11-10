@@ -53,6 +53,7 @@ import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
+import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.api.network.request.QuoteQTA
 import java.util.Date
 
@@ -688,6 +689,8 @@ class ServerRobot {
          */
 
         val COVERAGE_OK = Coverage(true)
+
+        val COVERAGE_REQUEST = CoverageRequest(LAT, LONG, "")
 
         /**
          *
