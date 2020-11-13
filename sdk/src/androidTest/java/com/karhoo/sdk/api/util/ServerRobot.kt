@@ -429,7 +429,9 @@ class ServerRobot {
                                     phoneNumber = "+123",
                                     termsConditionsUrl = "someTermsUrl")
 
-        val QUOTE_VEHICLE = QuoteVehicle(vehicleClass = "Saloon",
+        val QUOTE_VEHICLE = QuoteVehicle(vehicleType = "Electric",
+                                        vehicleClass = "Saloon",
+                                        vehicleTags = listOf("Electric", "Taxi"),
                                          vehicleQta = QuoteQTA(highMinutes = 10, lowMinutes = 1))
 
         val VEHICLE_ATTRIBUTES = VehicleAttributes(passengerCapacity = 4,
@@ -444,7 +446,7 @@ class ServerRobot {
                                vehicle = QUOTE_VEHICLE,
                                vehicleAttributes = VEHICLE_ATTRIBUTES)
 
-        val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto")))
+        val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"), types = listOf("Electric", "Standard", "MPV")))
 
         val VEHICLES = Vehicles(
                 status = "PROGRESSING",
