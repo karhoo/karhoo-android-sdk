@@ -25,7 +25,7 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun checkVerifyQuoteSuccessResponse() {
-        
+
     }
 
     /**
