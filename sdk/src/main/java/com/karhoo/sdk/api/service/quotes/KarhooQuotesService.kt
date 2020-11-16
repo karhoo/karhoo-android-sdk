@@ -2,6 +2,8 @@ package com.karhoo.sdk.api.service.quotes
 
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.Coverage
+import com.karhoo.sdk.api.model.Quote
+import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -30,4 +32,11 @@ class KarhooQuotesService : QuotesService {
                     apiTemplate = apiTemplate).apply {
         this.coverageRequest = coverageRequest
     }
+
+    override fun verifyQuotes(quoteId: QuoteId): Call<Quote> =
+            VerifyQuoteInteractor(
+                    credentialsManager = credentialsManager,
+                    apiTemplate = apiTemplate).apply {
+        this.quoteIdRequest = quoteId
+        }
 }
