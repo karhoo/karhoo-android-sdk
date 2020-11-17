@@ -22,10 +22,12 @@ internal class BookTripInteractor @Inject constructor(credentialsManager: Creden
 
     override fun createRequest(): Deferred<Resource<TripInfo>> {
         tripBooking?.let {
-            return apiTemplate.book(it)
+            return if (it.nonce.isNullOrBlank()) {
+                apiTemplate.book()
+            } else {
+                apiTemplate.bookWithNonce(it)
+            }
         } ?: run {
-            return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
-        }
+            return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))        }
     }
-
 }

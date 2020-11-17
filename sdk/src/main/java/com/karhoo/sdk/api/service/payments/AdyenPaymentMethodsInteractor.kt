@@ -1,11 +1,12 @@
 package com.karhoo.sdk.api.service.payments
 
+import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BaseCallInteractor
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -17,18 +18,31 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
                                                                  private val apiTemplate: APITemplate,
                                                                  private val context:
                                                                  CoroutineContext = Dispatchers.Main)
-    : BaseCallInteractor<AdyenPaymentMethods>(true, credentialsManager, apiTemplate, context) {
+    : BaseCallInteractor<String>(true, credentialsManager, apiTemplate, context) {
 
-    override fun createRequest(): Deferred<Resource<AdyenPaymentMethods>> {
-        return GlobalScope.async {
-            return@async getPaymentMethods()
+    var adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest? = null
+
+    override fun createRequest(): Deferred<Resource<String>> {
+        adyenPaymentMethodsRequest?.let {
+            return GlobalScope.async {
+                return@async getPaymentMethods(it)
+            }
+        } ?: run {
+            return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }
     }
 
-    private suspend fun getPaymentMethods(): Resource<AdyenPaymentMethods> {
-        return when (val result = apiTemplate.getPaymentMethods(AdyenPaymentMethodsRequest())
+    private suspend fun getPaymentMethods(request: AdyenPaymentMethodsRequest): Resource<String> {
+        return when (val result = apiTemplate.getAdyenPaymentMethods(request)
                 .await()) {
-            is Resource.Success -> Resource.Success(data = result.data)
+            is Resource.Success -> {
+                val responseBody = result.data.string()
+                if (responseBody.isNullOrBlank()) {
+                    Resource.Failure(error = KarhooError.InternalSDKError)
+                } else {
+                    Resource.Success(data = responseBody)
+                }
+            }
             is Resource.Failure -> Resource.Failure(error = result.error)
         }
     }

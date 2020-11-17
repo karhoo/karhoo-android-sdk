@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AdyenItem(@SerializedName("id") val id: String? = "",
-                     @SerializedName("name") val name: String? = "")
+data class AdyenPublicKey(
+        @SerializedName("key") val publicKey: String = "")
     : Parcelable

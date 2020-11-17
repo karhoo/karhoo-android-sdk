@@ -7,8 +7,6 @@ import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.request.NonceRequest
-import com.karhoo.sdk.api.network.request.Payer
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BaseCallInteractor
@@ -61,17 +59,6 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
         }
     }
 
-    private fun fetchUserCardDetails(user: UserInfo) {
-        val nonceRequest = NonceRequest(payer = Payer(
-                id = user.userId,
-                email = user.email,
-                firstName = user.firstName,
-                lastName = user.lastName),
-                                        organisationId = user.organisations.first().id
-                                       )
-        paymentsService.getNonce(nonceRequest).execute { }
-    }
-
     private fun checkIfRolesAreValidAndSave(userInfo: UserInfo): Resource<UserInfo> {
         userInfo.organisations.forEach {
             it.roles?.let { roles ->
@@ -88,10 +75,8 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
 
     private fun onSuccessfulUser(userInfo: UserInfo) {
         analytics.userInfo = userInfo
-        paymentsService.getPaymentProvider().execute {}
-        //TODO only call this for Braintree users
-        fetchUserCardDetails(userInfo)
         userManager.saveUser(userInfo)
+        paymentsService.getPaymentProvider().execute {}
     }
 
     private fun onSuccessfulCredentials(credentials: Credentials) {

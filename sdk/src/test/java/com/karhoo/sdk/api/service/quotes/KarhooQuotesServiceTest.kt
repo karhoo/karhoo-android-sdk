@@ -4,7 +4,6 @@ import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.service.availability.AvailabilityService
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -20,7 +19,6 @@ class KarhooQuotesServiceTest {
     private lateinit var service: KarhooQuotesService
 
     // Needed for InjectMocks
-    private val availabilityService: AvailabilityService = mock()
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
     private val dateFormat: DateFormat = mock()

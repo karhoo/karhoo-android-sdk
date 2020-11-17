@@ -1,6 +1,6 @@
 package com.karhoo.sdk.api.network.client
 
-import com.karhoo.sdk.api.EnvironmentDetails
+import com.karhoo.sdk.api.KarhooEnvironmentDetails
 import com.karhoo.sdk.api.KarhooApi
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.model.AuthenticationMethod
@@ -53,7 +53,7 @@ class RequestInterceptor(private val headers: Headers) : Interceptor {
 
     private fun updateBaseUrl(request: Request, updatedRequestBuilder: Request.Builder) {
         val old = request.url().host()
-        HttpUrl.parse(EnvironmentDetails.current().guestHost)?.url()?.let {
+        HttpUrl.parse(KarhooEnvironmentDetails.current().guestHost)?.url()?.let {
             updatedRequestBuilder
                     .url(HttpUrl.parse(request.url().toString().replace(old, it.host))
                                  ?: request.url())

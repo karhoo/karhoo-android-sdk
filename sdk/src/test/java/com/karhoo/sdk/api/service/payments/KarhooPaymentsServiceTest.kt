@@ -4,7 +4,7 @@ import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
-import com.karhoo.sdk.api.network.request.AdyenPaymentsRequest
+import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.Payer
 import com.karhoo.sdk.api.network.request.SDKInitRequest
@@ -81,7 +81,7 @@ class KarhooPaymentsServiceTest {
      */
     @Test
     fun getAdyenPaymentMethodsCallWhenGettingAdyenPaymentMethods() {
-        val call = service.getAdyenPaymentMethods()
+        val call = service.getAdyenPaymentMethods(AdyenPaymentMethodsRequest())
         assertNotNull(call)
     }
 
@@ -92,8 +92,18 @@ class KarhooPaymentsServiceTest {
      */
     @Test
     fun getAdyenPaymentsCallWhenGettingAdyenPayments() {
-        val request: AdyenPaymentsRequest = mock()
-        val call = service.getAdyenPayments(request)
+        val call = service.getAdyenPayments("request")
+        assertNotNull(call)
+    }
+
+    /**
+     * Given: A request is made to get Adyen payment details
+     * When: The call is constructed and executed
+     * Then: A call should be made to the appropriate endpoint
+     */
+    @Test
+    fun getAdyenPaymentsDetailsCallWhenGettingAdyenPaymentsDetails() {
+        val call = service.getAdyenPaymentDetails("request")
         assertNotNull(call)
     }
 }

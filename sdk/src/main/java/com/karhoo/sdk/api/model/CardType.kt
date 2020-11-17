@@ -16,11 +16,12 @@ enum class CardType constructor(val value: String) {
     NOT_SET("DEFAULT");
 
     companion object {
-        fun fromString(string: String): CardType? = when (string) {
-            "Visa" -> VISA
-            "MasterCard" -> MASTERCARD
-            "American Express" -> AMEX
-            "DEFAULT" -> NOT_SET
+        fun fromString(string: String): CardType? = when (string.toLowerCase()) {
+            "visa" -> VISA
+            "mc" -> MASTERCARD
+            "mastercard" -> MASTERCARD
+            "american express" -> AMEX
+            "default" -> NOT_SET
             else -> null
         }
     }
