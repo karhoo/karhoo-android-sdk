@@ -12,20 +12,30 @@ Install _fastlane_ using
 ```
 [sudo] gem install fastlane -NV
 ```
-or alternatively using `brew cask install fastlane`
+or alternatively using `brew install fastlane`
 
 # Available Actions
 ## Android
-### android test
+### android unit_tests
 ```
-fastlane android test
+fastlane android unit_tests
 ```
-Runs all the tests
+Runs all the unit tests
+### android linting
+```
+fastlane android linting
+```
+Runs lint and detekt
 ### android beta
 ```
 fastlane android beta
 ```
 New Build
+### android slack_result
+```
+fastlane android slack_result
+```
+Messaging
 
 ----
 

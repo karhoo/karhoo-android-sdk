@@ -2,30 +2,32 @@ version: 2
 jobs:
   build_and_setup:
     docker:
-      - image: ccistaging/android:api-28
+      - image: circleci/android:api-29
     working_directory: ~/project
     environment:
+      - FASTLANE_LANE_LINT: linting
+      - FASTLANE_LANE_TEST: unit_tests
       - JAVA_TOOL_OPTIONS: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=80"
       - GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dkotlin.incremental=false"
       - TERM: dumb
     steps:
       - checkout
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "build.gradle" }}
-      - run:
-          name: Download Dependencies
-          command: |
-                    sudo chmod +x ./gradlew 
-                    ./gradlew androidDependencies
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run: 
+          name: Bundle install
+          command: bundle check || bundle install --path vendor/bundle
       - save_cache:
+          name: Save cache
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
           paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "build.gradle" }}
+            - vendor/bundle
       - run:
-          name: Build test and lint
-          command: |
-                    sudo chmod +x ./gradlew 
-                    ./gradlew testDebug lintRelease
+          name: Run unit test
+          command: bundle exec fastlane $FASTLANE_LANE_TEST
+      - run:
+          name: Run linting
+          command: bundle exec fastlane $FASTLANE_LANE_LINT
       - run:
           name: Save test results
           command: |
@@ -40,6 +42,11 @@ jobs:
       - store_artifacts:
           path: ./build/reports
           destination: reports/
+      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: sdk/build/reports
+          destination: reports
+      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: sdk/build/test-results
       - persist_to_workspace:
           root: .
           paths:

@@ -2,15 +2,8 @@ package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.karhoo.sdk.api.model.adyen.AdyenAmount
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentsRequestPayload
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
-import com.karhoo.sdk.api.model.adyen.AdyenStoredPaymentMethod
-import com.karhoo.sdk.api.network.request.AdyenPaymentsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENTS
-import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENT_METHODS
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
@@ -18,7 +11,9 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Assertions.assertThat
+import org.json.JSONObject
 import org.junit.After
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -61,12 +56,12 @@ class AdyenPaymentsIntegrationTest {
     @Test
     fun getAdyenPaymentsSuccess() {
         serverRobot {
-            getAdyenPaymentsResponse(HTTP_CREATED, ADYEN_PAYMENTS)
+            getAdyenPaymentsResponse(HTTP_CREATED, RESPONSE)
         }
 
-        var result: AdyenPaymentsResponse? = null
+        var result: JSONObject? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -76,7 +71,7 @@ class AdyenPaymentsIntegrationTest {
         }
 
         latch.await(5, TimeUnit.SECONDS)
-        assertThat(result).isNotNull
+        assertNotNull(result)
     }
 
     /**
@@ -92,7 +87,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -102,32 +97,6 @@ class AdyenPaymentsIntegrationTest {
         }
 
         latch.await(200, TimeUnit.SECONDS)
-        assertThat(result).isEqualTo(KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   Adyen payments are retrieved
-     * When:    The call is successful but with bad json
-     * Then:    A blank object should be returned
-     **/
-    @Test
-    fun badJsonSuccessReturnsBlankResult() {
-        serverRobot {
-            getAdyenPaymentsResponse(code = HTTP_CREATED, response = INVALID_JSON)
-        }
-
-        var result: KarhooError? = null
-
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
-            when (it) {
-                is Resource.Failure -> {
-                    result = it.error
-                    latch.countDown()
-                }
-            }
-        }
-
-        latch.await(2, TimeUnit.SECONDS)
         assertThat(result).isEqualTo(KarhooError.Unexpected)
     }
 
@@ -144,7 +113,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -171,7 +140,7 @@ class AdyenPaymentsIntegrationTest {
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -197,7 +166,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -223,7 +192,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -249,7 +218,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -275,7 +244,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -301,7 +270,7 @@ class AdyenPaymentsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPayments(request).execute {
+        KarhooApi.paymentsService.getAdyenPayments(RESPONSE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -315,14 +284,6 @@ class AdyenPaymentsIntegrationTest {
     }
 
     companion object {
-        val request: AdyenPaymentsRequest = AdyenPaymentsRequest(
-                paymentsPayload = AdyenPaymentsRequestPayload(
-                        amount = AdyenAmount(currency = "GBP", value = 100.00),
-                        merchantAccount = "AB123",
-                        storedPaymentMethod = AdyenStoredPaymentMethod(),
-                        reference = "12345",
-                        returnUrl = "http://google.com"),
-                returnUrlSuffix = "return_url_suffix"
-                                                                )
+        const val RESPONSE = "{\"field1\":\"some text\", \"field2\":\"some more text\"}"
     }
 }

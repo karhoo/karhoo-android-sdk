@@ -4,7 +4,7 @@ import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.CancellationReason
-import com.karhoo.sdk.api.network.adapter.Void
+import com.karhoo.sdk.api.network.adapter.void
 import com.karhoo.sdk.api.network.request.CancellationRequest
 import com.karhoo.sdk.api.network.request.TripCancellation
 import com.karhoo.sdk.api.network.response.Resource
@@ -44,7 +44,7 @@ class CancelTripInteractorTest : BaseKarhooUserInteractorTest() {
                                                                                    authenticationMethod = AuthenticationMethod.KarhooUser()))
 
         whenever(apiTemplate.cancel(TRIP_ID, CancellationRequest(CancellationReason.OTHER_USER_REASON)))
-                .thenReturn(CompletableDeferred(Resource.Success(Void())))
+                .thenReturn(CompletableDeferred(Resource.Success(void())))
         interactor.tripCancellation = TripCancellation(TRIP_ID)
 
         var returnedCancelResponse: Void? = null
@@ -73,7 +73,7 @@ class CancelTripInteractorTest : BaseKarhooUserInteractorTest() {
                                                                                    authenticationMethod = AuthenticationMethod.Guest("identifier", "referer", "organisationId")))
         whenever(apiTemplate.cancelGuestBooking(TRIP_ID, CancellationRequest(CancellationReason
                                                                                      .OTHER_USER_REASON)))
-                .thenReturn(CompletableDeferred(Resource.Success(Void())))
+                .thenReturn(CompletableDeferred(Resource.Success(void())))
         interactor.tripCancellation = TripCancellation(TRIP_ID)
 
         var returnedCancelResponse: Void? = null

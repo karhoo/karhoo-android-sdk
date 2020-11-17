@@ -13,6 +13,7 @@ import com.karhoo.sdk.api.model.AvailabilityVehicle
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.Categories
+import com.karhoo.sdk.api.model.Coverage
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.Driver
 import com.karhoo.sdk.api.model.DriverTrackingInfo
@@ -39,7 +40,6 @@ import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotePrice
 import com.karhoo.sdk.api.model.QuoteSource
 import com.karhoo.sdk.api.model.QuoteType
-import com.karhoo.sdk.api.model.QuoteV2
 import com.karhoo.sdk.api.model.QuoteVehicle
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripList
@@ -50,16 +50,10 @@ import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicle
 import com.karhoo.sdk.api.model.VehicleAttributes
 import com.karhoo.sdk.api.model.Vehicles
-import com.karhoo.sdk.api.model.VehiclesV2
-import com.karhoo.sdk.api.model.adyen.AdyenDetail
-import com.karhoo.sdk.api.model.adyen.AdyenItem
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethod
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethodsGroup
-import com.karhoo.sdk.api.model.adyen.AdyenPayments
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentsResponse
+import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
+import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.api.network.request.QuoteQTA
 import java.util.Date
 
@@ -174,17 +168,8 @@ class ServerRobot {
                 delayInMillis = delayInMillis)
     }
 
-    fun availabilitiesResponse(code: Int, response: Any, delayInMillis: Int = 0) {
-        mockPostResponse(
-                code = code,
-                response = response,
-                endpoint = APITemplate.AVAILABILITY_METHOD,
-                delayInMillis = delayInMillis
-                        )
-    }
-
-    fun quoteIdResponse(code: Int, response: Any, endpoint: String = APITemplate.QUOTE_REQUEST_METHOD,
-                        delayInMillis: Int = 0) {
+    fun quoteIdResponse(code: Int, response: Any, endpoint: String = APITemplate
+            .QUOTES_REQUEST_METHOD, delayInMillis: Int = 0) {
         mockPostResponse(
                 code = code,
                 response = response,
@@ -193,27 +178,7 @@ class ServerRobot {
                         )
     }
 
-    fun quotesResponse(code: Int, response: Any, endpoint: String = APITemplate.QUOTES_METHOD, delayInMillis: Int = 0,
-                       quoteId: String = QUOTE_ID.quoteId) {
-        mockGetResponse(
-                code = code,
-                response = response,
-                endpoint = endpoint.replace("{$IDENTIFIER_ID}", quoteId),
-                delayInMillis = delayInMillis
-                       )
-    }
-
-    fun quoteIdResponseV2(code: Int, response: Any, endpoint: String = APITemplate
-            .QUOTES_V2_REQUEST_METHOD, delayInMillis: Int = 0) {
-        mockPostResponse(
-                code = code,
-                response = response,
-                endpoint = endpoint,
-                delayInMillis = delayInMillis
-                        )
-    }
-
-    fun quotesResponseV2(code: Int, response: Any, endpoint: String = APITemplate.QUOTES_V2_METHOD,
+    fun quotesResponse(code: Int, response: Any, endpoint: String = APITemplate.QUOTES_METHOD,
                          delayInMillis: Int = 0, quoteId: String = QUOTE_ID.quoteId) {
         mockGetResponse(
                 code = code,
@@ -223,7 +188,18 @@ class ServerRobot {
                        )
     }
 
-    fun bookingResponse(code: Int, response: Any, delayInMillis: Int = 0, header: Pair<String, String> = Pair("", "")) {
+    fun bookingResponseWithNonce(code: Int, response: Any, delayInMillis: Int = 0, header: Pair<String, String> = Pair("", "")) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.BOOKING_WITH_NONCE_METHOD,
+                delayInMillis = delayInMillis,
+                header = header
+                        )
+    }
+
+    fun bookingResponseWithoutNonce(code: Int, response: Any, delayInMillis: Int = 0, header:
+    Pair<String, String> = Pair("", "")) {
         mockPostResponse(
                 code = code,
                 response = response,
@@ -306,11 +282,20 @@ class ServerRobot {
                        )
     }
 
+    fun getAdyenPublicKeyResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockGetResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.ADYEN_PUBLIC_KEY_METHOD,
+                delayInMillis = delayInMillis
+                        )
+    }
+
     fun getAdyenPaymentMethodsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.GET_ADYEN_PAYMENT_METHODS_METHOD,
+                endpoint = APITemplate.ADYEN_PAYMENT_METHODS_METHOD,
                 delayInMillis = delayInMillis
                         )
     }
@@ -319,7 +304,16 @@ class ServerRobot {
         mockPostResponse(
                 code = code,
                 response = response,
-                endpoint = APITemplate.GET_ADYEN_PAYMENTS_METHOD,
+                endpoint = APITemplate.ADYEN_PAYMENTS_METHOD,
+                delayInMillis = delayInMillis
+                        )
+    }
+
+    fun getAdyenPaymentsDetailsResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockPostResponse(
+                code = code,
+                response = response,
+                endpoint = APITemplate.ADYEN_PAYMENT_DETAILS,
                 delayInMillis = delayInMillis
                         )
     }
@@ -357,7 +351,14 @@ class ServerRobot {
         mockGetResponse(code = code,
                         response = response,
                         delayInMillis = delayInMillis,
-                        endpoint = APITemplate.GET_PROVIDERS_METHOD)
+                        endpoint = APITemplate.PAYMENT_PROVIDERS_METHOD)
+    }
+    
+    fun getCheckCoverageResponse(code: Int, response: Any, delayInMillis: Int = 0) {
+        mockGetResponse(code = code,
+                        response = response,
+                        delayInMillis = delayInMillis,
+                        endpoint = APITemplate.CHECK_COVERAGE)
     }
 
     private fun mockPostResponse(code: Int,
@@ -417,46 +418,6 @@ class ServerRobot {
 
         val QUOTE_ID = QuoteId(quoteId = "129e51a-bc10-11e8-a821-0a580a0414db")
 
-        val QUOTE = Quote(availabilityId = "NTIxMjNiZDktY2M5OC00YjhkLWE5OGEtMTIyNDQ2ZDY5ZTc5O3NhbG9vbg==",
-                          categoryName = "Exec",
-                          currencyCode = "GBP",
-                          fleetId = "someFleetId",
-                          supplierName = "someFleetName",
-                          highPrice = 779,
-                          lowPrice = 778,
-                          phoneNumber = "+123",
-                          qta = 2,
-                          quoteId = "someQuoteId",
-                          quoteType = QuoteType.ESTIMATED,
-                          logoUrl = "someLogoUrl",
-                          termsAndConditions = "someTermsUrl",
-                          quoteSource = QuoteSource.FLEET,
-                          vehicleClass = "saloon")
-
-        val VEHICLES = Vehicles(
-                vehicles = listOf(
-                        QUOTE,
-                        QUOTE.copy(
-                                fleetId = "4f596e3f-c638-4221-9e88-b24bc7b4dea5",
-                                quoteSource = QuoteSource.FLEET,
-                                termsAndConditions = "https://karhoo.com/fleettcs/cdda3d54-2926-451f-b839-4201c9adc9f5",
-                                phoneNumber = "+447715364890",
-                                logoUrl = "https://cdn.karhoo.com/d/images/logos/cc775eda-950d-4a77-aa83-172d487a4cbf.png",
-                                quoteType = QuoteType.METERED,
-                                availabilityId = "NGY1OTZlM2YtYzYzOC00MjIxLTllODgtYjI0YmM3YjRkZWE1O3RheGk=",
-                                categoryName = "Taxi",
-                                lowPrice = 841,
-                                highPrice = 841,
-                                supplierName = "QA_base_ex_com_ex_tax_metered",
-                                vehicleClass = "taxi",
-                                qta = 2,
-                                quoteId = "eb00db4d-44bb-11e9-bdab-0a580a04005f:NGY1OTZlM2YtYzYzOC00MjIxLTllODgtYjI0YmM3YjRkZWE1O3RheGk=")
-
-                                 ),
-                status = "PROGRESSING",
-                id = QUOTE_ID.quoteId,
-                categoryNames = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"))
-
         val QUOTE_PRICE = QuotePrice(currencyCode = "GBP",
                                      highPrice = 779,
                                      lowPrice = 778)
@@ -468,13 +429,15 @@ class ServerRobot {
                                     phoneNumber = "+123",
                                     termsConditionsUrl = "someTermsUrl")
 
-        val QUOTE_VEHICLE = QuoteVehicle(vehicleClass = "Saloon",
+        val QUOTE_VEHICLE = QuoteVehicle(vehicleType = "Electric",
+                                        vehicleClass = "Saloon",
+                                        vehicleTags = listOf("Electric", "Taxi"),
                                          vehicleQta = QuoteQTA(highMinutes = 10, lowMinutes = 1))
 
         val VEHICLE_ATTRIBUTES = VehicleAttributes(passengerCapacity = 4,
                                                    luggageCapacity = 2)
 
-        val QUOTE_V2 = QuoteV2(id = "someQuoteId",
+        val QUOTE = Quote(id = "someQuoteId",
                                quoteType = QuoteType.ESTIMATED,
                                quoteSource = QuoteSource.FLEET,
                                price = QUOTE_PRICE,
@@ -483,44 +446,20 @@ class ServerRobot {
                                vehicle = QUOTE_VEHICLE,
                                vehicleAttributes = VEHICLE_ATTRIBUTES)
 
-        val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto")))
+        val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"), types = listOf("Electric", "Standard", "MPV")))
 
-        val VEHICLES_V2 = VehiclesV2(
+        val VEHICLES = Vehicles(
                 status = "PROGRESSING",
                 id = QUOTE_ID.quoteId,
                 availability = AVAILABILITY,
                 quotes = listOf(
-                        QUOTE_V2,
-                        QUOTE_V2.copy(
+                        QUOTE,
+                        QUOTE.copy(
                                 id = "someOtherQuoteId",
                                 quoteSource = QuoteSource.FLEET,
                                 quoteType = QuoteType.METERED,
                                 fleet = QUOTE_FLEET.copy(fleetId = "someOtherFleetId"))
                                ))
-
-        val QUOTES = QuoteList(
-                categories = mapOf(
-                        "Saloon" to emptyList(),
-                        "Taxi" to listOf(QUOTE.copy(
-                                fleetId = "4f596e3f-c638-4221-9e88-b24bc7b4dea5",
-                                quoteSource = QuoteSource.FLEET,
-                                termsAndConditions = "https://karhoo.com/fleettcs/cdda3d54-2926-451f-b839-4201c9adc9f5",
-                                phoneNumber = "+447715364890",
-                                logoUrl = "https://cdn.karhoo.com/d/images/logos/cc775eda-950d-4a77-aa83-172d487a4cbf.png",
-                                quoteType = QuoteType.METERED,
-                                availabilityId = "NGY1OTZlM2YtYzYzOC00MjIxLTllODgtYjI0YmM3YjRkZWE1O3RheGk=",
-                                categoryName = "Taxi",
-                                lowPrice = 841,
-                                highPrice = 841,
-                                supplierName = "QA_base_ex_com_ex_tax_metered",
-                                vehicleClass = "taxi",
-                                qta = 2,
-                                quoteId = "eb00db4d-44bb-11e9-bdab-0a580a04005f:NGY1OTZlM2YtYzYzOC00MjIxLTllODgtYjI0YmM3YjRkZWE1O3RheGk=")),
-                        "MPV" to emptyList(),
-                        "Exec" to listOf(QUOTE),
-                        "Electric" to emptyList(),
-                        "Moto" to emptyList()),
-                id = QUOTE_ID)
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_ID.quoteId),
@@ -642,6 +581,9 @@ class ServerRobot {
                                                                      instructions = "I am near by",
                                                                      pickupType = PickupType.CURBSIDE))
 
+        const val LAT = "51.532156"
+        const val LONG = "0.123838"
+
         /**
          *
          * Driver Tracking
@@ -740,37 +682,17 @@ class ServerRobot {
                 state = "PENDING",
                 breakdown = FARE_BREAKDOWN)
 
-        val DETAIL = AdyenDetail(
-                items = listOf(
-                        AdyenItem(id = "87", name = "Credit Agricole PBL"),
-                        AdyenItem(id = "89", name = "Santander")),
-                key = "issuer",
-                optional = true,
-                type = "select"
-                                )
+        val ADYEN_PUBLIC_KEY = AdyenPublicKey(publicKey = "12234455")
 
-        val ADYEN_PAYMENT_METHOD = AdyenPaymentMethod(
-                brands = listOf("amex", "diners", "maestro", "visa"),
-                details = listOf(DETAIL, DETAIL.copy()),
-                name = "",
-                supportsRecurring = true,
-                type = ""
-                                                     )
+        /**
+         *
+         * Coverage
+         *
+         */
 
-        val GROUP_CARD = AdyenPaymentMethodsGroup(name = "Credit Card",
-                                                  types = listOf("amex", "diners", "maestro", "visa"),
-                                                  groupType = "type")
+        val COVERAGE_OK = Coverage(true)
 
-        val ADYEN_PAYMENT_METHODS = AdyenPaymentMethods(
-                groups = listOf(
-                        GROUP_CARD,
-                        GROUP_CARD.copy(name = "AliPay", types = listOf("alipay_wap"))),
-                paymentMethods = listOf(ADYEN_PAYMENT_METHOD, ADYEN_PAYMENT_METHOD.copy())
-                                                       )
-
-        val ADYEN_PAYMENTS = AdyenPaymentsResponse(
-                payload = AdyenPayments(),
-                transactionId = "1234")
+        val COVERAGE_REQUEST = CoverageRequest(LAT, LONG, "")
 
         /**
          *

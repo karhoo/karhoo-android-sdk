@@ -1,9 +1,6 @@
 package com.karhoo.sdk.api.service.trips
 
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
-import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.FlightDetails
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.network.request.PassengerDetails
@@ -21,7 +18,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-class BookTripInteractorTest: BaseKarhooUserInteractorTest() {
+class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
 
     private lateinit var interactor: BookTripInteractor
 
@@ -38,6 +35,8 @@ class BookTripInteractorTest: BaseKarhooUserInteractorTest() {
 
     private val quoteId = "1234"
 
+    private val nonceId = "ABCD123"
+
     @Before
     override fun setUp() {
         super.setUp()
@@ -46,13 +45,14 @@ class BookTripInteractorTest: BaseKarhooUserInteractorTest() {
     }
 
     /**
-     * Given:   A request is made to make a booking
+     * Given:   A request is made to make a booking with Nonce
      * When:    The request is executed
-     * Then:    The values should be sent to the BE
+     * Then:    The endpoint called is the correct one
      **/
     @Test
-    fun `creating a booking sends values to the BE`() {
+    fun `creating a booking with nonce results in the use of the correct endpoint`() {
         interactor.tripBooking = TripBooking(
+                nonce = nonceId,
                 quoteId = quoteId,
                 passengers = Passengers(
                         passengerDetails = listOf(passengerDetails),
@@ -63,7 +63,49 @@ class BookTripInteractorTest: BaseKarhooUserInteractorTest() {
             delay(5)
         }
 
-        verify(apiTemplate).book(any())
+        verify(apiTemplate).bookWithNonce(any())
+    }
+
+    /**
+     * Given:   A request is made to make a booking with a blank nonce
+     * When:    The request is executed
+     * Then:    The endpoint called is the correct one
+     **/
+    @Test
+    fun `creating a booking with a blank nonce results in the use of the correct endpoint`() {
+        interactor.tripBooking = TripBooking(
+                nonce = "",
+                quoteId = quoteId,
+                passengers = Passengers(
+                        passengerDetails = listOf(passengerDetails),
+                        additionalPassengers = 0))
+        runBlocking {
+            interactor.execute {}
+            delay(5)
+        }
+
+        verify(apiTemplate).book()
+    }
+
+    /**
+     * Given:   A request is made to make a booking with a null nonce
+     * When:    The request is executed
+     * Then:    The endpoint called is the correct one
+     **/
+    @Test
+    fun `creating a booking with a null nonce results in the use of the correct endpoint`() {
+        interactor.tripBooking = TripBooking(
+                nonce = null,
+                quoteId = quoteId,
+                passengers = Passengers(
+                        passengerDetails = listOf(passengerDetails),
+                        additionalPassengers = 0))
+        runBlocking {
+            interactor.execute {}
+            delay(5)
+        }
+
+        verify(apiTemplate).book()
     }
 
     /**
@@ -113,7 +155,7 @@ class BookTripInteractorTest: BaseKarhooUserInteractorTest() {
             delay(5)
         }
 
-        verify(apiTemplate).book(request)
+        verify(apiTemplate).bookWithNonce(request)
     }
 
 }
