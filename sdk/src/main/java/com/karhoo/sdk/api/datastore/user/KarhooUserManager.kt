@@ -127,6 +127,8 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
                 .putString(USER_ID, null)
                 .putString(LAST_FOUR, null)
                 .putString(CARD_TYPE, null)
+                .putString(PROVIDER_ID, null)
+                .putString(PROVIDER_LOYALTY_PROGRAMMES, null)
                 .apply()
     }
 

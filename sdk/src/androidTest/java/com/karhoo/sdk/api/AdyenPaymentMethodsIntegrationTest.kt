@@ -2,10 +2,9 @@ package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.karhoo.sdk.api.model.adyen.AdyenPaymentMethods
+import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot.Companion.ADYEN_PAYMENT_METHODS
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_DATA
@@ -14,6 +13,7 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit
  */
 @RunWith(AndroidJUnit4::class)
 class AdyenPaymentMethodsIntegrationTest {
+
+    private val request: AdyenPaymentMethodsRequest = AdyenPaymentMethodsRequest()
 
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
@@ -56,12 +58,12 @@ class AdyenPaymentMethodsIntegrationTest {
     @Test
     fun getAdyenPaymentMethodsSuccess() {
         serverRobot {
-            getAdyenPaymentMethodsResponse(HTTP_CREATED, ADYEN_PAYMENT_METHODS)
+            getAdyenPaymentMethodsResponse(HTTP_CREATED, RESPONSE)
         }
 
-        var result: AdyenPaymentMethods? = null
+        var result: String? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -71,7 +73,7 @@ class AdyenPaymentMethodsIntegrationTest {
         }
 
         latch.await(5, TimeUnit.SECONDS)
-        assertThat(result).isNotNull
+        assertNotNull(result)
     }
 
     /**
@@ -87,7 +89,7 @@ class AdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -97,32 +99,6 @@ class AdyenPaymentMethodsIntegrationTest {
         }
 
         latch.await(200, TimeUnit.SECONDS)
-        assertThat(result).isEqualTo(KarhooError.Unexpected)
-    }
-
-    /**
-     * Given:   Adyen payment methods are retrieved
-     * When:    The call is successful but with bad json
-     * Then:    A blank object should be returned
-     **/
-    @Test
-    fun badJsonSuccessReturnsBlankResult() {
-        serverRobot {
-            getAdyenPaymentMethodsResponse(code = HTTP_CREATED, response = INVALID_JSON)
-        }
-
-        var result: KarhooError? = null
-
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
-            when (it) {
-                is Resource.Failure -> {
-                    result = it.error
-                    latch.countDown()
-                }
-            }
-        }
-
-        latch.await(2, TimeUnit.SECONDS)
         assertThat(result).isEqualTo(KarhooError.Unexpected)
     }
 
@@ -139,7 +115,7 @@ class AdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -166,7 +142,7 @@ class AdyenPaymentMethodsIntegrationTest {
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -192,7 +168,7 @@ class AdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -218,7 +194,7 @@ class AdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -244,7 +220,7 @@ class AdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -270,7 +246,7 @@ class AdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -296,7 +272,7 @@ class AdyenPaymentMethodsIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.getAdyenPaymentMethods().execute {
+        KarhooApi.paymentsService.getAdyenPaymentMethods(request).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -309,5 +285,8 @@ class AdyenPaymentMethodsIntegrationTest {
         assertThat(result).isEqualTo(KarhooError.Timeout)
     }
 
+    companion object {
+        private const val RESPONSE = "{\"field1\":\"some text\", \"field2\":\"some more text\"}"
+    }
 }
 

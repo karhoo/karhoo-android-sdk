@@ -7,7 +7,7 @@ import com.karhoo.sdk.analytics.Event
 import com.karhoo.sdk.analytics.Payloader
 import com.karhoo.sdk.api.SDKTestConfig
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.client.APITemplate.Companion.BOOKING_METHOD
+import com.karhoo.sdk.api.network.client.APITemplate.Companion.BOOKING_WITH_NONCE_METHOD
 import com.karhoo.sdk.api.network.request.TripBooking
 import com.karhoo.sdk.api.pairCaptor
 import com.nhaarman.mockitokotlin2.mock
@@ -59,7 +59,7 @@ class SealedCoroutineCallAdapterFactoryTest {
     fun `a call failure for not a Response raw type triggers a request error analytics event`() {
 
         //Don't set a response to cause a failure
-        apiTemplate.book(tripBooking)
+        apiTemplate.bookWithNonce(tripBooking)
 
         sleep(200)
 
@@ -69,6 +69,6 @@ class SealedCoroutineCallAdapterFactoryTest {
 
         assertEquals(event.firstValue, Event.REQUEST_ERROR)
         assertEquals(payloader.firstValue.payload[Event.REQUEST_ERROR.value], "Failed to connect to /127.0.0.1:80")
-        assertEquals(payloader.firstValue.payload["request_url"], "${SDKTestConfig.REST_API_LINK}${BOOKING_METHOD}")
+        assertEquals(payloader.firstValue.payload["request_url"], "${SDKTestConfig.REST_API_LINK}${BOOKING_WITH_NONCE_METHOD}")
     }
 }

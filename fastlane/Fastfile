@@ -1,19 +1,27 @@
+fastlane_require 'dotenv'
 FASTLANE_HIDE_CHANGELOG = true
 FASTLANE_SKIP_UPDATE_CHECK = true
-fastlane_version "2.62.1"
+fastlane_version "2.85.0"
 
 default_platform :android
 
 platform :android do
   before_all do
-    ENV["SLACK_URL"] = ""
+    ENV["SLACK_URL"] = ENV["SLACK_WEBHOOK_URL"]
+    setup_circle_ci
   end
 
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-    gradle(task: "testDebugUnitTestCoverage")
-    slack(message: "*Karhoo Android* Passed Unit Test for SDK")
+  desc "Runs all the unit tests"
+  lane :unit_tests do
+    gradle(task: "testDebug")
+    slack_result(message: "*Karhoo Android NSDK* passed unit testing")
+  end
+
+  desc "Runs lint and detekt"
+  lane :linting do
+    gradle(task: "lintRelease")
+    gradle(task: "detekt")
+    slack_result(message: "*Karhoo Android NSDK* passed detekt and lint")
   end
 
   desc "New Build"
@@ -22,18 +30,27 @@ platform :android do
     gradle(task: "install")
   end
 
+  desc "Messaging"
+  lane :slack_result do |values|
+    message_text = values[:message]
+    slack(
+      channel: "#mobile_circleci_results",
+      message: message_text,
+      success: values[:success]
+    )
+  end
 
   after_all do |lane|
-    slack(
-      message: "*Karhoo SDK* has passed unit test and has been installed"
+    slack_result(
+      message: "*Karhoo Android NSDK* passed all checks",
+      success: true
     )
   end
 
   error do |lane, exception|
-    slack(
+    slack_result(
       message: exception.message,
       success: false
     )
   end
 end
-

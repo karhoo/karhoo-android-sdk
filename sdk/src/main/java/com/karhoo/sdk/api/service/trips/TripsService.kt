@@ -11,7 +11,7 @@ import com.karhoo.sdk.call.PollCall
 interface TripsService {
 
     fun book(tripBooking: TripBooking): Call<TripInfo>
-
+    
     fun trackTrip(tripIdentifier: String): PollCall<TripInfo>
 
     fun cancel(tripCancellation: TripCancellation): Call<Void>

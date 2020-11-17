@@ -62,11 +62,11 @@ public class JavaInteroperabilityTest {
 
         CountDownLatch latch = new CountDownLatch(1);
 
-        serverRobot.bookingResponse(HTTP_CREATED, trip, 0, new Pair("", ""));
+        serverRobot.bookingResponseWithNonce(HTTP_CREATED, trip, 0, new Pair("", ""));
 
         final TripInfo[] result = new TripInfo[1];
 
-        TripBooking bookTrip = TestData.Companion.getBOOK_TRIP();
+        TripBooking bookTrip = TestData.Companion.getBOOK_TRIP_WITH_NONCE();
 
         api.getTripService().book(bookTrip).execute(resource -> {
             if (resource instanceof Resource.Success) {

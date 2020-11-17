@@ -45,19 +45,19 @@ class BookIntegrationTest {
     }
 
     /**
-     * Given:   Book Trip is requested
+     * Given:   Book Trip is requested with a nonce
      * When:    Successful response has been returned
      * Then:    The response payload should be valid
      **/
     @Test
-    fun bookSuccess() {
+    fun bookSuccessWithNonce() {
         serverRobot {
-            bookingResponse(code = HTTP_CREATED, response = TRIP_REQUESTED_DETAILS)
+            bookingResponseWithNonce(code = HTTP_CREATED, response = TRIP_REQUESTED_DETAILS)
         }
 
         var result: TripInfo? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -65,6 +65,29 @@ class BookIntegrationTest {
                 }
             }
         }
+    }
+
+        /**
+         * Given:   Book Trip is requested without a nonce
+         * When:    Successful response has been returned
+         * Then:    The response payload should be valid
+         **/
+        @Test
+        fun bookSuccessWithoutNonce() {
+            serverRobot {
+                bookingResponseWithoutNonce(code = HTTP_CREATED, response = TRIP_REQUESTED_DETAILS)
+            }
+
+            var result: TripInfo? = null
+
+            KarhooApi.tripService.book(TestData.BOOK_TRIP_INVOICE).execute {
+                when (it) {
+                    is Resource.Success -> {
+                        result = it.data
+                        latch.countDown()
+                    }
+                }
+            }
 
         latch.await(2, TimeUnit.SECONDS)
         assertThat(result?.tripId).isEqualTo(TRIP_REQUESTED_DETAILS.tripId)
@@ -78,12 +101,12 @@ class BookIntegrationTest {
     @Test
     fun invalidDataWhenRequestingTripInfoReturnsBlankTripInfo() {
         serverRobot {
-            bookingResponse(code = HTTP_CREATED, response = INVALID_DATA)
+            bookingResponseWithNonce(code = HTTP_CREATED, response = INVALID_DATA)
         }
 
         var result: TripInfo? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -104,12 +127,12 @@ class BookIntegrationTest {
     @Test
     fun badJsonSuccessReturnsError() {
         serverRobot {
-            bookingResponse(code = HTTP_CREATED, response = INVALID_JSON)
+            bookingResponseWithNonce(code = HTTP_CREATED, response = INVALID_JSON)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -130,12 +153,12 @@ class BookIntegrationTest {
     @Test
     fun noBodyReturnsError() {
         serverRobot {
-            bookingResponse(code = HTTP_CREATED, response = NO_BODY)
+            bookingResponseWithNonce(code = HTTP_CREATED, response = NO_BODY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -156,12 +179,12 @@ class BookIntegrationTest {
     @Test
     fun errorResponseGetsParsedIntoKarhooError() {
         serverRobot {
-            bookingResponse(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR)
+            bookingResponseWithNonce(code = HTTP_BAD_REQUEST, response = GENERAL_ERROR)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -182,12 +205,12 @@ class BookIntegrationTest {
     @Test
     fun errorResponseWithNoBodyGetsParsedIntoKarhooError() {
         serverRobot {
-            bookingResponse(code = HTTP_BAD_REQUEST, response = NO_BODY)
+            bookingResponseWithNonce(code = HTTP_BAD_REQUEST, response = NO_BODY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -208,12 +231,12 @@ class BookIntegrationTest {
     @Test
     fun errorResponseWithEmptyBodyGetsParsedIntoKarhooError() {
         serverRobot {
-            bookingResponse(code = HTTP_BAD_REQUEST, response = EMPTY)
+            bookingResponseWithNonce(code = HTTP_BAD_REQUEST, response = EMPTY)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -234,12 +257,12 @@ class BookIntegrationTest {
     @Test
     fun errorResponseWithInvalidJsonGetsParsedIntoKarhooError() {
         serverRobot {
-            bookingResponse(code = HTTP_BAD_REQUEST, response = INVALID_JSON)
+            bookingResponseWithNonce(code = HTTP_BAD_REQUEST, response = INVALID_JSON)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -260,12 +283,12 @@ class BookIntegrationTest {
     @Test
     fun errorResponseWithInvalidDataGetsParsedIntoKarhooError() {
         serverRobot {
-            bookingResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
+            bookingResponseWithNonce(code = HTTP_BAD_REQUEST, response = INVALID_DATA)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -286,12 +309,12 @@ class BookIntegrationTest {
     @Test
     fun timeoutErrorReturnedWhenResponseTakesTooLong() {
         serverRobot {
-            bookingResponse(code = HTTP_BAD_REQUEST, response = INVALID_DATA, delayInMillis = 2000)
+            bookingResponseWithNonce(code = HTTP_BAD_REQUEST, response = INVALID_DATA, delayInMillis = 2000)
         }
 
         var result: KarhooError? = null
 
-        KarhooApi.tripService.book(TestData.BOOK_TRIP).execute {
+        KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
