@@ -33,6 +33,7 @@ import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.model.Coverage
+import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
@@ -63,6 +64,7 @@ interface   APITemplate {
 
         const val QUOTES_REQUEST_METHOD = "/v2/quotes"
         const val QUOTES_METHOD = "/v2/quotes/{id}"
+        const val VERIFY_QUOTES_METHOD = "/v2/quotes/verify/{id}"
         const val BOOKING_METHOD = "/v1/bookings"
         const val BOOKING_WITH_NONCE_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
@@ -137,6 +139,9 @@ interface   APITemplate {
 
     @GET(QUOTES_METHOD)
     fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
+
+    @GET(VERIFY_QUOTES_METHOD)
+    fun verifyQuotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Quote>>
 
     @GET(CHECK_COVERAGE)
     fun checkCoverage(@Query(IDENTIFIER_LATITUDE) latitude: String, @Query(IDENTIFIER_LONGITUDE)

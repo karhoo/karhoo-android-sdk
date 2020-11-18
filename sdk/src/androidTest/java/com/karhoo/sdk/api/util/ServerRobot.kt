@@ -188,6 +188,15 @@ class ServerRobot {
                        )
     }
 
+    fun verifyQuotesResponse(code: Int, response: Any, endpoint: String = APITemplate.VERIFY_QUOTES_METHOD, delayInMillis: Int = 0, quoteId: String = QUOTE_ID.quoteId) {
+        mockGetResponse(
+                code = code,
+                response = response,
+                endpoint = endpoint.replace("{$IDENTIFIER_ID}", quoteId),
+                delayInMillis = delayInMillis
+        )
+    }
+
     fun bookingResponseWithNonce(code: Int, response: Any, delayInMillis: Int = 0, header: Pair<String, String> = Pair("", "")) {
         mockPostResponse(
                 code = code,
