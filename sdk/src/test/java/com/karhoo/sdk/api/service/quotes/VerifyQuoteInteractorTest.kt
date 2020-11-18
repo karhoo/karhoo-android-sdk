@@ -13,6 +13,9 @@ import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
+import junit.framework.Assert.assertNull
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -42,7 +45,7 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun checkVerifyQuoteSuccessResponse() {
-        val quoteInfo = Quote(id, quoteType, quoteSource, price, fleet, null, vehicle, vehicleAttributes)
+        val quoteInfo = Quote(id, QUOTETYPE, QUOTESOURCE, PRICE, FLEET, null, VEHICLE, VEHICLEATTRIBUTES)
         whenever(apiTemplate.verifyQuotes(id))
                 .thenReturn(CompletableDeferred(Resource.Success(quoteInfo)))
         interactor.quoteIdRequest = quoteRequest
@@ -57,8 +60,8 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
             }
             delay(5)
         }
-        Assert.assertNotNull(returnedVerifyInfo)
-        Assert.assertEquals(quoteInfo, returnedVerifyInfo)
+        assertNotNull(returnedVerifyInfo)
+        assertEquals(quoteInfo, returnedVerifyInfo)
         verify(apiTemplate).verifyQuotes(id)
     }
 
@@ -69,7 +72,7 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun checkVerifyQuoteFailureResponse() {
-        val quoteInfo = Quote(id, quoteType, quoteSource, price, fleet, null, vehicle, vehicleAttributes)
+        val quoteInfo = Quote(id, QUOTETYPE, QUOTESOURCE, PRICE, FLEET, null, VEHICLE, VEHICLEATTRIBUTES)
         whenever(apiTemplate.verifyQuotes(id))
                 .thenReturn(CompletableDeferred(Resource.Success(quoteInfo)))
         interactor.quoteIdRequest = quoteRequest
@@ -84,8 +87,8 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
             }
             delay(5)
         }
-        Assert.assertNotNull(returnedVerifyInfo)
-        Assert.assertEquals(quoteInfo, returnedVerifyInfo)
+        assertNotNull(returnedVerifyInfo)
+        assertEquals(quoteInfo, returnedVerifyInfo)
         verify(apiTemplate).verifyQuotes(id)
     }
 
@@ -109,21 +112,21 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
             delay(5)
         }
 
-        Assert.assertEquals(KarhooError.InternalSDKError, error)
-        Assert.assertNull(shouldBeNull)
+        assertEquals(KarhooError.InternalSDKError, error)
+        assertNull(shouldBeNull)
     }
 
     companion object {
-        val quoteType = QuoteType.ESTIMATED
+        val QUOTETYPE = QuoteType.ESTIMATED
 
-        val quoteSource = QuoteSource.FLEET
+        val QUOTESOURCE = QuoteSource.FLEET
 
-        val price = QuotePrice()
+        val PRICE = QuotePrice()
 
-        val fleet = FleetInfo()
+        val FLEET = FleetInfo()
 
-        val vehicle = QuoteVehicle()
+        val VEHICLE = QuoteVehicle()
 
-        val vehicleAttributes = VehicleAttributes()
+        val VEHICLEATTRIBUTES = VehicleAttributes()
     }
 }

@@ -8,6 +8,7 @@ import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Java6Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -59,7 +60,7 @@ class VerifyQuoteIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        Assertions.assertThat(result).isEqualTo(ServerRobot.QUOTE)
+        assertThat(result).isEqualTo(ServerRobot.QUOTE)
     }
 
     /**
@@ -85,7 +86,7 @@ class VerifyQuoteIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        Assertions.assertThat(result).isEqualTo(KarhooError.Unexpected)
+        assertThat(result).isEqualTo(KarhooError.Unexpected)
     }
 
     /**
@@ -111,7 +112,7 @@ class VerifyQuoteIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        Assertions.assertThat(result).isEqualTo(KarhooError.GeneralRequestError)
+        assertThat(result).isEqualTo(KarhooError.GeneralRequestError)
     }
 
     /**
@@ -137,7 +138,7 @@ class VerifyQuoteIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        Assertions.assertThat(result).isEqualTo(KarhooError.Unexpected)
+        assertThat(result).isEqualTo(KarhooError.Unexpected)
     }
 
     /**
@@ -163,7 +164,7 @@ class VerifyQuoteIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        Assertions.assertThat(result).isEqualTo(KarhooError.Unexpected)
+        assertThat(result).isEqualTo(KarhooError.Unexpected)
     }
 
     /**
@@ -189,7 +190,7 @@ class VerifyQuoteIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        Assertions.assertThat(result).isEqualTo(KarhooError.Unexpected)
+        assertThat(result).isEqualTo(KarhooError.Unexpected)
     }
 
     /**
@@ -215,6 +216,6 @@ class VerifyQuoteIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        Assertions.assertThat(result).isEqualTo(KarhooError.Timeout)
+        assertThat(result).isEqualTo(KarhooError.Timeout)
     }
 }
