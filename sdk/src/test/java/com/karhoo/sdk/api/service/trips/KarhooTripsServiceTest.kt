@@ -16,7 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class KarhooTripsServiceTest {
 
     private val tripHistoryRequest: TripSearch = TripSearch()
-    private val tripBooking: TripBooking = TripBooking(QUOTE_ID, null, null)
+    private val tripBooking: TripBooking = TripBooking(quoteId = QUOTE_ID)
     // Needed for InjectMocks
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
