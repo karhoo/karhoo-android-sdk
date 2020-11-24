@@ -37,7 +37,7 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
 
     private val NONCE_ID = "ABCD123"
 
-    private val META_DATA = hashMapOf("trip_id" to "$NONCE_ID")
+    private val META_DATA = mapOf("trip_id" to "$NONCE_ID")
 
     @Before
     override fun setUp() {
