@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class QuotePrice(@SerializedName("high") val highPrice: Int = 0,
+data class QuotePrice(@SerializedName("currency_code") val currencyCode: String? = null,
+                      @SerializedName("high") val highPrice: Int = 0,
                       @SerializedName("low") val lowPrice: Int = 0,
-                      @SerializedName("currency_code") val currencyCode: String? = null) : Parcelable
+                      @SerializedName("net") val net: QuotePriceNet = QuotePriceNet()) : Parcelable
