@@ -79,6 +79,17 @@ class KarhooTripsServiceTest {
         assertNotNull(call)
     }
 
+    /**
+     * Given: A request is made to get a cancellation fee for a trip
+     * When: The call is constructed and executed
+     * Then: A call should be made to the appropriate endpoint
+     */
+    @Test
+    fun `cancellation fee call is created when looking for fee`() {
+        val call = service.cancellationFee("1234")
+        assertNotNull(call)
+    }
+
     companion object {
         private const val QUOTE_ID = "myQuoteId"
     }
