@@ -44,7 +44,7 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun checkVerifyQuoteSuccessResponse() {
-        val quoteInfo = Quote(id, PRICE,null, QUOTETYPE, QUOTESOURCE, FLEET, VEHICLE)
+        val quoteInfo = Quote(id, PRICE, null, QUOTETYPE, QUOTESOURCE, FLEET, VEHICLE)
         whenever(apiTemplate.verifyQuotes(id))
                 .thenReturn(CompletableDeferred(Resource.Success(quoteInfo)))
         interactor.quoteIdRequest = quoteRequest
@@ -71,7 +71,7 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun checkVerifyQuoteFailureResponse() {
-        val quoteInfo = Quote(id, PRICE,null, QUOTETYPE, QUOTESOURCE, FLEET, VEHICLE)
+        val quoteInfo = Quote(id, PRICE, null, QUOTETYPE, QUOTESOURCE, FLEET, VEHICLE)
         whenever(apiTemplate.verifyQuotes(id))
                 .thenReturn(CompletableDeferred(Resource.Success(quoteInfo)))
         interactor.quoteIdRequest = quoteRequest
