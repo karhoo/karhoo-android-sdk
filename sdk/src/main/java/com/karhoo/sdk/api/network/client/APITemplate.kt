@@ -1,6 +1,7 @@
 package com.karhoo.sdk.api.network.client
 
 import com.karhoo.sdk.api.KarhooEnvironmentDetails
+import com.karhoo.sdk.api.model.BookingFee
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.DriverTrackingInfo
@@ -67,6 +68,7 @@ interface   APITemplate {
         const val BOOKING_METHOD = "/v1/bookings"
         const val BOOKING_WITH_NONCE_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
+        const val BOOKING_CANCEL_FEE = "/v1/bookings/{id}/cancel-fee"
         const val GUEST_BOOKING_DETAILS_METHOD = "/v1/bookings/follow/{id}"
         const val BOOKING_STATUS_METHOD = "/v1/bookings/{id}/status"
         const val GUEST_BOOKING_STATUS_METHOD = "/v1/bookings/follow/{id}/status"
@@ -155,6 +157,9 @@ interface   APITemplate {
 
     @GET(BOOKING_DETAILS_METHOD)
     fun tripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>
+
+    @GET(BOOKING_CANCEL_FEE)
+    fun cancellationFee(@Path(IDENTIFIER_ID) id:String): Deferred<Resource<BookingFee>>
 
     @GET(GUEST_BOOKING_DETAILS_METHOD)
     fun guestTripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>
