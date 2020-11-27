@@ -237,8 +237,7 @@ class TestData {
                 price = ServerRobot.QUOTE_PRICE,
                 fleet = ServerRobot.QUOTE_FLEET,
                 pickupType = PickupType.CURBSIDE,
-                vehicle = ServerRobot.QUOTE_VEHICLE,
-                vehicleAttributes = ServerRobot.VEHICLE_ATTRIBUTES)
+                vehicle = ServerRobot.QUOTE_VEHICLE)
 
         val QUOTE_LIST = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),

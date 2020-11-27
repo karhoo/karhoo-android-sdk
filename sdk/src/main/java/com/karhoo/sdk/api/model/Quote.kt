@@ -4,8 +4,6 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-//TODO: Remove Vehicle Attributes
-
 @Parcelize
 data class Quote(@SerializedName("id") val id: String? = null,
                  @SerializedName("price") val price: QuotePrice = QuotePrice(),

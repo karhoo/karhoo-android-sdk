@@ -7,7 +7,6 @@ import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Java6Assertions.assertThat
 import org.junit.After
 import org.junit.Before
