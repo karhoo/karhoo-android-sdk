@@ -8,7 +8,6 @@ import com.karhoo.sdk.api.model.QuotePrice
 import com.karhoo.sdk.api.model.QuoteSource
 import com.karhoo.sdk.api.model.QuoteType
 import com.karhoo.sdk.api.model.QuoteVehicle
-import com.karhoo.sdk.api.model.VehicleAttributes
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.nhaarman.mockitokotlin2.verify
@@ -45,7 +44,7 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun checkVerifyQuoteSuccessResponse() {
-        val quoteInfo = Quote(id, QUOTETYPE, QUOTESOURCE, PRICE, FLEET, null, VEHICLE, VEHICLEATTRIBUTES)
+        val quoteInfo = Quote(id, PRICE,null, QUOTETYPE, QUOTESOURCE, FLEET, VEHICLE)
         whenever(apiTemplate.verifyQuotes(id))
                 .thenReturn(CompletableDeferred(Resource.Success(quoteInfo)))
         interactor.quoteIdRequest = quoteRequest
@@ -72,7 +71,7 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
      **/
     @Test
     fun checkVerifyQuoteFailureResponse() {
-        val quoteInfo = Quote(id, QUOTETYPE, QUOTESOURCE, PRICE, FLEET, null, VEHICLE, VEHICLEATTRIBUTES)
+        val quoteInfo = Quote(id, PRICE,null, QUOTETYPE, QUOTESOURCE, FLEET, VEHICLE)
         whenever(apiTemplate.verifyQuotes(id))
                 .thenReturn(CompletableDeferred(Resource.Success(quoteInfo)))
         interactor.quoteIdRequest = quoteRequest
@@ -126,7 +125,5 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
         val FLEET = FleetInfo()
 
         val VEHICLE = QuoteVehicle()
-
-        val VEHICLEATTRIBUTES = VehicleAttributes()
     }
 }
