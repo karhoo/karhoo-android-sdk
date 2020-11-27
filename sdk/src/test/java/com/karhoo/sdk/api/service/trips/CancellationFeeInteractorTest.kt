@@ -98,7 +98,7 @@ class CancellationFeeInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    An InternalSDKError is returned
      **/
     @Test
-    fun `monitor trip when id not set returns an error`() {
+    fun `cancellation fee for a trip when id not set returns an error`() {
         var shouldBeNull: BookingFee? = null
         var error: KarhooError? = null
 
