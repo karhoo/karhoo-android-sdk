@@ -159,7 +159,7 @@ interface   APITemplate {
     fun tripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>
 
     @GET(BOOKING_CANCEL_FEE)
-    fun cancellationFee(@Path(IDENTIFIER_ID) id:String): Deferred<Resource<BookingFee>>
+    fun cancellationFee(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<BookingFee>>
 
     @GET(GUEST_BOOKING_DETAILS_METHOD)
     fun guestTripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>

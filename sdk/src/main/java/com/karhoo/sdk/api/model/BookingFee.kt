@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class BookingFee(@SerializedName("cancellation_fee") val cancellationFee: Boolean = true,
+data class BookingFee(@SerializedName("cancellation_fee") val cancellationFee: Boolean = false,
                       @SerializedName("fee") val fee: BookingFeePrice? = BookingFeePrice()) : Parcelable
