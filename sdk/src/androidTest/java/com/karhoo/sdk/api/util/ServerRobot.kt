@@ -455,7 +455,10 @@ class ServerRobot {
                                vehicle = QUOTE_VEHICLE,
                                vehicleAttributes = VEHICLE_ATTRIBUTES)
 
-        val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"), types = listOf("Electric", "Standard", "MPV")))
+        val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(
+                classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"),
+                tags = listOf(""),
+                types = listOf("Electric", "Standard", "MPV")))
 
         val VEHICLES = Vehicles(
                 status = "PROGRESSING",
