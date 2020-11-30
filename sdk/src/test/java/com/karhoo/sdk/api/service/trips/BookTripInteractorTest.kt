@@ -3,6 +3,7 @@ package com.karhoo.sdk.api.service.trips
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.model.FlightDetails
 import com.karhoo.sdk.api.model.TripInfo
+import com.karhoo.sdk.api.network.request.Luggage
 import com.karhoo.sdk.api.network.request.PassengerDetails
 import com.karhoo.sdk.api.network.request.Passengers
 import com.karhoo.sdk.api.network.request.TripBooking
@@ -58,7 +59,8 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
                 quoteId = QUOTE_ID,
                 passengers = Passengers(
                         passengerDetails = listOf(PASSENGER_DETAILS),
-                        additionalPassengers = 0),
+                        additionalPassengers = 0,
+                        luggage = Luggage(total = 2)),
                 meta = META_DATA)
 
         runBlocking {
@@ -81,7 +83,8 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
                 quoteId = QUOTE_ID,
                 passengers = Passengers(
                         passengerDetails = listOf(PASSENGER_DETAILS),
-                        additionalPassengers = 0))
+                        additionalPassengers = 0,
+                        luggage = Luggage(total = 2)))
         runBlocking {
             interactor.execute {}
             delay(5)
@@ -102,7 +105,8 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
                 quoteId = QUOTE_ID,
                 passengers = Passengers(
                         passengerDetails = listOf(PASSENGER_DETAILS),
-                        additionalPassengers = 0))
+                        additionalPassengers = 0,
+                        luggage = Luggage(total = 2)))
         runBlocking {
             interactor.execute {}
             delay(5)
@@ -146,7 +150,8 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
                 nonce = "nonce",
                 passengers = Passengers(
                         passengerDetails = listOf(PASSENGER_DETAILS),
-                        additionalPassengers = 0),
+                        additionalPassengers = 0,
+                        luggage = Luggage(total = 2)),
                 quoteId = QUOTE_ID,
                 flightNumber = FLIGHT_DETAILS.flightNumber,
                 comments = FLIGHT_DETAILS.comments
