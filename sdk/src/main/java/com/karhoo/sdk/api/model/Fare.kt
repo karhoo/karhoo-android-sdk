@@ -5,7 +5,5 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Fare(@SerializedName("total") val total: Int = 0,
-                @SerializedName("currency") val currency: String = "",
-                @SerializedName("gratuity_percent") val gratuityPercent: Int = 0,
+data class Fare(@SerializedName("state") val state: String = "",
                 @SerializedName("breakdown") val breakdown: FareBreakdown? = FareBreakdown()) : Parcelable
