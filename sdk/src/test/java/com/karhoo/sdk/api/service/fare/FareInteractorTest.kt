@@ -101,8 +101,6 @@ class FareInteractorTest {
         private val FARE_COMPLETE = Fare(state = "COMPLETED",
                                          breakdown = FareBreakdown(total = 300,
                                                                    currency = "GBP"))
-
-
     }
 
 }
