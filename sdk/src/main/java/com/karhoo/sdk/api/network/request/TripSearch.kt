@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class TripSearch(@SerializedName("trip_states") private val tripState: List<TripStatus>? = null,
-                      @SerializedName("trip_type") private val tripType: TripType? = null,
+                      @SerializedName("trip_type") private val tripType: String? = null,
                       @SerializedName("created_after") private val createdAfter: String? = null,
                       @SerializedName("email") private val email: String? = null,
                       @SerializedName("partner_traveller_id") private val partnerId: String? = null,
