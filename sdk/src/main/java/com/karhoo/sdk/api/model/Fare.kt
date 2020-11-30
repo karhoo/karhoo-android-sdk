@@ -6,4 +6,4 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Fare(@SerializedName("state") val state: String = "",
-                @SerializedName("breakdown") val breakdown: FareBreakdown? = FareBreakdown()) : Parcelable
+                @SerializedName("breakdown") val breakdown: FareBreakdown = FareBreakdown()) : Parcelable
