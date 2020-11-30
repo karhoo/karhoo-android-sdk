@@ -219,14 +219,11 @@ class TestData {
         val TRIP_HISTORY = listOf(TRIP)
 
         val FARE_BREAKDOWN = FareBreakdown(
-                value = 15,
-                name = "Name",
-                description = "Test")
+                currency = "EUR",
+                total = 15)
 
         val FARE = Fare(
-                total = 15,
-                currency = "GBP",
-                gratuityPercent = 10,
+                state = "PENDING",
                 breakdown = FARE_BREAKDOWN)
 
         val BLANK_TRIP_HISTORY = listOf<TripInfo>()

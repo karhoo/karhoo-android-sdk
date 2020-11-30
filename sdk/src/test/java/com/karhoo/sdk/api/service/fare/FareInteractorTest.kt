@@ -98,12 +98,11 @@ class FareInteractorTest {
 
     companion object {
 
-        private val FARE_COMPLETE = Fare(total = 10,
-                                        currency = "GBP",
-                                        gratuityPercent = 5,
-                                        breakdown = FareBreakdown(value = 10,
-                                                                 name = "Name",
-                                                                 description = "Test"))
+        private val FARE_COMPLETE = Fare(state = "COMPLETED",
+                                         breakdown = FareBreakdown(total = 300,
+                                                                   currency = "GBP"))
+
+
     }
 
 }

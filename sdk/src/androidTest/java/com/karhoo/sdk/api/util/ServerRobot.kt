@@ -706,14 +706,11 @@ class ServerRobot {
          *
          */
         val FARE_BREAKDOWN = FareBreakdown(
-                value = 15,
-                name = "Name",
-                description = "Test")
+                currency = "EUR",
+                total = 15)
 
         val FARE = Fare(
-                total = 15,
-                currency = "GBP",
-                gratuityPercent = 10,
+                state = "PENDING",
                 breakdown = FARE_BREAKDOWN)
 
         val ADYEN_PUBLIC_KEY = AdyenPublicKey(publicKey = "12234455")
