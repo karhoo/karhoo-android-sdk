@@ -97,7 +97,7 @@ class FareDetailsIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        assertThat(result?.state).isNullOrEmpty()
+        assertThat(result?.total).isEqualTo(0)
     }
 
     /**

@@ -17,6 +17,7 @@ import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.Categories
 import com.karhoo.sdk.api.model.Coverage
 import com.karhoo.sdk.api.model.Credentials
+import com.karhoo.sdk.api.model.Direction
 import com.karhoo.sdk.api.model.Driver
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
@@ -623,7 +624,9 @@ class ServerRobot {
                         longitude = -0.1769328
                                    ),
                 destinationEta = 10,
-                originEta = 5
+                originEta = 5,
+                direction = Direction(kph = 10,
+                                      heading = 20)
                                                 )
 
         /**
@@ -703,11 +706,14 @@ class ServerRobot {
          *
          */
         val FARE_BREAKDOWN = FareBreakdown(
-                currency = "EUR",
-                total = 15)
+                value = 15,
+                name = "Name",
+                description = "Test")
 
         val FARE = Fare(
-                state = "PENDING",
+                total = 15,
+                currency = "GBP",
+                gratuityPercent = 10,
                 breakdown = FARE_BREAKDOWN)
 
         val ADYEN_PUBLIC_KEY = AdyenPublicKey(publicKey = "12234455")
