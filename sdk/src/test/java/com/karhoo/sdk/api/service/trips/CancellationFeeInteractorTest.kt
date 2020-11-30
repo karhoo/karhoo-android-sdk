@@ -34,7 +34,7 @@ class CancellationFeeInteractorTest : BaseKarhooUserInteractorTest() {
     /**
      * Given:   A valid trip id
      * When:    When requesting to cancel a trip
-     * Then:    The cancellation fee should come back with true
+     * Then:    The cancellation response should come back as true
      */
     @Test
     fun `cancellation to a trip returns true`() {
@@ -66,7 +66,7 @@ class CancellationFeeInteractorTest : BaseKarhooUserInteractorTest() {
     /**
      * Given:   A valid trip id
      * When:    When requesting to cancel a trip
-     * Then:    The cancellation fee should be returned as true
+     * Then:    The cancellation fee should be returned as true with a fee returned
      */
     @Test
     fun `cancelling a trip returns a fee`() {

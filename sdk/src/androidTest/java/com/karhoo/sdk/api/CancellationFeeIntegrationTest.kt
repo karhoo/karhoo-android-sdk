@@ -5,7 +5,12 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.karhoo.sdk.api.model.BookingFee
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot
+import com.karhoo.sdk.api.util.ServerRobot.Companion.BOOKINGFEE
+import com.karhoo.sdk.api.util.ServerRobot.Companion.BOOKING_ID
+import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
+import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
+import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
+import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Java6Assertions.assertThat
 import org.junit.After
@@ -13,7 +18,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.net.HttpURLConnection
+import java.net.HttpURLConnection.HTTP_OK
+import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -46,11 +52,11 @@ class CancellationFeeIntegrationTest {
     @Test
     fun cancellationFeeSuccess() {
         serverRobot {
-            cancellationFeeResponse(code = HttpURLConnection.HTTP_OK, response = ServerRobot.BOOKINGFEE)
+            cancellationFeeResponse(code = HTTP_OK, response = BOOKINGFEE)
         }
         var result: BookingFee? = null
 
-        KarhooApi.tripService.cancellationFee(ServerRobot.BOOKING_ID).execute {
+        KarhooApi.tripService.cancellationFee(BOOKING_ID).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -60,7 +66,7 @@ class CancellationFeeIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        assertThat(result).isEqualTo(ServerRobot.BOOKINGFEE)
+        assertThat(result).isEqualTo(BOOKINGFEE)
     }
 
     /**
@@ -72,11 +78,11 @@ class CancellationFeeIntegrationTest {
     @Test
     fun invalidJsonWhenRequestingCancellationFee() {
         serverRobot {
-            cancellationFeeResponse(code = HttpURLConnection.HTTP_OK, response = ServerRobot.INVALID_JSON)
+            cancellationFeeResponse(code = HTTP_OK, response = INVALID_JSON)
         }
         var result: KarhooError? = null
 
-        KarhooApi.tripService.cancellationFee(ServerRobot.BOOKING_ID).execute {
+        KarhooApi.tripService.cancellationFee(BOOKING_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -98,11 +104,11 @@ class CancellationFeeIntegrationTest {
     @Test
     fun invalidSessionTokenWhenRequestingCancellationFee() {
         serverRobot {
-            cancellationFeeResponse(code = HttpURLConnection.HTTP_UNAUTHORIZED, response = ServerRobot.GENERAL_ERROR)
+            cancellationFeeResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR)
         }
         var result: KarhooError? = null
 
-        KarhooApi.tripService.cancellationFee(ServerRobot.BOOKING_ID).execute {
+        KarhooApi.tripService.cancellationFee(BOOKING_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -124,11 +130,11 @@ class CancellationFeeIntegrationTest {
     @Test
     fun noBodyErrorWhenRequestingCancellationFee() {
         serverRobot {
-            cancellationFeeResponse(code = HttpURLConnection.HTTP_OK, response = ServerRobot.NO_BODY)
+            cancellationFeeResponse(code = HTTP_OK, response = NO_BODY)
         }
         var result: KarhooError? = null
 
-        KarhooApi.tripService.cancellationFee(ServerRobot.BOOKING_ID).execute {
+        KarhooApi.tripService.cancellationFee(BOOKING_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -150,11 +156,11 @@ class CancellationFeeIntegrationTest {
     @Test
     fun errorResponseWithEmptyBodyWhenRequestingCancellationFee() {
         serverRobot {
-            cancellationFeeResponse(code = HttpURLConnection.HTTP_UNAUTHORIZED, response = ServerRobot.EMPTY)
+            cancellationFeeResponse(code = HTTP_UNAUTHORIZED, response = EMPTY)
         }
         var result: KarhooError? = null
 
-        KarhooApi.tripService.cancellationFee(ServerRobot.BOOKING_ID).execute {
+        KarhooApi.tripService.cancellationFee(BOOKING_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -169,18 +175,18 @@ class CancellationFeeIntegrationTest {
 
     /**
      * Given:   Cancellation Fee is requested
-     * When:    Error 401 but with empty payload
+     * When:    Error 401 but with invalid payload
      * Then:    The karhoo error should be valid
      **/
 
     @Test
     fun errorResponseWithInvalidJsonyWhenRequestingCancellationFee() {
         serverRobot {
-            cancellationFeeResponse(code = HttpURLConnection.HTTP_UNAUTHORIZED, response = ServerRobot.INVALID_JSON)
+            cancellationFeeResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON)
         }
         var result: KarhooError? = null
 
-        KarhooApi.tripService.cancellationFee(ServerRobot.BOOKING_ID).execute {
+        KarhooApi.tripService.cancellationFee(BOOKING_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -202,11 +208,11 @@ class CancellationFeeIntegrationTest {
     @Test
     fun timeoutErrorResponseWhenRequestingCancellationFee() {
         serverRobot {
-            cancellationFeeResponse(code = HttpURLConnection.HTTP_OK, response = ServerRobot.INVALID_JSON, delayInMillis = 20000)
+            cancellationFeeResponse(code = HTTP_OK, response = INVALID_JSON, delayInMillis = 20000)
         }
         var result: KarhooError? = null
 
-        KarhooApi.tripService.cancellationFee(ServerRobot.BOOKING_ID).execute {
+        KarhooApi.tripService.cancellationFee(BOOKING_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
