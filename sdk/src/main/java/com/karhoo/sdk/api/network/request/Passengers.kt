@@ -6,13 +6,15 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Passengers(@SerializedName("additional_passengers") val additionalPassengers: Int,
-                      @SerializedName("passenger_details") val passengerDetails: List<PassengerDetails>?)
-    : Parcelable
+                      @SerializedName("passenger_details") val passengerDetails: List<PassengerDetails>?,
+                      @SerializedName("luggage") val luggage: Luggage?) : Parcelable
 
 @Parcelize
 data class PassengerDetails(@SerializedName("first_name") var firstName: String? = null,
                             @SerializedName("last_name") var lastName: String? = null,
                             @SerializedName("email") var email: String? = null,
                             @SerializedName("phone_number") var phoneNumber: String? = null,
-                            @SerializedName("locale") var locale: String? = null)
-    : Parcelable
+                            @SerializedName("locale") var locale: String? = null) : Parcelable
+
+@Parcelize
+data class Luggage(@SerializedName("total") var total: Int = 0) : Parcelable

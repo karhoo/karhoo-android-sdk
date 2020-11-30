@@ -11,7 +11,5 @@ enum class Poi constructor(val value: String) {
     @SerializedName("REGULATED")
     REGULATED("REGULATED"),
     @SerializedName("NEAREST")
-    NEAREST("NEAREST"),
-    @SerializedName("AIRPORT")
-    AIRPORT("AIRPORT")
+    NEAREST("NEAREST")
 }

@@ -8,5 +8,5 @@ import kotlinx.android.parcel.Parcelize
 data class MeetingPoint(
         @SerializedName("position") val position: Position? = null,
         @SerializedName("type") val pickupType: PickupType? = PickupType.NOT_SET,
-        @SerializedName("instructions") val instructions: String = "")
-    : Parcelable
+        @SerializedName("instructions") val instructions: String = "",
+        @SerializedName("note") val note: String? = "") : Parcelable
