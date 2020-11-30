@@ -10,6 +10,8 @@ import com.google.gson.annotations.SerializedName
 import com.karhoo.sdk.api.model.Address
 import com.karhoo.sdk.api.model.Availability
 import com.karhoo.sdk.api.model.AvailabilityVehicle
+import com.karhoo.sdk.api.model.BookingFee
+import com.karhoo.sdk.api.model.BookingFeePrice
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.Categories
@@ -20,6 +22,7 @@ import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.FareBreakdown
 import com.karhoo.sdk.api.model.FleetInfo
+import com.karhoo.sdk.api.model.FleetRating
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.LoyaltyProgramme
 import com.karhoo.sdk.api.model.MeetingPoint
@@ -38,6 +41,7 @@ import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotePrice
+import com.karhoo.sdk.api.model.QuotePriceNet
 import com.karhoo.sdk.api.model.QuoteSource
 import com.karhoo.sdk.api.model.QuoteType
 import com.karhoo.sdk.api.model.QuoteVehicle
@@ -48,7 +52,6 @@ import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.TripStatus
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicle
-import com.karhoo.sdk.api.model.VehicleAttributes
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -188,6 +191,15 @@ class ServerRobot {
                        )
     }
 
+    fun verifyQuotesResponse(code: Int, response: Any, endpoint: String = APITemplate.VERIFY_QUOTES_METHOD, delayInMillis: Int = 0, quoteId: String = QUOTE_ID.quoteId) {
+        mockGetResponse(
+                code = code,
+                response = response,
+                endpoint = endpoint.replace("{$IDENTIFIER_ID}", quoteId),
+                delayInMillis = delayInMillis
+        )
+    }
+
     fun bookingResponseWithNonce(code: Int, response: Any, delayInMillis: Int = 0, header: Pair<String, String> = Pair("", "")) {
         mockPostResponse(
                 code = code,
@@ -216,6 +228,13 @@ class ServerRobot {
                 endpoint = APITemplate.BOOKING_DETAILS_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                        )
+    }
+
+    fun cancellationFeeResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String = BOOKING_ID) {
+        mockGetResponse(code = code,
+                       response = response,
+                       endpoint = APITemplate.BOOKING_CANCEL_FEE.replace("{$IDENTIFIER_ID}", id),
+                        delayInMillis = delayInMillis)
     }
 
     fun cancelResponse(code: Int, response: Any, delayInMillis: Int = 0, trip: String) {
@@ -422,20 +441,24 @@ class ServerRobot {
                                      highPrice = 779,
                                      lowPrice = 778)
 
+        val QUOTE_NET_PRICE = QuotePriceNet(highPrice = 779, lowPrice = 778)
+
         val QUOTE_FLEET = FleetInfo(fleetId = "someFleetId",
                                     name = "someFleetName",
                                     logoUrl = "someLogoUrl",
                                     description = "Some fleet description",
                                     phoneNumber = "+123",
-                                    termsConditionsUrl = "someTermsUrl")
+                                    termsConditionsUrl = "someTermsUrl",
+                                    capabilities = listOf("driver_details", "vehicle_details"))
+
+        val QUOTE_FLEET_RATING = FleetRating(count = 1, score = 4)
 
         val QUOTE_VEHICLE = QuoteVehicle(vehicleType = "Electric",
                                         vehicleClass = "Saloon",
                                         vehicleTags = listOf("Electric", "Taxi"),
-                                         vehicleQta = QuoteQTA(highMinutes = 10, lowMinutes = 1))
-
-        val VEHICLE_ATTRIBUTES = VehicleAttributes(passengerCapacity = 4,
-                                                   luggageCapacity = 2)
+                                        vehicleQta = QuoteQTA(highMinutes = 10, lowMinutes = 1),
+                                        passengerCapacity = 4,
+                                        luggageCapacity = 2)
 
         val QUOTE = Quote(id = "someQuoteId",
                                quoteType = QuoteType.ESTIMATED,
@@ -443,10 +466,12 @@ class ServerRobot {
                                price = QUOTE_PRICE,
                                fleet = QUOTE_FLEET,
                                pickupType = PickupType.CURBSIDE,
-                               vehicle = QUOTE_VEHICLE,
-                               vehicleAttributes = VEHICLE_ATTRIBUTES)
+                               vehicle = QUOTE_VEHICLE)
 
-        val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"), types = listOf("Electric", "Standard", "MPV")))
+        val AVAILABILITY = Availability(vehicles = AvailabilityVehicle(
+                classes = listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"),
+                tags = listOf(""),
+                types = listOf("Electric", "Standard", "MPV")))
 
         val VEHICLES = Vehicles(
                 status = "PROGRESSING",
@@ -470,6 +495,9 @@ class ServerRobot {
                         "Exec" to emptyList(),
                         "Electric" to emptyList(),
                         "Moto" to emptyList()))
+
+        val BOOKINGFEE = BookingFee(true,
+                                    BookingFeePrice("GBP", "", 500))
 
         /**
          *

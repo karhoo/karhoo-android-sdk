@@ -1,6 +1,7 @@
 package com.karhoo.sdk.api.network.client
 
 import com.karhoo.sdk.api.KarhooEnvironmentDetails
+import com.karhoo.sdk.api.model.BookingFee
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.DriverTrackingInfo
@@ -20,7 +21,6 @@ import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
-import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
 import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
@@ -33,6 +33,7 @@ import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.model.Coverage
+import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
@@ -63,9 +64,11 @@ interface   APITemplate {
 
         const val QUOTES_REQUEST_METHOD = "/v2/quotes"
         const val QUOTES_METHOD = "/v2/quotes/{id}"
+        const val VERIFY_QUOTES_METHOD = "/v2/quotes/verify/{id}"
         const val BOOKING_METHOD = "/v1/bookings"
         const val BOOKING_WITH_NONCE_METHOD = "/v1/bookings/with-nonce"
         const val BOOKING_DETAILS_METHOD = "/v1/bookings/{id}"
+        const val BOOKING_CANCEL_FEE = "/v1/bookings/{id}/cancel-fee"
         const val GUEST_BOOKING_DETAILS_METHOD = "/v1/bookings/follow/{id}"
         const val BOOKING_STATUS_METHOD = "/v1/bookings/{id}/status"
         const val GUEST_BOOKING_STATUS_METHOD = "/v1/bookings/follow/{id}/status"
@@ -138,6 +141,9 @@ interface   APITemplate {
     @GET(QUOTES_METHOD)
     fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
 
+    @GET(VERIFY_QUOTES_METHOD)
+    fun verifyQuotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Quote>>
+
     @GET(CHECK_COVERAGE)
     fun checkCoverage(@Query(IDENTIFIER_LATITUDE) latitude: String, @Query(IDENTIFIER_LONGITUDE)
     longitude: String, @Query(IDENTIFIER_DATE_SCHEDULED) dateScheduled: String?):
@@ -151,6 +157,9 @@ interface   APITemplate {
 
     @GET(BOOKING_DETAILS_METHOD)
     fun tripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>
+
+    @GET(BOOKING_CANCEL_FEE)
+    fun cancellationFee(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<BookingFee>>
 
     @GET(GUEST_BOOKING_DETAILS_METHOD)
     fun guestTripDetails(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<TripInfo>>

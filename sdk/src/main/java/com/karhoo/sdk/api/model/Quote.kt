@@ -6,10 +6,9 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Quote(@SerializedName("id") val id: String? = null,
+                 @SerializedName("price") val price: QuotePrice = QuotePrice(),
+                 @SerializedName("pick_up_type") val pickupType: PickupType? = null,
                  @SerializedName("quote_type") val quoteType: QuoteType = QuoteType.ESTIMATED,
                  @SerializedName("source") val quoteSource: QuoteSource = QuoteSource.FLEET,
-                 @SerializedName("price") val price: QuotePrice = QuotePrice(),
                  @SerializedName("fleet") val fleet: FleetInfo = FleetInfo(),
-                 @SerializedName("pick_up_type") val pickupType: PickupType? = null,
-                 @SerializedName("vehicle") val vehicle: QuoteVehicle = QuoteVehicle(),
-                 @SerializedName("vehicle_attributes") val vehicleAttributes: VehicleAttributes = VehicleAttributes()) : Parcelable
+                 @SerializedName("vehicle") val vehicle: QuoteVehicle = QuoteVehicle()) : Parcelable
