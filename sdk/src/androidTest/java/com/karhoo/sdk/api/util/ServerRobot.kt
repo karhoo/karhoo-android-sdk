@@ -10,6 +10,8 @@ import com.google.gson.annotations.SerializedName
 import com.karhoo.sdk.api.model.Address
 import com.karhoo.sdk.api.model.Availability
 import com.karhoo.sdk.api.model.AvailabilityVehicle
+import com.karhoo.sdk.api.model.BookingFee
+import com.karhoo.sdk.api.model.BookingFeePrice
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.Categories
@@ -226,6 +228,13 @@ class ServerRobot {
                 endpoint = APITemplate.BOOKING_DETAILS_METHOD.replace("{$IDENTIFIER_ID}", trip),
                 delayInMillis = delayInMillis
                        )
+    }
+
+    fun cancellationFeeResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String = BOOKING_ID) {
+        mockGetResponse(code = code,
+                       response = response,
+                       endpoint = APITemplate.BOOKING_CANCEL_FEE.replace("{$IDENTIFIER_ID}", id),
+                        delayInMillis = delayInMillis)
     }
 
     fun cancelResponse(code: Int, response: Any, delayInMillis: Int = 0, trip: String) {
@@ -486,6 +495,9 @@ class ServerRobot {
                         "Exec" to emptyList(),
                         "Electric" to emptyList(),
                         "Moto" to emptyList()))
+
+        val BOOKINGFEE = BookingFee(true,
+                                    BookingFeePrice("GBP", "", 500))
 
         /**
          *

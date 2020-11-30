@@ -1,6 +1,7 @@
 package com.karhoo.sdk.api.service.trips
 
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.BookingFee
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -37,5 +38,9 @@ class KarhooTripsService : TripsService {
 
     override fun status(tripId: String): PollCall<TripState> = TripStateInteractor(credentialsManager, apiTemplate).apply {
         this.tripIdentifier = tripId
+    }
+
+    override fun cancellationFee(feeIdentifier: String): Call<BookingFee> = CancellationFeeInteractor(credentialsManager, apiTemplate).apply {
+        this.feeIdentifier = feeIdentifier
     }
 }
