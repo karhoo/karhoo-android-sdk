@@ -17,6 +17,7 @@ import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.Categories
 import com.karhoo.sdk.api.model.Coverage
 import com.karhoo.sdk.api.model.Credentials
+import com.karhoo.sdk.api.model.Direction
 import com.karhoo.sdk.api.model.Driver
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
@@ -623,8 +624,9 @@ class ServerRobot {
                         longitude = -0.1769328
                                    ),
                 destinationEta = 10,
-                originEta = 5
-                                                )
+                originEta = 5,
+                direction = Direction(kph = 5,
+                                      heading = 10))
 
         /**
          *
