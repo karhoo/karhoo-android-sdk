@@ -3,6 +3,7 @@ package com.karhoo.sdk.api.service.trips
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.model.FlightDetails
 import com.karhoo.sdk.api.model.TripInfo
+import com.karhoo.sdk.api.network.request.Luggage
 import com.karhoo.sdk.api.network.request.PassengerDetails
 import com.karhoo.sdk.api.network.request.Passengers
 import com.karhoo.sdk.api.network.request.TripBooking
@@ -22,20 +23,22 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
 
     private lateinit var interactor: BookTripInteractor
 
-    private val passengerDetails = PassengerDetails(
+    private val PASSENGER_DETAILS = PassengerDetails(
             firstName = "John",
             lastName = "Smith",
             locale = "en_GB"
-                                                   )
+                                                    )
 
-    private val flightDetails = FlightDetails(
+    private val FLIGHT_DETAILS = FlightDetails(
             flightNumber = "12345",
             comments = null
-                                             )
+                                              )
 
-    private val quoteId = "1234"
+    private val QUOTE_ID = "1234"
 
-    private val nonceId = "ABCD123"
+    private val NONCE_ID = "ABCD123"
+
+    private val META_DATA = mapOf("trip_id" to "$NONCE_ID")
 
     @Before
     override fun setUp() {
@@ -52,11 +55,13 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
     @Test
     fun `creating a booking with nonce results in the use of the correct endpoint`() {
         interactor.tripBooking = TripBooking(
-                nonce = nonceId,
-                quoteId = quoteId,
+                nonce = NONCE_ID,
+                quoteId = QUOTE_ID,
                 passengers = Passengers(
-                        passengerDetails = listOf(passengerDetails),
-                        additionalPassengers = 0))
+                        passengerDetails = listOf(PASSENGER_DETAILS),
+                        additionalPassengers = 0,
+                        luggage = Luggage(total = 2)),
+                meta = META_DATA)
 
         runBlocking {
             interactor.execute {}
@@ -75,10 +80,11 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
     fun `creating a booking with a blank nonce results in the use of the correct endpoint`() {
         interactor.tripBooking = TripBooking(
                 nonce = "",
-                quoteId = quoteId,
+                quoteId = QUOTE_ID,
                 passengers = Passengers(
-                        passengerDetails = listOf(passengerDetails),
-                        additionalPassengers = 0))
+                        passengerDetails = listOf(PASSENGER_DETAILS),
+                        additionalPassengers = 0,
+                        luggage = Luggage(total = 2)))
         runBlocking {
             interactor.execute {}
             delay(5)
@@ -96,10 +102,11 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
     fun `creating a booking with a null nonce results in the use of the correct endpoint`() {
         interactor.tripBooking = TripBooking(
                 nonce = null,
-                quoteId = quoteId,
+                quoteId = QUOTE_ID,
                 passengers = Passengers(
-                        passengerDetails = listOf(passengerDetails),
-                        additionalPassengers = 0))
+                        passengerDetails = listOf(PASSENGER_DETAILS),
+                        additionalPassengers = 0,
+                        luggage = Luggage(total = 2)))
         runBlocking {
             interactor.execute {}
             delay(5)
@@ -142,11 +149,12 @@ class BookTripInteractorTest : BaseKarhooUserInteractorTest() {
         val request = TripBooking(
                 nonce = "nonce",
                 passengers = Passengers(
-                        passengerDetails = listOf(passengerDetails),
-                        additionalPassengers = 0),
-                quoteId = quoteId,
-                flightNumber = flightDetails.flightNumber,
-                comments = flightDetails.comments
+                        passengerDetails = listOf(PASSENGER_DETAILS),
+                        additionalPassengers = 0,
+                        luggage = Luggage(total = 2)),
+                quoteId = QUOTE_ID,
+                flightNumber = FLIGHT_DETAILS.flightNumber,
+                comments = FLIGHT_DETAILS.comments
                                  )
 
         interactor.tripBooking = request

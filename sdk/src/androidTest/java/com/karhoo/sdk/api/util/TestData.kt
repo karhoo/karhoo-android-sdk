@@ -3,6 +3,7 @@ package com.karhoo.sdk.api.util
 import com.karhoo.sdk.api.model.Address
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.CancellationReason
+import com.karhoo.sdk.api.model.Direction
 import com.karhoo.sdk.api.model.Driver
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
@@ -28,6 +29,7 @@ import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.TripStatus
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicle
+import com.karhoo.sdk.api.network.request.Luggage
 import com.karhoo.sdk.api.network.request.Passengers
 import com.karhoo.sdk.api.network.request.PlaceSearch
 import com.karhoo.sdk.api.network.request.TripBooking
@@ -71,13 +73,15 @@ class TestData {
                 quoteId = "1234567890",
                 passengers = Passengers(
                         additionalPassengers = 1,
-                        passengerDetails = listOf()))
+                        passengerDetails = listOf(),
+                        luggage = Luggage(total = 2)))
 
         val BOOK_TRIP_INVOICE = TripBooking(
                 quoteId = "1234567890",
                 passengers = Passengers(
                         additionalPassengers = 1,
-                        passengerDetails = listOf()))
+                        passengerDetails = listOf(),
+                        luggage = Luggage(total = 2)))
 
         val TRIP_SEARCH = TripSearch()
 
@@ -140,8 +144,10 @@ class TestData {
         )
 
         val DRIVER_TRACKING_INFO = DriverTrackingInfo(position = Position(LATITUDE, LONGITUDE),
-                originEta = 5,
-                destinationEta = 10)
+                                                      originEta = 5,
+                                                      destinationEta = 10,
+                                                      direction = Direction(kph = 5,
+                                                                            heading = 10))
 
         val TRIP_INFO_BLANK = TripInfo()
 
@@ -237,8 +243,7 @@ class TestData {
                 price = ServerRobot.QUOTE_PRICE,
                 fleet = ServerRobot.QUOTE_FLEET,
                 pickupType = PickupType.CURBSIDE,
-                vehicle = ServerRobot.QUOTE_VEHICLE,
-                vehicleAttributes = ServerRobot.VEHICLE_ATTRIBUTES)
+                vehicle = ServerRobot.QUOTE_VEHICLE)
 
         val QUOTE_LIST = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),

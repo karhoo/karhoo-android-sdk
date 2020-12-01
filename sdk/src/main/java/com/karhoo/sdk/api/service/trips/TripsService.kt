@@ -1,5 +1,6 @@
 package com.karhoo.sdk.api.service.trips
 
+import com.karhoo.sdk.api.model.BookingFee
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.network.request.TripBooking
@@ -19,5 +20,7 @@ interface TripsService {
     fun search(tripSearch: TripSearch): Call<List<TripInfo>>
 
     fun status(tripId: String): PollCall<TripState>
+
+    fun cancellationFee(feeIdentifier: String): Call<BookingFee>
 
 }

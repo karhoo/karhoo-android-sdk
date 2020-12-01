@@ -16,7 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class KarhooTripsServiceTest {
 
     private val tripHistoryRequest: TripSearch = TripSearch()
-    private val tripBooking: TripBooking = TripBooking(QUOTE_ID, null, null)
+    private val tripBooking: TripBooking = TripBooking(quoteId = QUOTE_ID)
     // Needed for InjectMocks
     private val credentialsManager: CredentialsManager = mock()
     private val apiTemplate: APITemplate = mock()
@@ -76,6 +76,17 @@ class KarhooTripsServiceTest {
     @Test
     fun `trip status call is created when looking for trip status`() {
         val call = service.status("1234")
+        assertNotNull(call)
+    }
+
+    /**
+     * Given: A request is made to get a cancellation fee for a trip
+     * When: The call is constructed and executed
+     * Then: A call should be made to the appropriate endpoint
+     */
+    @Test
+    fun `cancellation fee call is created when looking for fee`() {
+        val call = service.cancellationFee("1234")
         assertNotNull(call)
     }
 

@@ -6,10 +6,6 @@ enum class MeetingPointType(val type: String) {
 
     @SerializedName("NOT_SET_DETAILS_TYPE")
     NOT_SET_DETAILS_TYPE("NOT_SET_DETAILS_TYPE"),
-    @SerializedName("AIRPORT")
-    AIRPORT("AIRPORT"),
-    @SerializedName("TRAIN_STATION")
-    TRAIN_STATION("TRAIN_STATION"),
     @SerializedName("DEFAULT")
     NOT_SET("DEFAULT"),
     @SerializedName("DEFAULT")
