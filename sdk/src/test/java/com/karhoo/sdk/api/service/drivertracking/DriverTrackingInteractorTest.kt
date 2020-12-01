@@ -3,6 +3,7 @@ package com.karhoo.sdk.api.service.drivertracking
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.model.AuthenticationMethod
+import com.karhoo.sdk.api.model.Direction
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.network.response.Resource
@@ -113,6 +114,8 @@ class DriverTrackingInteractorTest : BaseKarhooUserInteractorTest() {
     private fun createDriver() = DriverTrackingInfo(
             position = Position(0.5, 0.4),
             originEta = 5,
-            destinationEta = 10)
+            destinationEta = 10,
+            direction = Direction(kph = 5,
+                                  heading = 10))
 
 }

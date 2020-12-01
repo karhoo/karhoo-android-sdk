@@ -34,6 +34,12 @@ enum class TripStatus constructor(val value: String) {
     @SerializedName("KARHOO_CANCELLED")
     CANCELLED_BY_KARHOO("KARHOO_CANCELLED"),
 
+    @SerializedName("FAILED")
+    FAILED("FAILED"),
+
+    @SerializedName("PREAUTH_DECLINED")
+    PREAUTH_DECLINED("PREAUTH_DECLINED"),
+
     @SerializedName("INCOMPLETE")
     INCOMPLETE("INCOMPLETE");
 
