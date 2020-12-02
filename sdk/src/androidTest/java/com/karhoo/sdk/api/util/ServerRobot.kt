@@ -33,8 +33,8 @@ import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.PickupType
 import com.karhoo.sdk.api.model.Place
 import com.karhoo.sdk.api.model.Places
+import com.karhoo.sdk.api.model.Poi
 import com.karhoo.sdk.api.model.PoiDetails
-import com.karhoo.sdk.api.model.PoiType
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.Price
 import com.karhoo.sdk.api.model.Provider
@@ -598,7 +598,7 @@ class ServerRobot {
 
         val LOCATION_INFO = LocationInfo(position = Position(LATITUDE, LONGITUDE),
                                          placeId = "123",
-                                         poiType = PoiType.REGULATED,
+                                         poiType = Poi.REGULATED,
                                          address = ADDRESS,
                                          timezone = "UK",
                                          details = PoiDetails(iata = "iata",
@@ -669,13 +669,13 @@ class ServerRobot {
                                 longitude = -0.1585557
                                            ),
                         placeId = "ChIJEYJiM88adkgR4SKDqHd2XUQ",
-                        poiType = PoiType.NOT_SET,
+                        poiType = Poi.NOT_SET,
                         timezone = "Europe/London"
                                          ),
                 destination = TripLocationInfo(
                         displayAddress = "221B Baker St, Marylebone, London NW1 6XE, UK",
                         placeId = "43fChIJEYJiM88adkgsdsaR4SKDqHd2XUQ",
-                        poiType = PoiType.NOT_SET,
+                        poiType = Poi.NOT_SET,
                         timezone = "Europe/London",
                         position = Position(
                                 latitude = 51.5237466,

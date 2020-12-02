@@ -4,16 +4,25 @@ import com.google.gson.annotations.SerializedName
 
 enum class PoiType constructor(val value: String) {
 
+    @SerializedName("AIRPORT")
+    AIRPORT("AIRPORT"),
+
     @SerializedName("NOT_SET", alternate = ["NOT_SET_DETAILS_TYPE"])
     NOT_SET("NOT_SET"),
 
-    @SerializedName("ENRICHED")
-    ENRICHED("ENRICHED"),
+    @SerializedName("TRAIN_STATION")
+    TRAIN_STATION("TRAIN_STATION"),
 
-    @SerializedName("REGULATED")
-    REGULATED("REGULATED"),
+    @SerializedName("METRO_STATION")
+    METRO_STATION("METRO_STATION"),
 
-    @SerializedName("NEAREST")
-    NEAREST("NEAREST")
+    @SerializedName("PORT")
+    PORT("PORT"),
+
+    @SerializedName("HOTEL")
+    HOTEL("HOTEL"),
+
+    @SerializedName("OTHER")
+    OTHER("OTHER")
 
 }

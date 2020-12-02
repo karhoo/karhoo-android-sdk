@@ -8,5 +8,5 @@ import kotlinx.android.parcel.Parcelize
 data class PoiDetails(
         @SerializedName("iata") val iata: String = "",
         @SerializedName("terminal") val terminal: String = "",
-        @SerializedName("type") val type: PoiDetailsType? = null)
+        @SerializedName("type") val type: PoiType? = null)
     : Parcelable
