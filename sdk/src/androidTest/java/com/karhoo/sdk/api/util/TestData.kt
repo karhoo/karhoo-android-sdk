@@ -13,8 +13,8 @@ import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.MeetingPoint
 import com.karhoo.sdk.api.model.Organisation
 import com.karhoo.sdk.api.model.PickupType
-import com.karhoo.sdk.api.model.Poi
 import com.karhoo.sdk.api.model.PoiDetails
+import com.karhoo.sdk.api.model.PoiType
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.Price
 import com.karhoo.sdk.api.model.Quote
@@ -111,14 +111,14 @@ class TestData {
                 countryCode = "UK")
 
         val LOCATION_INFO = LocationInfo(position = Position(LATITUDE, LONGITUDE),
-                placeId = "123",
-                poiType = Poi.REGULATED,
-                address = ADDRESS,
-                timezone = "UK",
-                details = PoiDetails(iata = "iata",
+                                         placeId = "123",
+                                         poiType = PoiType.REGULATED,
+                                         address = ADDRESS,
+                                         timezone = "UK",
+                                         details = PoiDetails(iata = "iata",
                         terminal = "terminal",
                         type = null),
-                meetingPoint = MeetingPoint(position = Position(
+                                         meetingPoint = MeetingPoint(position = Position(
                         latitude = 51.5062894,
                         longitude = -0.0859324),
                         instructions = "I am near by",
@@ -164,7 +164,7 @@ class TestData {
                 position = TRIP_POSITION,
                 placeId = "EhpCcm93bmVsbCBTdCwgU2hlZmZpZWxkLCBVSw",
                 timezone = "Europe/London",
-                poiType = Poi.NOT_SET)
+                poiType = PoiType.NOT_SET)
 
         val PRICE = Price(
                 total = 3550,
