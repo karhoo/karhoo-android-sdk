@@ -12,6 +12,7 @@ import okhttp3.Request
 import okhttp3.Response
 import retrofit2.Invocation
 import java.io.IOException
+import kotlin.jvm.Throws
 
 class RequestInterceptor(private val headers: Headers) : Interceptor {
 
