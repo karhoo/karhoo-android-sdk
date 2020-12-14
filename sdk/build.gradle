@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'jacoco'
 
@@ -14,10 +14,6 @@ String[] fileFilter = [
         '**/di/**',
         '**/analytics/**']
 enableJacoco(project, 'Debug', fileFilter)
-
-androidExtensions {
-    experimental = true
-}
 
 android {
     compileSdkVersion 29
