@@ -1,3 +1,4 @@
+@file:Suppress("TooManyFunctions")
 package com.karhoo.sdk.api.network.client
 
 import com.karhoo.sdk.api.KarhooEnvironmentDetails
