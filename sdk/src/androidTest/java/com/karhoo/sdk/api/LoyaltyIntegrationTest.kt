@@ -1,24 +1,33 @@
-package com.karhoo.sdk.api.util
+package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.karhoo.sdk.api.KarhooApi
-import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.model.Quote
+import org.assertj.core.api.Java6Assertions.assertThat
+import com.karhoo.sdk.api.model.LoyaltyBalance
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import org.assertj.core.api.Java6Assertions.assertThat
+import com.karhoo.sdk.api.util.ServerRobot
+import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
+import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
+import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
+import com.karhoo.sdk.api.util.ServerRobot.Companion.LOYALTY_BALANCE
+import com.karhoo.sdk.api.util.ServerRobot.Companion.LOYALTY_ID
+import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
+import com.karhoo.sdk.api.util.serverRobot
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.net.HttpURLConnection
+import java.net.HttpURLConnection.HTTP_OK
+import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
-class VerifyQuoteIntegrationTest {
+@Ignore
+class LoyaltyIntegrationTest {
 
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
@@ -38,18 +47,19 @@ class VerifyQuoteIntegrationTest {
     }
 
     /**
-     * Given:   Verify quote is requested
-     * When:    Successful response has been returned
+     * Given:   Loyalty Balance on a trip is requested
+     * When:    It is a user booking
+     * And:     Successful response has been returned
      * Then:    The response payload should be valid
      **/
     @Test
-    fun verifyQuoteSuccess() {
+    fun loyaltyBalanceSuccess() {
         serverRobot {
-            verifyQuotesResponse(code = HttpURLConnection.HTTP_OK, response = ServerRobot.QUOTE)
+            getLoyaltyBalanceResponse(code = HTTP_OK, response = LOYALTY_BALANCE)
         }
-        var result: Quote? = null
+        var result: LoyaltyBalance? = null
 
-        KarhooApi.quotesService.verifyQuotes(ServerRobot.QUOTE_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -59,23 +69,23 @@ class VerifyQuoteIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        assertThat(result).isEqualTo(ServerRobot.QUOTE)
+        assertThat(result).isEqualTo(LOYALTY_BALANCE)
     }
 
     /**
-     * Given:   Verify quote is requested
+     * Given:   Loyalty Balance is requested
      * When:    Success 201 but with invalid data
      * Then:    An internal sdk error should be returned
      **/
 
     @Test
-    fun invalidJsonWhenRequestingVerifyQuote() {
+    fun invalidJsonWhenRequestingLoyaltyBalance() {
         serverRobot {
-            verifyQuotesResponse(code = HttpURLConnection.HTTP_OK, response = ServerRobot.INVALID_JSON)
+            getLoyaltyBalanceResponse(code = HTTP_OK, response = INVALID_JSON)
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.verifyQuotes(ServerRobot.QUOTE_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -89,19 +99,19 @@ class VerifyQuoteIntegrationTest {
     }
 
     /**
-     * Given:   Verify quote is requested
+     * Given:   Loyalty Balance is requested
      * When:    Error 401 but with error payload
      * Then:    An error should be returned
      **/
 
     @Test
-    fun invalidSessionTokenWhenRequestingVerifyQuote() {
+    fun invalidSessionTokenWhenRequestingLoyaltyBalance() {
         serverRobot {
-            verifyQuotesResponse(code = HttpURLConnection.HTTP_UNAUTHORIZED, response = ServerRobot.GENERAL_ERROR)
+            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR)
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.verifyQuotes(ServerRobot.QUOTE_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -115,19 +125,19 @@ class VerifyQuoteIntegrationTest {
     }
 
     /**
-     * Given:   Verify quote is requested
+     * Given:   Loyalty Balance is requested
      * When:    Success 201 but with no body
      * Then:    An error should be returned
      **/
 
     @Test
-    fun noBodyErrorWhenRequestingVerifyQuote() {
+    fun noBodyErrorWhenRequestingLoyaltyBalance() {
         serverRobot {
-            verifyQuotesResponse(code = HttpURLConnection.HTTP_OK, response = ServerRobot.NO_BODY)
+            getLoyaltyBalanceResponse(code = HTTP_OK, response = NO_BODY)
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.verifyQuotes(ServerRobot.QUOTE_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -141,19 +151,19 @@ class VerifyQuoteIntegrationTest {
     }
 
     /**
-     * Given:   Verify Quote is requested
+     * Given:   Loyalty Balance is requested
      * When:    Error 401 but with empty payload
      * Then:    The karhoo error should be valid
      **/
 
     @Test
-    fun errorResponseWithEmptyBodyWhenRequestingVerifyQuote() {
+    fun errorResponseWithEmptyBodyWhenRequestingLoyaltyBalance() {
         serverRobot {
-            verifyQuotesResponse(code = HttpURLConnection.HTTP_UNAUTHORIZED, response = ServerRobot.EMPTY)
+            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = EMPTY)
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.verifyQuotes(ServerRobot.QUOTE_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -167,19 +177,19 @@ class VerifyQuoteIntegrationTest {
     }
 
     /**
-     * Given:   Verify Quote is requested
-     * When:    Error 401 but with empty payload
+     * Given:   Loyalty Balance is requested
+     * When:    Error 401 but with invalid payload
      * Then:    The karhoo error should be valid
      **/
 
     @Test
-    fun errorResponseWithInvalidJsonyWhenRequestingVerifyQuote() {
+    fun errorResponseWithInvalidJsonyWhenRequestingLoyaltyBalance() {
         serverRobot {
-            verifyQuotesResponse(code = HttpURLConnection.HTTP_UNAUTHORIZED, response = ServerRobot.INVALID_JSON)
+            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON)
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.verifyQuotes(ServerRobot.QUOTE_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -193,19 +203,19 @@ class VerifyQuoteIntegrationTest {
     }
 
     /**
-     * Given:   Verify quote is requested
+     * Given:   Loyalty Balance is requested
      * When:    The response takes too long
      * Then:    The timeout error should be returned
      **/
 
     @Test
-    fun timeoutErrorResponseWhenRequestingVerifyQuote() {
+    fun timeoutErrorResponseWhenRequestingLoyaltyBalance() {
         serverRobot {
-            verifyQuotesResponse(code = HttpURLConnection.HTTP_OK, response = ServerRobot.INVALID_JSON, delayInMillis = 20000)
+            getLoyaltyBalanceResponse(code = HTTP_OK, response = INVALID_JSON, delayInMillis = 20000)
         }
         var result: KarhooError? = null
 
-        KarhooApi.quotesService.verifyQuotes(ServerRobot.QUOTE_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error

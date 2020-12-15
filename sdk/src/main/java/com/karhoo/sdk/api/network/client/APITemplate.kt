@@ -1,3 +1,4 @@
+@file:Suppress("TooManyFunctions")
 package com.karhoo.sdk.api.network.client
 
 import com.karhoo.sdk.api.KarhooEnvironmentDetails
@@ -33,6 +34,7 @@ import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.model.Coverage
+import com.karhoo.sdk.api.model.LoyaltyBalance
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
@@ -93,6 +95,8 @@ interface   APITemplate {
         const val ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
         const val ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/payments"
         const val ADYEN_PAYMENT_DETAILS = "/v3/payments/adyen/payments-details"
+
+        const val LOYALTY_BALANCE = "/v3/payments/loyalty/programmes/{id}/balance"
 
         const val IDENTIFIER_ID = "id"
         const val IDENTIFIER_LATITUDE = "latitude"
@@ -216,6 +220,9 @@ interface   APITemplate {
     @Headers("Content-Type: application/json")
     @POST(ADYEN_PAYMENT_DETAILS)
     fun getAdyenPaymentDetails(@Body adyenPaymentsDetails: String): Deferred<Resource<ResponseBody>>
+
+    @GET(LOYALTY_BALANCE)
+    fun getLoyaltyBalance(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<LoyaltyBalance>>
 
     @POST
     @FormUrlEncoded
