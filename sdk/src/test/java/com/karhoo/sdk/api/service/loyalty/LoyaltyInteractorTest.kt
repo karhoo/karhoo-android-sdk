@@ -17,7 +17,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 
 class LoyaltyInteractorTest : BaseKarhooUserInteractorTest() {
 
@@ -42,9 +41,9 @@ class LoyaltyInteractorTest : BaseKarhooUserInteractorTest() {
         KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
                                                                                    applicationContext,
                                                                                    authenticationMethod = AuthenticationMethod.KarhooUser()))
-        whenever(apiTemplate.getLoyaltyBalance(LoyaltyInteractorTest.LOYALTY_ID)).thenReturn(CompletableDeferred(Resource.Success(loyaltyBalance)))
+        whenever(apiTemplate.getLoyaltyBalance(LOYALTY_ID)).thenReturn(CompletableDeferred(Resource.Success(loyaltyBalance)))
 
-        interactor.loyaltyId = LoyaltyInteractorTest.LOYALTY_ID
+        interactor.loyaltyId = LOYALTY_ID
         var returnedLoyaltyBalance: LoyaltyBalance? = null
         runBlocking {
             interactor.execute { result ->
@@ -58,34 +57,7 @@ class LoyaltyInteractorTest : BaseKarhooUserInteractorTest() {
 
         assertNotNull(returnedLoyaltyBalance)
         assertEquals(loyaltyBalance, returnedLoyaltyBalance)
-        verify(apiTemplate).getLoyaltyBalance(LoyaltyInteractorTest.LOYALTY_ID)
-    }
-
-    /**
-     * Given:   A valid loyalty id
-     * When:    When requesting loyalty balance
-     * Then:    The loyalty balance should return as burnable.
-     */
-    @Test
-    fun `requesting loyalty balance returns burnable value`() {
-        val loyaltyBalance = LoyaltyBalance(123, true)
-        whenever(apiTemplate.getLoyaltyBalance(ArgumentMatchers.anyString())).thenReturn(CompletableDeferred(Resource.Success(loyaltyBalance)))
-
-        interactor.loyaltyId = LoyaltyInteractorTest.LOYALTY_ID
-        var returnedLoyaltyBalance: LoyaltyBalance? = null
-        runBlocking {
-            interactor.execute { result ->
-                when (result) {
-                    is Resource.Success -> returnedLoyaltyBalance = result.data
-                    is Resource.Failure -> Assert.fail()
-                }
-            }
-            delay(5)
-        }
-
-        assertNotNull(returnedLoyaltyBalance)
-        assertEquals(loyaltyBalance, returnedLoyaltyBalance)
-        verify(apiTemplate).getLoyaltyBalance(LoyaltyInteractorTest.LOYALTY_ID)
+        verify(apiTemplate).getLoyaltyBalance(LOYALTY_ID)
     }
 
     /**

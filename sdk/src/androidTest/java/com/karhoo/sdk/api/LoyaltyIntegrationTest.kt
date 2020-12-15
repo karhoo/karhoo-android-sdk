@@ -11,6 +11,7 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
 import com.karhoo.sdk.api.util.ServerRobot.Companion.LOYALTY_BALANCE
+import com.karhoo.sdk.api.util.ServerRobot.Companion.LOYALTY_ID
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.serverRobot
 import org.junit.After
@@ -19,14 +20,13 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.net.HttpURLConnection
 import java.net.HttpURLConnection.HTTP_OK
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
-@Ignore("Tests not ready")
+@Ignore
 class LoyaltyIntegrationTest {
 
     @get:Rule
@@ -57,9 +57,9 @@ class LoyaltyIntegrationTest {
         serverRobot {
             getLoyaltyBalanceResponse(code = HTTP_OK, response = LOYALTY_BALANCE)
         }
-        var result: LoyaltyBalance? = LoyaltyBalance(123, false)
+        var result: LoyaltyBalance? = null
 
-        KarhooApi.loyaltyService.getBalance(ServerRobot.LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -85,7 +85,7 @@ class LoyaltyIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(ServerRobot.LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -111,7 +111,7 @@ class LoyaltyIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(ServerRobot.LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -137,7 +137,7 @@ class LoyaltyIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(ServerRobot.LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -163,7 +163,7 @@ class LoyaltyIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(ServerRobot.LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -189,7 +189,7 @@ class LoyaltyIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(ServerRobot.LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -215,7 +215,7 @@ class LoyaltyIntegrationTest {
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(ServerRobot.LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error

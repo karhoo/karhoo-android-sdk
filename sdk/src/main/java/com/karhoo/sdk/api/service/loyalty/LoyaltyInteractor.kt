@@ -13,11 +13,11 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 internal class LoyaltyInteractor @Inject constructor(credentialsManager: CredentialsManager,
-                                                    private val apiTemplate: APITemplate,
-                                                    context: CoroutineContext = Main) :
+                                                     private val apiTemplate: APITemplate,
+                                                     context: CoroutineContext = Main) :
         BaseCallInteractor<LoyaltyBalance>(true, credentialsManager, apiTemplate, context) {
 
-            internal var loyaltyId: String? = null
+    internal var loyaltyId: String? = null
 
     override fun createRequest(): Deferred<Resource<LoyaltyBalance>> {
         loyaltyId?.let { loyaltyId ->
