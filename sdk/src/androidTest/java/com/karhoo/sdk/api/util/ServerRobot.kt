@@ -25,6 +25,7 @@ import com.karhoo.sdk.api.model.FareBreakdown
 import com.karhoo.sdk.api.model.FleetInfo
 import com.karhoo.sdk.api.model.FleetRating
 import com.karhoo.sdk.api.model.LocationInfo
+import com.karhoo.sdk.api.model.LoyaltyBalance
 import com.karhoo.sdk.api.model.LoyaltyProgramme
 import com.karhoo.sdk.api.model.MeetingPoint
 import com.karhoo.sdk.api.model.Organisation
@@ -247,6 +248,13 @@ class ServerRobot {
                         )
     }
 
+    fun getLoyaltyBalanceResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String = LOYALTY_ID) {
+        mockGetResponse(code = code,
+                        response = response,
+                        endpoint = APITemplate.LOYALTY_BALANCE.replace("{$IDENTIFIER_ID}", id),
+                        delayInMillis = delayInMillis)
+    }
+
     fun cancelGuestBookingResponse(code: Int, response: Any, delayInMillis: Int = 0, trip: String) {
         mockPostResponse(
                 code = code,
@@ -433,6 +441,8 @@ class ServerRobot {
          *
          */
         val BOOKING_ID = "BK123"
+
+        val LOYALTY_ID = "LP123"
 
         val AVAILABILITIES = Categories(listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"))
 
@@ -690,6 +700,15 @@ class ServerRobot {
         val TRIP_LIST_COMPLETED = TripList(listOf(TRIP_DER.copy(
                 tripState = TripStatus.COMPLETED)
                                                  ))
+
+        /**
+         *
+         * Loyalty
+         *
+         */
+
+        val LOYALTY_BALANCE = LoyaltyBalance(points = 123,
+                                            burnable = false)
 
         /**
          *
