@@ -3,14 +3,13 @@ package com.karhoo.sdk.api
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import org.assertj.core.api.Java6Assertions.assertThat
-import com.karhoo.sdk.api.model.LoyaltyBalance
+import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
-import com.karhoo.sdk.api.util.ServerRobot
 import com.karhoo.sdk.api.util.ServerRobot.Companion.EMPTY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.GENERAL_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.INVALID_JSON
-import com.karhoo.sdk.api.util.ServerRobot.Companion.LOYALTY_BALANCE
+import com.karhoo.sdk.api.util.ServerRobot.Companion.LOYALTY_CONVERSION
 import com.karhoo.sdk.api.util.ServerRobot.Companion.LOYALTY_ID
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.serverRobot
@@ -27,7 +26,7 @@ import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 @Ignore
-class LoyaltyIntegrationTest {
+class LoyaltyConversionIntregrationTest {
 
     @get:Rule
     var wireMockRule = WireMockRule(SDKTestConfig.wireMockOptions)
@@ -47,19 +46,19 @@ class LoyaltyIntegrationTest {
     }
 
     /**
-     * Given:   Loyalty Balance on a trip is requested
+     * Given:   Cancellation fee on a trip is requested
      * When:    It is a user booking
      * And:     Successful response has been returned
      * Then:    The response payload should be valid
      **/
     @Test
-    fun loyaltyBalanceSuccess() {
+    fun cancellationFeeSuccess() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_OK, response = LOYALTY_BALANCE, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_OK, response = LOYALTY_CONVERSION, id = LOYALTY_ID)
         }
-        var result: LoyaltyBalance? = null
+        var result: LoyaltyConversion? = null
 
-        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getConversionRates(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -69,23 +68,23 @@ class LoyaltyIntegrationTest {
         }
 
         latch.await(2, TimeUnit.SECONDS)
-        assertThat(result).isEqualTo(LOYALTY_BALANCE)
+        assertThat(result).isEqualTo(LOYALTY_CONVERSION)
     }
 
     /**
-     * Given:   Loyalty Balance is requested
+     * Given:   Cancellation Fee is requested
      * When:    Success 201 but with invalid data
      * Then:    An internal sdk error should be returned
      **/
 
     @Test
-    fun invalidJsonWhenRequestingLoyaltyBalance() {
+    fun invalidJsonWhenRequestingCancellationFee() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_OK, response = INVALID_JSON, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_OK, response = INVALID_JSON, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getConversionRates(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -99,19 +98,19 @@ class LoyaltyIntegrationTest {
     }
 
     /**
-     * Given:   Loyalty Balance is requested
+     * Given:   Cancellation Fee is requested
      * When:    Error 401 but with error payload
      * Then:    An error should be returned
      **/
 
     @Test
-    fun invalidSessionTokenWhenRequestingLoyaltyBalance() {
+    fun invalidSessionTokenWhenRequestingCancellationFee() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getConversionRates(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -125,19 +124,19 @@ class LoyaltyIntegrationTest {
     }
 
     /**
-     * Given:   Loyalty Balance is requested
+     * Given:   Cancellation Fee is requested
      * When:    Success 201 but with no body
      * Then:    An error should be returned
      **/
 
     @Test
-    fun noBodyErrorWhenRequestingLoyaltyBalance() {
+    fun noBodyErrorWhenRequestingCancellationFee() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_OK, response = NO_BODY, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_OK, response = NO_BODY, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getConversionRates(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -151,19 +150,19 @@ class LoyaltyIntegrationTest {
     }
 
     /**
-     * Given:   Loyalty Balance is requested
+     * Given:   Cancellation Fee is requested
      * When:    Error 401 but with empty payload
      * Then:    The karhoo error should be valid
      **/
 
     @Test
-    fun errorResponseWithEmptyBodyWhenRequestingLoyaltyBalance() {
+    fun errorResponseWithEmptyBodyWhenRequestingCancellationFee() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = EMPTY, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = EMPTY, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getConversionRates(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -177,19 +176,19 @@ class LoyaltyIntegrationTest {
     }
 
     /**
-     * Given:   Loyalty Balance is requested
+     * Given:   Cancellation Fee is requested
      * When:    Error 401 but with invalid payload
      * Then:    The karhoo error should be valid
      **/
 
     @Test
-    fun errorResponseWithInvalidJsonyWhenRequestingLoyaltyBalance() {
+    fun errorResponseWithInvalidJsonyWhenRequestingCancellationFee() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getConversionRates(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -203,19 +202,19 @@ class LoyaltyIntegrationTest {
     }
 
     /**
-     * Given:   Loyalty Balance is requested
+     * Given:   Cancellation Fee is requested
      * When:    The response takes too long
      * Then:    The timeout error should be returned
      **/
 
     @Test
-    fun timeoutErrorResponseWhenRequestingLoyaltyBalance() {
+    fun timeoutErrorResponseWhenRequestingCancellationFee() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_OK, response = INVALID_JSON, delayInMillis = 20000, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_OK, response = INVALID_JSON, delayInMillis = 20000, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
-        KarhooApi.loyaltyService.getBalance(LOYALTY_ID).execute {
+        KarhooApi.loyaltyService.getConversionRates(LOYALTY_ID).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
