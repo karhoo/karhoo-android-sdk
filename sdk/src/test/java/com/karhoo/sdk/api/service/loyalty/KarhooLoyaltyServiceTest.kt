@@ -20,13 +20,24 @@ class KarhooLoyaltyServiceTest {
     private lateinit var service: KarhooLoyaltyService
 
     /**
-     * Given: A request is made to get a cancellation fee for a trip
+     * Given: A request is made to get a loyalty balance for a user
      * When: The call is constructed and executed
      * Then: A call should be made to the appropriate endpoint
      */
     @Test
-    fun `cancellation fee call is created when looking for fee`() {
+    fun `loyalty balance call is created when looking for balance`() {
         val call = service.getBalance("1234")
+        Assert.assertNotNull(call)
+    }
+
+    /**
+     * Given: A request is made to get a loyalty conversion for a loyalty balance
+     * When: The call is constructed and executed
+     * Then: A call should be made to the appropriate endpoint
+     */
+    @Test
+    fun `loyalty conversion call is created when looking for conversion rates on balance`() {
+        val call = service.getConversionRates("1234")
         Assert.assertNotNull(call)
     }
 }
