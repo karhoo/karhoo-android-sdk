@@ -3,7 +3,6 @@ package com.karhoo.sdk.api.service.loyalty
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.model.AuthenticationMethod
-import com.karhoo.sdk.api.model.LoyaltyBalance
 import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
@@ -58,7 +57,7 @@ class LoyaltyConversionInteractorTest : BaseKarhooUserInteractorTest() {
 
         assertNotNull(returnedLoyaltyConversion)
         assertEquals(loyaltyConversion, returnedLoyaltyConversion)
-        verify(apiTemplate).getLoyaltyBalance(LOYALTY_ID)
+        verify(apiTemplate).loyaltyConversionRates(LOYALTY_ID)
     }
 
     /**
@@ -67,7 +66,7 @@ class LoyaltyConversionInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    An InternalSDKError is returned
      **/
     @Test
-    fun `loyalty balance null when no loyalty Id is passed`() {
+    fun `loyalty conversion null when no loyalty Id is passed`() {
         var shouldBeNull: LoyaltyConversion? = null
         var error: KarhooError? = null
 
