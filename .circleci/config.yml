@@ -7,6 +7,7 @@ jobs:
     environment:
       - FASTLANE_LANE_LINT: linting
       - FASTLANE_LANE_TEST: unit_tests
+      - FASTLANE_LANE_COVERAGE_REPORT: coverage_report
       - JAVA_TOOL_OPTIONS: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=80"
       - GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dkotlin.incremental=false"
       - TERM: dumb
@@ -25,6 +26,9 @@ jobs:
       - run:
           name: Run unit test
           command: bundle exec fastlane $FASTLANE_LANE_TEST
+      - run:
+          name: Create coverage report
+          command: bundle exec fastlane $FASTLANE_LANE_COVERAGE_REPORT
       - run:
           name: Run linting
           command: bundle exec fastlane $FASTLANE_LANE_LINT
