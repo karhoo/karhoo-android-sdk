@@ -30,9 +30,6 @@ jobs:
           name: Create coverage report
           command: bundle exec fastlane $FASTLANE_LANE_COVERAGE_REPORT
       - run:
-          name: Run linting
-          command: bundle exec fastlane $FASTLANE_LANE_LINT
-      - run:
           name: Save test results
           command: |
             mkdir -p ~/junit/
@@ -46,7 +43,7 @@ jobs:
       - store_artifacts:
           path: ./build/reports
       - store_artifacts:
-          path: ./build/reports/jacoco/**/*.*
+          path: ./build/reports/jacoco/**/*/
           destination: reports/jacoco
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: sdk/build/reports
