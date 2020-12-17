@@ -16,10 +16,10 @@ class KarhooLoyaltyService : LoyaltyService {
     internal lateinit var apiTemplate: APITemplate
 
     override fun getBalance(loyaltyID: String): Call<LoyaltyBalance> = LoyaltyBalanceInteractor(credentialsManager, apiTemplate).apply {
-        this.loyaltyId
+        this.loyaltyId = loyaltyID
     }
 
     override fun getConversionRates(loyaltyID: String): Call<LoyaltyConversion> = LoyaltyConversionInteractor(credentialsManager, apiTemplate).apply {
-        this.loyaltyId
+        this.loyaltyId = loyaltyID
     }
 }

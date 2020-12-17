@@ -25,7 +25,6 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
-@Ignore
 class LoyaltyConversionIntregrationTest {
 
     @get:Rule
@@ -54,7 +53,7 @@ class LoyaltyConversionIntregrationTest {
     @Test
     fun loyaltyConversionSuccess() {
         serverRobot {
-            loyaltyConversionResponse(code = HTTP_OK, response = LOYALTY_CONVERSION, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_OK, response = LOYALTY_CONVERSION)
         }
         var result: LoyaltyConversion? = null
 
@@ -80,7 +79,7 @@ class LoyaltyConversionIntregrationTest {
     @Test
     fun invalidJsonWhenRequestingLoyaltyConversion() {
         serverRobot {
-            loyaltyConversionResponse(code = HTTP_OK, response = INVALID_JSON, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_OK, response = INVALID_JSON)
         }
         var result: KarhooError? = null
 
@@ -106,7 +105,7 @@ class LoyaltyConversionIntregrationTest {
     @Test
     fun invalidSessionTokenWhenRequestingLoyaltyConversion() {
         serverRobot {
-            loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR)
         }
         var result: KarhooError? = null
 
@@ -132,7 +131,7 @@ class LoyaltyConversionIntregrationTest {
     @Test
     fun noBodyErrorWhenRequestingLoyaltyConversion() {
         serverRobot {
-            loyaltyConversionResponse(code = HTTP_OK, response = NO_BODY, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_OK, response = NO_BODY)
         }
         var result: KarhooError? = null
 
@@ -158,7 +157,7 @@ class LoyaltyConversionIntregrationTest {
     @Test
     fun errorResponseWithEmptyBodyWhenRequestingLoyaltyConversion() {
         serverRobot {
-            loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = EMPTY, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = EMPTY)
         }
         var result: KarhooError? = null
 
@@ -184,7 +183,7 @@ class LoyaltyConversionIntregrationTest {
     @Test
     fun errorResponseWithInvalidJsonyWhenRequestingLoyaltyConversion() {
         serverRobot {
-            loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON)
         }
         var result: KarhooError? = null
 
@@ -210,7 +209,7 @@ class LoyaltyConversionIntregrationTest {
     @Test
     fun timeoutErrorResponseWhenRequestingLoyaltyConversion() {
         serverRobot {
-            loyaltyConversionResponse(code = HTTP_OK, response = INVALID_JSON, delayInMillis = 20000, id = LOYALTY_ID)
+            loyaltyConversionResponse(code = HTTP_OK, response = INVALID_JSON, delayInMillis = 20000)
         }
         var result: KarhooError? = null
 
