@@ -46,13 +46,13 @@ class LoyaltyConversionIntregrationTest {
     }
 
     /**
-     * Given:   Cancellation fee on a trip is requested
+     * Given:   Loyalty conversion on a payment is requested
      * When:    It is a user booking
      * And:     Successful response has been returned
      * Then:    The response payload should be valid
      **/
     @Test
-    fun cancellationFeeSuccess() {
+    fun loyaltyConversionSuccess() {
         serverRobot {
             loyaltyConversionResponse(code = HTTP_OK, response = LOYALTY_CONVERSION, id = LOYALTY_ID)
         }
@@ -72,13 +72,13 @@ class LoyaltyConversionIntregrationTest {
     }
 
     /**
-     * Given:   Cancellation Fee is requested
+     * Given:   Loyalty Conversion is requested
      * When:    Success 201 but with invalid data
      * Then:    An internal sdk error should be returned
      **/
 
     @Test
-    fun invalidJsonWhenRequestingCancellationFee() {
+    fun invalidJsonWhenRequestingLoyaltyConversion() {
         serverRobot {
             loyaltyConversionResponse(code = HTTP_OK, response = INVALID_JSON, id = LOYALTY_ID)
         }
@@ -98,13 +98,13 @@ class LoyaltyConversionIntregrationTest {
     }
 
     /**
-     * Given:   Cancellation Fee is requested
+     * Given:   Loyalty Conversion is requested
      * When:    Error 401 but with error payload
      * Then:    An error should be returned
      **/
 
     @Test
-    fun invalidSessionTokenWhenRequestingCancellationFee() {
+    fun invalidSessionTokenWhenRequestingLoyaltyConversion() {
         serverRobot {
             loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, id = LOYALTY_ID)
         }
@@ -124,13 +124,13 @@ class LoyaltyConversionIntregrationTest {
     }
 
     /**
-     * Given:   Cancellation Fee is requested
+     * Given:   Loyalty Conversion is requested
      * When:    Success 201 but with no body
      * Then:    An error should be returned
      **/
 
     @Test
-    fun noBodyErrorWhenRequestingCancellationFee() {
+    fun noBodyErrorWhenRequestingLoyaltyConversion() {
         serverRobot {
             loyaltyConversionResponse(code = HTTP_OK, response = NO_BODY, id = LOYALTY_ID)
         }
@@ -150,13 +150,13 @@ class LoyaltyConversionIntregrationTest {
     }
 
     /**
-     * Given:   Cancellation Fee is requested
+     * Given:   Loyalty Conversion is requested
      * When:    Error 401 but with empty payload
      * Then:    The karhoo error should be valid
      **/
 
     @Test
-    fun errorResponseWithEmptyBodyWhenRequestingCancellationFee() {
+    fun errorResponseWithEmptyBodyWhenRequestingLoyaltyConversion() {
         serverRobot {
             loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = EMPTY, id = LOYALTY_ID)
         }
@@ -176,13 +176,13 @@ class LoyaltyConversionIntregrationTest {
     }
 
     /**
-     * Given:   Cancellation Fee is requested
+     * Given:   Loyalty Conversion is requested
      * When:    Error 401 but with invalid payload
      * Then:    The karhoo error should be valid
      **/
 
     @Test
-    fun errorResponseWithInvalidJsonyWhenRequestingCancellationFee() {
+    fun errorResponseWithInvalidJsonyWhenRequestingLoyaltyConversion() {
         serverRobot {
             loyaltyConversionResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON, id = LOYALTY_ID)
         }
@@ -202,13 +202,13 @@ class LoyaltyConversionIntregrationTest {
     }
 
     /**
-     * Given:   Cancellation Fee is requested
+     * Given:   Loyalty Conversion is requested
      * When:    The response takes too long
      * Then:    The timeout error should be returned
      **/
 
     @Test
-    fun timeoutErrorResponseWhenRequestingCancellationFee() {
+    fun timeoutErrorResponseWhenRequestingLoyaltyConversion() {
         serverRobot {
             loyaltyConversionResponse(code = HTTP_OK, response = INVALID_JSON, delayInMillis = 20000, id = LOYALTY_ID)
         }
