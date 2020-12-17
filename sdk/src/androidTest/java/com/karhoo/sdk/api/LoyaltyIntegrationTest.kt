@@ -54,7 +54,7 @@ class LoyaltyIntegrationTest {
     @Test
     fun loyaltyBalanceSuccess() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_OK, response = LOYALTY_BALANCE)
+            getLoyaltyBalanceResponse(code = HTTP_OK, response = LOYALTY_BALANCE, id = LOYALTY_ID)
         }
         var result: LoyaltyBalance? = null
 
@@ -80,7 +80,7 @@ class LoyaltyIntegrationTest {
     @Test
     fun invalidJsonWhenRequestingLoyaltyBalance() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_OK, response = INVALID_JSON)
+            getLoyaltyBalanceResponse(code = HTTP_OK, response = INVALID_JSON, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
@@ -106,7 +106,7 @@ class LoyaltyIntegrationTest {
     @Test
     fun invalidSessionTokenWhenRequestingLoyaltyBalance() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR)
+            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = GENERAL_ERROR, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
@@ -132,7 +132,7 @@ class LoyaltyIntegrationTest {
     @Test
     fun noBodyErrorWhenRequestingLoyaltyBalance() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_OK, response = NO_BODY)
+            getLoyaltyBalanceResponse(code = HTTP_OK, response = NO_BODY, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
@@ -158,7 +158,7 @@ class LoyaltyIntegrationTest {
     @Test
     fun errorResponseWithEmptyBodyWhenRequestingLoyaltyBalance() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = EMPTY)
+            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = EMPTY, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
@@ -184,7 +184,7 @@ class LoyaltyIntegrationTest {
     @Test
     fun errorResponseWithInvalidJsonyWhenRequestingLoyaltyBalance() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON)
+            getLoyaltyBalanceResponse(code = HTTP_UNAUTHORIZED, response = INVALID_JSON, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
@@ -210,7 +210,7 @@ class LoyaltyIntegrationTest {
     @Test
     fun timeoutErrorResponseWhenRequestingLoyaltyBalance() {
         serverRobot {
-            getLoyaltyBalanceResponse(code = HTTP_OK, response = INVALID_JSON, delayInMillis = 20000)
+            getLoyaltyBalanceResponse(code = HTTP_OK, response = INVALID_JSON, delayInMillis = 20000, id = LOYALTY_ID)
         }
         var result: KarhooError? = null
 
