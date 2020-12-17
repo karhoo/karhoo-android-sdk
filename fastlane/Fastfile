@@ -14,7 +14,7 @@ platform :android do
   desc "Runs all the unit tests"
   lane :unit_tests do
     gradle(task: "testDebug")
-    slack_result(message: "*Karhoo Android NSDK* passed unit testing")
+    #slack_result(message: "*Karhoo Android NSDK* passed unit testing")
   end
 
   desc "Create coverage report"
@@ -27,7 +27,7 @@ platform :android do
   lane :linting do
     gradle(task: "lintRelease")
     gradle(task: "detekt")
-    slack_result(message: "*Karhoo Android NSDK* passed detekt and lint")
+    #slack_result(message: "*Karhoo Android NSDK* passed detekt and lint")
   end
 
   desc "New Build"
