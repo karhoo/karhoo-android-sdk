@@ -250,14 +250,14 @@ class ServerRobot {
                         )
     }
 
-    fun getLoyaltyBalanceResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String) {
+    fun getLoyaltyBalanceResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String = LOYALTY_ID) {
         mockGetResponse(code = code,
                         response = response,
                         endpoint = APITemplate.LOYALTY_BALANCE.replace("{$IDENTIFIER_ID}", id),
                         delayInMillis = delayInMillis)
     }
 
-    fun loyaltyConversionResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String) {
+    fun loyaltyConversionResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String = LOYALTY_ID) {
         mockGetResponse(code = code,
                        response = response,
                        endpoint = APITemplate.LOYALTY_CONVERSION.replace("{$IDENTIFIER_ID}", id),
