@@ -3,7 +3,7 @@ package com.karhoo.sdk.api.service.loyalty
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.model.AuthenticationMethod
-import com.karhoo.sdk.api.model.LoyaltyBalance
+import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
@@ -18,56 +18,56 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class LoyaltyInteractorTest : BaseKarhooUserInteractorTest() {
+class LoyaltyConversionInteractorTest : BaseKarhooUserInteractorTest() {
 
-    private lateinit var interactor: LoyaltyInteractor
+    private lateinit var interactor: LoyaltyConversionInteractor
 
     @Before
     override fun setUp() {
         super.setUp()
         whenever(credentialsManager.isValidToken).thenReturn(true)
-        interactor = LoyaltyInteractor(credentialsManager, apiTemplate, context)
+        interactor = LoyaltyConversionInteractor(credentialsManager, apiTemplate, context)
     }
 
     /**
      * Given:   A valid loyalty id
-     * When:    When requesting loyalty balance
-     * Then:    A balance should be returned
+     * When:    When requesting loyalty conversion
+     * Then:    A loyalty version should be returned
      */
     @Test
-    fun `requesting loyalty balance returns balance`() {
-        val loyaltyBalance = LoyaltyBalance(123, burnable = true)
+    fun `requesting loyalty conversion returns version`() {
+        val loyaltyConversion = LoyaltyConversion("20200312")
 
         KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
                                                                                    applicationContext,
                                                                                    authenticationMethod = AuthenticationMethod.KarhooUser()))
-        whenever(apiTemplate.getLoyaltyBalance(LOYALTY_ID)).thenReturn(CompletableDeferred(Resource.Success(loyaltyBalance)))
+        whenever(apiTemplate.loyaltyConversionRates(LOYALTY_ID)).thenReturn(CompletableDeferred(Resource.Success(loyaltyConversion)))
 
         interactor.loyaltyId = LOYALTY_ID
-        var returnedLoyaltyBalance: LoyaltyBalance? = null
+        var returnedLoyaltyConversion: LoyaltyConversion? = null
         runBlocking {
             interactor.execute { result ->
                 when (result) {
-                    is Resource.Success -> returnedLoyaltyBalance = result.data
+                    is Resource.Success -> returnedLoyaltyConversion = result.data
                     is Resource.Failure -> Assert.fail()
                 }
             }
             delay(5)
         }
 
-        assertNotNull(returnedLoyaltyBalance)
-        assertEquals(loyaltyBalance, returnedLoyaltyBalance)
-        verify(apiTemplate).getLoyaltyBalance(LOYALTY_ID)
+        assertNotNull(returnedLoyaltyConversion)
+        assertEquals(loyaltyConversion, returnedLoyaltyConversion)
+        verify(apiTemplate).loyaltyConversionRates(LOYALTY_ID)
     }
 
     /**
      * Given:   The loyalty programme id isn't set
-     * When:    A request is made to fetch balance
+     * When:    A request is made to fetch conversion
      * Then:    An InternalSDKError is returned
      **/
     @Test
-    fun `loyalty balance null when no loyalty Id is passed`() {
-        var shouldBeNull: LoyaltyBalance? = null
+    fun `loyalty conversion null when no loyalty Id is passed`() {
+        var shouldBeNull: LoyaltyConversion? = null
         var error: KarhooError? = null
 
         runBlocking {
@@ -87,5 +87,4 @@ class LoyaltyInteractorTest : BaseKarhooUserInteractorTest() {
     companion object {
         private const val LOYALTY_ID = "1234"
     }
-
 }

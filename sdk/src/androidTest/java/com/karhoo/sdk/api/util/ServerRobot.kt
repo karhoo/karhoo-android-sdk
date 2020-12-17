@@ -26,7 +26,9 @@ import com.karhoo.sdk.api.model.FleetInfo
 import com.karhoo.sdk.api.model.FleetRating
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.LoyaltyBalance
+import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.model.LoyaltyProgramme
+import com.karhoo.sdk.api.model.LoyaltyRates
 import com.karhoo.sdk.api.model.MeetingPoint
 import com.karhoo.sdk.api.model.Organisation
 import com.karhoo.sdk.api.model.PaymentProvider
@@ -248,11 +250,18 @@ class ServerRobot {
                         )
     }
 
-    fun getLoyaltyBalanceResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String = LOYALTY_ID) {
+    fun getLoyaltyBalanceResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String) {
         mockGetResponse(code = code,
                         response = response,
                         endpoint = APITemplate.LOYALTY_BALANCE.replace("{$IDENTIFIER_ID}", id),
                         delayInMillis = delayInMillis)
+    }
+
+    fun loyaltyConversionResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String) {
+        mockGetResponse(code = code,
+                       response = response,
+                       endpoint = APITemplate.LOYALTY_CONVERSION.replace("{$IDENTIFIER_ID}", id),
+                       delayInMillis = delayInMillis)
     }
 
     fun cancelGuestBookingResponse(code: Int, response: Any, delayInMillis: Int = 0, trip: String) {
@@ -709,6 +718,10 @@ class ServerRobot {
 
         val LOYALTY_BALANCE = LoyaltyBalance(points = 123,
                                             burnable = false)
+
+        val LOYALTY_CONVERSION = LoyaltyConversion(version = "20200312",
+                                                  rates = listOf(LoyaltyRates(currency = "GBP",
+                                                                             points = 5.0)))
 
         /**
          *
