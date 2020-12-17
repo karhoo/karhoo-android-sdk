@@ -42,12 +42,12 @@ jobs:
           destination: tests
       - store_artifacts:
           path: ./build/reports
-      - store_artifacts:
-          path: ./build/reports/jacoco/.*/*.*
-          destination: reports/jacoco
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: sdk/build/reports
           destination: reports
+      - store_artifacts:
+          path: sdk/build/reports/jacoco/.*/*.*
+          destination: reports/jacoco
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: sdk/build/test-results
       - persist_to_workspace:
