@@ -46,7 +46,7 @@ jobs:
       - store_artifacts:
           path: ./build/reports
       - store_artifacts:
-          path: ./build/reports/jacoco/*
+          path: ./build/reports/jacoco/**/*.*
           destination: reports/jacoco
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: sdk/build/reports
