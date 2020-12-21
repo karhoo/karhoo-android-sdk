@@ -1,5 +1,6 @@
 package com.karhoo.sdk.api.util
 
+import com.karhoo.sdk.BuildConfig
 import com.karhoo.sdk.api.model.Address
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.CancellationReason
@@ -132,7 +133,7 @@ class TestData {
                 phoneNumber = "1234567890",
                 locale = "en-GB",
                 organisations = listOf(Organisation(
-                        id = "5a54722d-e699-4da6-801f-a5652e6e31f7",
+                        id = BuildConfig.KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID,
                         name = "Karhoo",
                         roles = listOf("TRIP_ADMIN", InteractorContants.MOBILE_USER)))
         )
