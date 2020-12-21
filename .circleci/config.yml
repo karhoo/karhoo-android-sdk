@@ -24,7 +24,7 @@ jobs:
             echo "KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID=\"KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID"\"" >> sdk/secure.properties
             echo "KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID=\"KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID\"" >> sdk/secure.properties
             echo "KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID=\"KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID\"" >> sdk/secure.properties
-            echo "KARHOO_US_ORGANISATION_ID=\"KARHOO_US_ORGANISATION_ID" >> sdk/secure.properties
+            echo "KARHOO_US_ORGANISATION_ID=\"KARHOO_US_ORGANISATION_ID\"" >> sdk/secure.properties
       - run:
           name: Bundle install
           command: bundle check || bundle install --path vendor/bundle
@@ -43,7 +43,7 @@ jobs:
             echo "KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID=\"KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID"\"" >> sdk/secure.properties
             echo "KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID=\"KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID\"" >> sdk/secure.properties
             echo "KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID=\"KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID\"" >> sdk/secure.properties
-            echo "KARHOO_US_ORGANISATION_ID=\"KARHOO_US_ORGANISATION_ID" >> sdk/secure.properties
+            echo "KARHOO_US_ORGANISATION_ID=\"KARHOO_US_ORGANISATION_ID\"" >> sdk/secure.properties
       - run:
           name: Run unit test
           command: bundle exec fastlane $FASTLANE_LANE_TEST
