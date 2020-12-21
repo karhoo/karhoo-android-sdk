@@ -7,7 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import com.karhoo.sdk.BuildConfig
+import com.karhoo.sdk.test.BuildConfig
 import com.karhoo.sdk.api.model.Address
 import com.karhoo.sdk.api.model.Availability
 import com.karhoo.sdk.api.model.AvailabilityVehicle
