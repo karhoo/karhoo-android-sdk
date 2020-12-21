@@ -58,6 +58,10 @@ android {
     }
 
     buildTypes {
+        def secureProps = new Properties()
+        if (file("secure.properties").exists()) {
+            file("secure.properties")?.withInputStream { secureProps.load(it) }
+        }
         release {
         }
         sandbox {
