@@ -34,6 +34,20 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "com.karhoo.sdk.api.testrunner.SDKTestRunner"
+
+        def secureProps = new Properties()
+        if (file("secure.properties").exists()) {
+            file("secure.properties")?.withInputStream { secureProps.load(it) }
+        }
+        buildConfigField("String", "KARHOO_TRAVELLER_ORGANISATION_ID", (secureProps.getProperty("KARHOO_TRAVELLER_ORGANISATION_ID") ?: ""))
+        buildConfigField("String", "KARHOO_INTERNAL_ORGANISATION_ID", (secureProps.getProperty("KARHOO_INTERNAL_ORGANISATION_ID") ?: ""))
+        buildConfigField("String", "KARHOO_PROD_BRAINTREE_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_PROD_BRAINTREE_DEFAULT_ORGANISATION_ID") ?: ""))
+        buildConfigField("String", "KARHOO_SANDBOX_BRAINTREE_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_SANDBOX_BRAINTREE_DEFAULT_ORGANISATION_ID") ?: ""))
+        buildConfigField("String", "KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID") ?: ""))
+        buildConfigField("String", "KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID") ?: ""))
+        buildConfigField("String", "KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID") ?: ""))
+        buildConfigField("String", "KARHOO_US_ORGANISATION_ID", (secureProps.getProperty("KARHOO_US_ORGANISATION_ID") ?: ""))
+
         buildConfigField("String", "KARHOO_API_POINT_SANDBOX", '"https://rest.sandbox.karhoo.com"')
         buildConfigField("String", "KARHOO_AUTH_API_POINT_SANDBOX", '"https://sso.sandbox.karhoo.com"')
         buildConfigField("String", "KARHOO_GUEST_API_POINT_SANDBOX", '"https://public-api.sandbox.karhoo.com"')
