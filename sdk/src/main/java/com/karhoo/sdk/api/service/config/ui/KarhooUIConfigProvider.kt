@@ -15,8 +15,6 @@ class KarhooUIConfigProvider : UIConfigProvider {
 
     override fun fetchConfig(uiConfigRequest: UIConfigRequest, organistionId: Organisation): Deferred<Resource<UIConfig>> {
 
-        // TODO: Review before making publishing this project to open source
-
         val uiSettings = UISettings(
                 mapOf(
                         BuildConfig.KARHOO_TRAVELLER_ORGANISATION_ID to UISetting(
