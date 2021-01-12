@@ -64,7 +64,7 @@ class QuotesInteractorTest {
      */
     @Test
     fun `quotes returns successful response`() {
-        val quotesList = QuoteList(categories = mapOf(), id = QuoteId("1234567"), status = quoteStatus, validity = 10)
+        val quotesList = QuoteList(categories = mapOf(), id = QuoteId("1234567"), status = QuoteStatus.PROGRESSING, validity = 10)
         whenever(apiTemplate.quotes(any<QuotesRequest>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
         whenever(apiTemplate.quotes(ArgumentMatchers.anyString()))
@@ -233,8 +233,6 @@ class QuotesInteractorTest {
         val destination = LocationInfo(placeId = "5678ZXA", position = Position(latitude = 0.3,
                                                                                 longitude = 0.4))
         val dateScheduled = Date()
-
-        val quoteStatus = QuoteStatus.PROGRESSING
 
         val quotesSearch = QuotesSearch(origin, destination, dateScheduled)
         val quotesSearchNoDate = QuotesSearch(origin, destination, null)
