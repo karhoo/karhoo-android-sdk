@@ -5,6 +5,7 @@ import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
+import com.karhoo.sdk.api.model.QuoteStatus
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -84,6 +85,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
         this.vehicles?.let {
 
             val quotesMap = mutableMapOf<String, List<Quote>>()
+            val quotesStatus = QuoteStatus.PROGRESSING
             val categoryNames = it.availability.vehicles.classes
 
             categoryNames.forEach { category ->
@@ -93,7 +95,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
                 }
                 quotesMap[category] = filteredVehicles
             }
-            return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap))
+            return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap, status = quotesStatus, validity = 10))
         } ?: return Resource.Failure(error = KarhooError.InternalSDKError)
     }
 

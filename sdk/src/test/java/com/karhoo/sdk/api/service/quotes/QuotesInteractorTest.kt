@@ -9,6 +9,7 @@ import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
+import com.karhoo.sdk.api.model.QuoteStatus
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -63,7 +64,7 @@ class QuotesInteractorTest {
      */
     @Test
     fun `quotes returns successful response`() {
-        val quotesList = QuoteList(categories = mapOf(), id = QuoteId("1234567"))
+        val quotesList = QuoteList(categories = mapOf(), id = QuoteId("1234567"), status = QuoteStatus.PROGRESSING, validity = 10)
         whenever(apiTemplate.quotes(any<QuotesRequest>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
         whenever(apiTemplate.quotes(ArgumentMatchers.anyString()))

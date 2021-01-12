@@ -22,6 +22,7 @@ import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuoteSource
+import com.karhoo.sdk.api.model.QuoteStatus
 import com.karhoo.sdk.api.model.QuoteType
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.TripInfo
@@ -248,6 +249,8 @@ class TestData {
 
         val QUOTE_LIST = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),
+                status = QuoteStatus.COMPLETED,
+                validity = 10,
                 categories = mapOf(
                         Pair("Saloon", emptyList()),
                         Pair("Taxi", emptyList()),
@@ -258,6 +261,8 @@ class TestData {
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),
+                status = QuoteStatus.PROGRESSING,
+                validity = 10,
                 categories = mapOf(
                         Pair("Saloon", emptyList()),
                         Pair("Taxi", emptyList()),

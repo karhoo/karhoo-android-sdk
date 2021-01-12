@@ -7,7 +7,9 @@ enum class QuoteStatus constructor(private val status: String) {
     @SerializedName("PROGRESSING")
     PROGRESSING("PROGRESSING"),
     @SerializedName("COMPLETED")
-    COMPLETED("COMPLETED");
+    COMPLETED("COMPLETED"),
+
+    GENERIC("GENERIC");
 
     override fun toString(): String {
         val sb = StringBuilder("QuoteStatus{")
