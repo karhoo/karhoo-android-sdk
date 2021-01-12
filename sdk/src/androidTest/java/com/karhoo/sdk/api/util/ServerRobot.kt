@@ -48,6 +48,7 @@ import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotePrice
 import com.karhoo.sdk.api.model.QuotePriceNet
 import com.karhoo.sdk.api.model.QuoteSource
+import com.karhoo.sdk.api.model.QuoteStatus
 import com.karhoo.sdk.api.model.QuoteType
 import com.karhoo.sdk.api.model.QuoteVehicle
 import com.karhoo.sdk.api.model.TripInfo
@@ -509,7 +510,7 @@ class ServerRobot {
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_ID.quoteId),
-                status = "PROGRESSING",
+                status = QuoteStatus.PROGRESSING,
                 validity = 10,
                 categories = mapOf(
                         "Saloon" to emptyList(),
