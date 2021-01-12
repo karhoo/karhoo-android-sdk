@@ -84,6 +84,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
         this.vehicles?.let {
 
             val quotesMap = mutableMapOf<String, List<Quote>>()
+            val quotesStatus = it.status
             val categoryNames = it.availability.vehicles.classes
 
             categoryNames.forEach { category ->
@@ -93,7 +94,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
                 }
                 quotesMap[category] = filteredVehicles
             }
-            return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap))
+            return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap, status = quotesStatus, validity = 10))
         } ?: return Resource.Failure(error = KarhooError.InternalSDKError)
     }
 

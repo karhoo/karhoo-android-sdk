@@ -509,6 +509,8 @@ class ServerRobot {
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_ID.quoteId),
+                status = "PROGRESSING",
+                validity = 10,
                 categories = mapOf(
                         "Saloon" to emptyList(),
                         "Taxi" to emptyList(),

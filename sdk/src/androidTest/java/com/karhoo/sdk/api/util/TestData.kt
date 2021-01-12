@@ -248,6 +248,8 @@ class TestData {
 
         val QUOTE_LIST = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),
+                status = "PROGRESSING",
+                validity = 10,
                 categories = mapOf(
                         Pair("Saloon", emptyList()),
                         Pair("Taxi", emptyList()),
@@ -258,6 +260,8 @@ class TestData {
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),
+                status = "COMPLETED",
+                validity = 10,
                 categories = mapOf(
                         Pair("Saloon", emptyList()),
                         Pair("Taxi", emptyList()),

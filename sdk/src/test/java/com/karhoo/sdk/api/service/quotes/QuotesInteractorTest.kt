@@ -63,7 +63,7 @@ class QuotesInteractorTest {
      */
     @Test
     fun `quotes returns successful response`() {
-        val quotesList = QuoteList(categories = mapOf(), id = QuoteId("1234567"))
+        val quotesList = QuoteList(categories = mapOf(), id = QuoteId("1234567"), status = "", validity = 10)
         whenever(apiTemplate.quotes(any<QuotesRequest>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
         whenever(apiTemplate.quotes(ArgumentMatchers.anyString()))
