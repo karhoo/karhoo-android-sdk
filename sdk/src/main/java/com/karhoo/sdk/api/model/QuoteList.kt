@@ -6,5 +6,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class QuoteList(val categories: Map<String, List<Quote>>,
                      val id: QuoteId,
-                     val status: QuoteStatus = QuoteStatus.COMPLETED,
+                     val status: QuoteStatus? = null,
                      val validity: Int) : Parcelable

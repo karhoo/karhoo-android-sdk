@@ -2,10 +2,11 @@ package com.karhoo.sdk.api.model
 
 import com.google.gson.annotations.SerializedName
 
-enum class QuoteStatus constructor(private val status: String) {
+enum class QuoteStatus constructor(val status: String) {
 
     @SerializedName("PROGRESSING")
     PROGRESSING("PROGRESSING"),
+
     @SerializedName("COMPLETED")
     COMPLETED("COMPLETED"),
 

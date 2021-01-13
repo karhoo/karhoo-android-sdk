@@ -8,5 +8,5 @@ import kotlinx.android.parcel.Parcelize
 data class Vehicles(@SerializedName("id") val id: String = "",
                     @SerializedName("availability") val availability: Availability = Availability(),
                     @SerializedName("quotes") val quotes: List<Quote> = emptyList(),
-                    @SerializedName("status") val status: String? = null,
+                    @SerializedName("status") val status: QuoteStatus? = null,
                     @SerializedName("validity") val validity: Int = 0) : Parcelable
