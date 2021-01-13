@@ -68,7 +68,8 @@ class QuotesInteractorTest {
         whenever(apiTemplate.quotes(any<QuotesRequest>()))
                 .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
         whenever(apiTemplate.quotes(ArgumentMatchers.anyString()))
-                .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
+                .thenReturn(CompletableDeferred(Resource.Success(Vehicles(
+                        status = QuoteStatus.PROGRESSING, validity = 10))))
 
         interactor.quotesSearch = quotesSearch
 
