@@ -6,6 +6,7 @@ import com.karhoo.sdk.api.service.auth.AuthService
 import com.karhoo.sdk.api.service.config.ConfigService
 import com.karhoo.sdk.api.service.drivertracking.DriverTrackingService
 import com.karhoo.sdk.api.service.fare.FareService
+import com.karhoo.sdk.api.service.loyalty.LoyaltyService
 import com.karhoo.sdk.api.service.payments.PaymentsService
 import com.karhoo.sdk.api.service.quotes.QuotesService
 import com.karhoo.sdk.api.service.trips.TripsService
@@ -34,5 +35,7 @@ interface KarhooService {
     val configService: ConfigService
 
     val fareService: FareService
+
+    val loyaltyService: LoyaltyService
 
 }

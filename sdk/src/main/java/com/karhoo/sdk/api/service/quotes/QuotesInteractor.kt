@@ -93,7 +93,8 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
                 }
                 quotesMap[category] = filteredVehicles
             }
-            return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap))
+            return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap,
+                                              status = it.status, validity = it.validity))
         } ?: return Resource.Failure(error = KarhooError.InternalSDKError)
     }
 

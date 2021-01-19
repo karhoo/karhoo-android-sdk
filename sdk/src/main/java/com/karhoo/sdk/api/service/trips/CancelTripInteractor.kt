@@ -26,9 +26,11 @@ internal class CancelTripInteractor @Inject constructor(credentialsManager: Cred
         tripCancellation?.let {
             return if (KarhooSDKConfigurationProvider.configuration.authenticationMethod() is
                             AuthenticationMethod.Guest) {
-                apiTemplate.cancelGuestBooking(it.tripIdentifier, CancellationRequest(reason = it.reason))
+                apiTemplate.cancelGuestBooking(it.tripIdentifier, CancellationRequest(reason = it.reason,
+                                                                                      explanation = it.explanation))
             } else {
-                apiTemplate.cancel(it.tripIdentifier, CancellationRequest(reason = it.reason))
+                apiTemplate.cancel(it.tripIdentifier, CancellationRequest(reason = it.reason,
+                                                                          explanation = it.explanation))
             }
         } ?: run {
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))

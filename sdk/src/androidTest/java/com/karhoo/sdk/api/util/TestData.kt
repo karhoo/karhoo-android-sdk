@@ -1,5 +1,6 @@
 package com.karhoo.sdk.api.util
 
+import com.karhoo.sdk.test.BuildConfig
 import com.karhoo.sdk.api.model.Address
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.CancellationReason
@@ -21,6 +22,7 @@ import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuoteSource
+import com.karhoo.sdk.api.model.QuoteStatus
 import com.karhoo.sdk.api.model.QuoteType
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.TripInfo
@@ -111,14 +113,14 @@ class TestData {
                 countryCode = "UK")
 
         val LOCATION_INFO = LocationInfo(position = Position(LATITUDE, LONGITUDE),
-                placeId = "123",
-                poiType = Poi.REGULATED,
-                address = ADDRESS,
-                timezone = "UK",
-                details = PoiDetails(iata = "iata",
+                                         placeId = "123",
+                                         poiType = Poi.REGULATED,
+                                         address = ADDRESS,
+                                         timezone = "UK",
+                                         details = PoiDetails(iata = "iata",
                         terminal = "terminal",
                         type = null),
-                meetingPoint = MeetingPoint(position = Position(
+                                         meetingPoint = MeetingPoint(position = Position(
                         latitude = 51.5062894,
                         longitude = -0.0859324),
                         instructions = "I am near by",
@@ -132,7 +134,7 @@ class TestData {
                 phoneNumber = "1234567890",
                 locale = "en-GB",
                 organisations = listOf(Organisation(
-                        id = "5a54722d-e699-4da6-801f-a5652e6e31f7",
+                        id = BuildConfig.KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID,
                         name = "Karhoo",
                         roles = listOf("TRIP_ADMIN", InteractorContants.MOBILE_USER)))
         )
@@ -247,6 +249,8 @@ class TestData {
 
         val QUOTE_LIST = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),
+                status = QuoteStatus.COMPLETED,
+                validity = 10,
                 categories = mapOf(
                         Pair("Saloon", emptyList()),
                         Pair("Taxi", emptyList()),
@@ -257,6 +261,8 @@ class TestData {
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_LIST_ID),
+                status = QuoteStatus.PROGRESSING,
+                validity = 10,
                 categories = mapOf(
                         Pair("Saloon", emptyList()),
                         Pair("Taxi", emptyList()),
