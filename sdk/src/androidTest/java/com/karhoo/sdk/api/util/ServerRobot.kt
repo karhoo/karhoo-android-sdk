@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.karhoo.sdk.test.BuildConfig
 import com.karhoo.sdk.api.model.Address
 import com.karhoo.sdk.api.model.Availability
 import com.karhoo.sdk.api.model.AvailabilityVehicle
@@ -25,7 +26,10 @@ import com.karhoo.sdk.api.model.FareBreakdown
 import com.karhoo.sdk.api.model.FleetInfo
 import com.karhoo.sdk.api.model.FleetRating
 import com.karhoo.sdk.api.model.LocationInfo
+import com.karhoo.sdk.api.model.LoyaltyBalance
+import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.model.LoyaltyProgramme
+import com.karhoo.sdk.api.model.LoyaltyRates
 import com.karhoo.sdk.api.model.MeetingPoint
 import com.karhoo.sdk.api.model.Organisation
 import com.karhoo.sdk.api.model.PaymentProvider
@@ -44,6 +48,7 @@ import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotePrice
 import com.karhoo.sdk.api.model.QuotePriceNet
 import com.karhoo.sdk.api.model.QuoteSource
+import com.karhoo.sdk.api.model.QuoteStatus
 import com.karhoo.sdk.api.model.QuoteType
 import com.karhoo.sdk.api.model.QuoteVehicle
 import com.karhoo.sdk.api.model.TripInfo
@@ -247,6 +252,20 @@ class ServerRobot {
                         )
     }
 
+    fun getLoyaltyBalanceResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String = LOYALTY_ID) {
+        mockGetResponse(code = code,
+                        response = response,
+                        endpoint = APITemplate.LOYALTY_BALANCE.replace("{$IDENTIFIER_ID}", id),
+                        delayInMillis = delayInMillis)
+    }
+
+    fun loyaltyConversionResponse(code: Int, response: Any, delayInMillis: Int = 0, id: String = LOYALTY_ID) {
+        mockGetResponse(code = code,
+                       response = response,
+                       endpoint = APITemplate.LOYALTY_CONVERSION.replace("{$IDENTIFIER_ID}", id),
+                       delayInMillis = delayInMillis)
+    }
+
     fun cancelGuestBookingResponse(code: Int, response: Any, delayInMillis: Int = 0, trip: String) {
         mockPostResponse(
                 code = code,
@@ -434,6 +453,8 @@ class ServerRobot {
          */
         val BOOKING_ID = "BK123"
 
+        val LOYALTY_ID = "LP123"
+
         val AVAILABILITIES = Categories(listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"))
 
         val QUOTE_ID = QuoteId(quoteId = "129e51a-bc10-11e8-a821-0a580a0414db")
@@ -489,6 +510,8 @@ class ServerRobot {
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_ID.quoteId),
+                status = QuoteStatus.PROGRESSING,
+                validity = 10,
                 categories = mapOf(
                         "Saloon" to emptyList(),
                         "Taxi" to emptyList(),
@@ -554,7 +577,7 @@ class ServerRobot {
                 locale = "en-GB",
                 primaryOrganisationId = "Karhoo",
                 organisations = listOf(Organisation(
-                        id = "5a54722d-e699-4da6-801f-a5652e6e31f7",
+                        id = BuildConfig.KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID,
                         name = "Karhoo",
                         roles = listOf("TRIP_ADMIN")
                                                    ))
@@ -690,6 +713,19 @@ class ServerRobot {
         val TRIP_LIST_COMPLETED = TripList(listOf(TRIP_DER.copy(
                 tripState = TripStatus.COMPLETED)
                                                  ))
+
+        /**
+         *
+         * Loyalty
+         *
+         */
+
+        val LOYALTY_BALANCE = LoyaltyBalance(points = 123,
+                                            burnable = false)
+
+        val LOYALTY_CONVERSION = LoyaltyConversion(version = "20200312",
+                                                  rates = listOf(LoyaltyRates(currency = "GBP",
+                                                                             points = 5.0)))
 
         /**
          *

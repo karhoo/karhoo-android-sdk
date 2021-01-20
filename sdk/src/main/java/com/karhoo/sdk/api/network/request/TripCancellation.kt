@@ -6,5 +6,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class TripCancellation(val tripIdentifier: String,
-                            val reason: CancellationReason = CancellationReason.OTHER_USER_REASON) : Parcelable
+                            val reason: CancellationReason = CancellationReason.OTHER_USER_REASON,
+                            val explanation: String? = "") : Parcelable
 
