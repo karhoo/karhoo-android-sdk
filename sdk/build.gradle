@@ -77,7 +77,7 @@ android {
 
 publish {
     def groupProjectID = 'com.karhoo'
-    def artifactProjectID = 'nsdk-canary'
+    def artifactProjectID = 'nsdk'
     def publishVersionID = '1.2.0-rc-1'
     def repoNameID = 'Android'
 
