@@ -1,7 +1,9 @@
 package com.karhoo.sdk.api.service.trips
 
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.BookingFee
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
@@ -21,7 +23,12 @@ internal class CancellationFeeInteractor @Inject constructor(credentialsManager:
 
     override fun createRequest(): Deferred<Resource<BookingFee>> {
         feeIdentifier?.let { feeIdentifier ->
-            return apiTemplate.cancellationFee(feeIdentifier)
+            if (KarhooSDKConfigurationProvider.configuration.authenticationMethod() is
+                            AuthenticationMethod.Guest) {
+                return apiTemplate.getGuestCancelFee(feeIdentifier)
+            } else {
+                return apiTemplate.cancellationFee(feeIdentifier)
+            }
         } ?: run {
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))        }
     }

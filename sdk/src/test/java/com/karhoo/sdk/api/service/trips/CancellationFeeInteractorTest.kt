@@ -116,6 +116,38 @@ class CancellationFeeInteractorTest : BaseKarhooUserInteractorTest() {
         Assert.assertNull(shouldBeNull)
     }
 
+    /**
+     * Given: The follow code is set
+     * When: A request is made to cancel a guest trip
+     * Then: Booking fee should be returned
+     */
+    @Test
+    fun `cancellation to a guest trip returns true`() {
+        val bookingFee = BookingFee(true)
+
+        KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
+                                                                                   applicationContext,
+                                                                                   authenticationMethod = AuthenticationMethod.Guest("identifier", "referer", "organisationId")))
+        whenever(apiTemplate.getGuestCancelFee(FEE_IDENTIFIER)).thenReturn(CompletableDeferred
+                                                                         (Resource.Success(bookingFee)))
+
+        interactor.feeIdentifier = FEE_IDENTIFIER
+        var returnedBookingFee: BookingFee? = null
+        runBlocking {
+            interactor.execute { result ->
+                when (result) {
+                    is Resource.Success -> returnedBookingFee = result.data
+                    is Resource.Failure -> Assert.fail()
+                }
+            }
+            delay(5)
+        }
+
+        assertNotNull(returnedBookingFee)
+        assertEquals(bookingFee, returnedBookingFee)
+        verify(apiTemplate).getGuestCancelFee(FEE_IDENTIFIER)
+    }
+
     companion object {
         private const val FEE_IDENTIFIER = "1234"
     }
