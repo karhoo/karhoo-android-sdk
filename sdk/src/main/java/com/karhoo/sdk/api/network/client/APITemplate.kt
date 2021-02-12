@@ -80,6 +80,7 @@ interface   APITemplate {
         const val BOOKING_HISTORY_METHOD = "/v1/bookings/search"
         const val CANCEL_BOOKING_METHOD = "/v1/bookings/{id}/cancel"
         const val CANCEL_GUEST_BOOKING_METHOD = "/v1/bookings/follow/{id}/cancel"
+        const val CANCEL_FEE_GUEST_BOOKING_METHOD = "/v1/bookings/follow/{id}/cancel-fee"
         const val SDK_INITIALISER_METHOD = "/v2/payments/payment-methods/braintree/client-tokens"
         const val ADD_CARD_METHOD = "/v2/payments/payment-methods/braintree/add-payment-details"
         const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-payment-method"
@@ -191,6 +192,9 @@ interface   APITemplate {
 
     @POST(CANCEL_GUEST_BOOKING_METHOD)
     fun cancelGuestBooking(@Path(IDENTIFIER_ID) tripIdentifier: String, @Body cancellationRequest: CancellationRequest): Deferred<Resource<Void>>
+
+    @GET(CANCEL_FEE_GUEST_BOOKING_METHOD)
+    fun getGuestCancelFee(@Path(IDENTIFIER_ID) followCode: String?): Deferred<Resource<BookingFee>>
 
     @POST(SDK_INITIALISER_METHOD)
     fun sdkInitToken(@Query(IDENTIFIER_ORG) organisationId: String, @Query(IDENTIFIER_CURRENCY) currency: String): Deferred<Resource<BraintreeSDKToken>>
