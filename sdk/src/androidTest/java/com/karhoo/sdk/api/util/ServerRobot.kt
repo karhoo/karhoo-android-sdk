@@ -496,7 +496,7 @@ class ServerRobot {
                 types = listOf("Electric", "Standard", "MPV")))
 
         val VEHICLES = Vehicles(
-                status = "PROGRESSING",
+                status = QuoteStatus.PROGRESSING,
                 id = QUOTE_ID.quoteId,
                 availability = AVAILABILITY,
                 quotes = listOf(

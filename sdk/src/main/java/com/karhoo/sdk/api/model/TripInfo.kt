@@ -31,4 +31,5 @@ data class TripInfo(@SerializedName("id") val tripId: String = "",
                     @SerializedName("agent") val agent: Agent? = null,
                     @SerializedName("cost_center_reference") val costReference: String? = null,
                     @SerializedName("cancelled_by") val cancelledBy: Payer? = null,
-                    @SerializedName("train_time") val trainTime: String? = null) : Parcelable
+                    @SerializedName("train_time") val trainTime: String? = null,
+                    @SerializedName("service_level_agreements") val serviceAgreements: ServiceAgreements? = null) : Parcelable
