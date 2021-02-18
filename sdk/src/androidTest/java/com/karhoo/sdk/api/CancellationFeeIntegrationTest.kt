@@ -16,7 +16,6 @@ import com.karhoo.sdk.api.util.serverRobot
 import org.assertj.core.api.Java6Assertions.assertThat
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
