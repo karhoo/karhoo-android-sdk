@@ -11,4 +11,5 @@ data class Quote(@SerializedName("id") val id: String? = null,
                  @SerializedName("quote_type") val quoteType: QuoteType = QuoteType.ESTIMATED,
                  @SerializedName("source") val quoteSource: QuoteSource = QuoteSource.FLEET,
                  @SerializedName("fleet") val fleet: FleetInfo = FleetInfo(),
-                 @SerializedName("vehicle") val vehicle: QuoteVehicle = QuoteVehicle()) : Parcelable
+                 @SerializedName("vehicle") val vehicle: QuoteVehicle = QuoteVehicle(),
+                 @SerializedName("service_level_agreements") val serviceAgreements: ServiceAgreements? = null) : Parcelable
