@@ -62,7 +62,7 @@ class KarhooErrorTest {
     /**
      * Given:   An unrecognised HTTP error is thrown
      * When:    Parsing the error fails
-     * Then:    A defult error should be returned
+     * Then:    A default error should be returned
      **/
     @Test
     fun `parsing a http error fails and returns an unexpected error`() {
@@ -71,5 +71,19 @@ class KarhooErrorTest {
         val errorResult = KarhooError.fromThrowable(exception)
 
         assertEquals(KarhooError.Unexpected, errorResult)
+    }
+
+    /**
+     * Given:   A Custom Error happens with custom error code
+     * When:    Parsing the error fails
+     * Then:    A custom error should be returned
+     **/
+    @Test
+    fun `parsing a custom error happened and returns an custom error`() {
+        val errorResult = KarhooError.fromCustomError("customCode", "customInternalMessage",
+                                                      "customUserFriendlyMessage")
+
+        assertEquals(KarhooError.Custom, errorResult)
+        assertEquals(KarhooError.Custom.code, "KSDK00 customCode")
     }
 }

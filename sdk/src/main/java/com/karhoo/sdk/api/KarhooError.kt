@@ -9,9 +9,13 @@ import java.net.SocketTimeoutException
 
 enum class KarhooError(var code: String,
                        var internalMessage: String,
-                       val userFriendlyMessage: String) {
+                       var userFriendlyMessage: String) {
 
-    Unexpected("KSDK001",
+    Custom("KSDK00",
+               "Something went wrong but we don't know what it was",
+               "Something went wrong but we don't know what it was."),
+
+    Unexpected("KSDK01",
                "Something went wrong but we don't know what it was",
                "Something went wrong but we don't know what it was."),
 
@@ -299,8 +303,17 @@ enum class KarhooError(var code: String,
             }
             return Unexpected
         }
-    }
 
+        fun fromCustomError(erCode: String,
+                            erInternalMessage: String,
+                            erUserFriendlyMessage: String): KarhooError {
+            return Custom.apply {
+                code = "KSDK00 $erCode"
+                internalMessage = erInternalMessage
+                userFriendlyMessage = erUserFriendlyMessage
+            }
+        }
+    }
 }
 
 private fun parseHttpException(error: HttpException): KarhooError {
