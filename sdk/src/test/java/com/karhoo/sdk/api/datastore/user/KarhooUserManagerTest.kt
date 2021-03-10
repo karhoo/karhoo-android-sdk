@@ -89,8 +89,8 @@ class KarhooUserManagerTest {
     }
 
     /**
-     * Given    A user has requested that they want there details removed
-     * When     Trying to delete there details
+     * Given    A user has requested that they want their details removed
+     * When     Trying to delete their details
      * Then     The details should be deleted from shared preferences
      *
      */
@@ -100,6 +100,21 @@ class KarhooUserManagerTest {
         whenever(editor.putString(anyString(), eq(null))).thenReturn(editor)
 
         karhooUserManager.deleteUser()
+
+        verify(editor).apply()
+    }
+
+    /**
+     * Given    A user has requested that they want there saved payment info removed
+     * Then     The the saved payment info should be deleted from shared preferences
+     *
+     */
+    @Test
+    fun `delete saved payment info from shared preferences nulls out the values`() {
+        whenever(preferences.edit()).thenReturn(editor)
+        whenever(editor.putString(anyString(), eq(null))).thenReturn(editor)
+
+        karhooUserManager.deleteSavedPaymentInfo()
 
         verify(editor).apply()
     }

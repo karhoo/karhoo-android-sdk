@@ -119,6 +119,12 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
         }
     }
 
+    override fun deleteSavedPaymentInfo() {
+        sharedPreferences.edit().putString(LAST_FOUR, null)
+                .putString(CARD_TYPE, null)
+                .apply()
+    }
+
     override fun deleteUser() {
         sharedPreferences.edit().putString(FIRST_NAME, null)
                 .putString(LAST_NAME, null)
