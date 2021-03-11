@@ -23,6 +23,7 @@ import com.karhoo.sdk.api.model.Driver
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.FareBreakdown
+import com.karhoo.sdk.api.model.Fleet
 import com.karhoo.sdk.api.model.FleetInfo
 import com.karhoo.sdk.api.model.FleetRating
 import com.karhoo.sdk.api.model.LocationInfo
@@ -465,7 +466,7 @@ class ServerRobot {
 
         val QUOTE_NET_PRICE = QuotePriceNet(highPrice = 779, lowPrice = 778)
 
-        val QUOTE_FLEET = FleetInfo(fleetId = "someFleetId",
+        val QUOTE_FLEET = Fleet(id = "someFleetId",
                                     name = "someFleetName",
                                     logoUrl = "someLogoUrl",
                                     description = "Some fleet description",
@@ -505,7 +506,7 @@ class ServerRobot {
                                 id = "someOtherQuoteId",
                                 quoteSource = QuoteSource.FLEET,
                                 quoteType = QuoteType.METERED,
-                                fleet = QUOTE_FLEET.copy(fleetId = "someOtherFleetId"))
+                                fleet = QUOTE_FLEET.copy(id = "someOtherFleetId"))
                                ))
 
         val QUOTE_LIST_EMPTY = QuoteList(

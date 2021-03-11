@@ -112,7 +112,7 @@ class QuotesIntegrationTest {
         assertEquals(QUOTE.quoteSource, saloonQuotes?.get(0)?.quoteSource)
         assertEquals(QUOTE.quoteType, saloonQuotes?.get(0)?.quoteType)
         assertEquals("someOtherQuoteId", saloonQuotes?.get(1)?.id)
-        assertEquals("someOtherFleetId", saloonQuotes?.get(1)?.fleet?.fleetId)
+        assertEquals("someOtherFleetId", saloonQuotes?.get(1)?.fleet?.id)
         assertEquals(QuoteSource.FLEET, saloonQuotes?.get(1)?.quoteSource)
         assertEquals(QuoteType.METERED, saloonQuotes?.get(1)?.quoteType)
     }

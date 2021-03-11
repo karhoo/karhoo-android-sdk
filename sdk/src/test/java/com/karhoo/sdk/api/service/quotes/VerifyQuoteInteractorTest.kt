@@ -1,7 +1,7 @@
 package com.karhoo.sdk.api.service.quotes
 
 import com.karhoo.sdk.api.KarhooError
-import com.karhoo.sdk.api.model.FleetInfo
+import com.karhoo.sdk.api.model.Fleet
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuotePrice
@@ -122,7 +122,7 @@ class VerifyQuoteInteractorTest : BaseKarhooUserInteractorTest() {
 
         val PRICE = QuotePrice()
 
-        val FLEET = FleetInfo()
+        val FLEET = Fleet()
 
         val VEHICLE = QuoteVehicle()
     }
