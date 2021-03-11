@@ -1,6 +1,5 @@
 package com.karhoo.sdk.api.datastore.user
 
-import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.UserInfo
 
@@ -17,6 +16,8 @@ interface UserManager {
     fun saveUser(userInfo: UserInfo)
 
     fun deleteUser()
+
+    fun deleteSavedPaymentInfo()
 
     fun addSavedPaymentObserver(userInfoListener: OnUserPaymentChangedListener?)
 

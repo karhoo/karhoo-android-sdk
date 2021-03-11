@@ -14,6 +14,10 @@ class KarhooUserStore : UserStore {
     @Inject
     internal lateinit var credentialsManager: CredentialsManager
 
+    override fun clearSavedPaymentInfo() {
+        userManager.deleteSavedPaymentInfo()
+    }
+
     override fun removeCurrentUser() {
         userManager.deleteUser()
         credentialsManager.deleteCredentials()
