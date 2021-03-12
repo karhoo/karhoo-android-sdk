@@ -459,6 +459,8 @@ class ServerRobot {
         val AVAILABILITIES = Categories(listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"))
 
         val QUOTE_ID = QuoteId(quoteId = "129e51a-bc10-11e8-a821-0a580a0414db")
+        val SOME_OTHER_QUOTE_ID_VALUE = "someOtherQuoteId"
+        val SOME_OTHER_FLEET_ID = "someOtherQuoteId"
 
         val QUOTE_PRICE = QuotePrice(currencyCode = "GBP",
                                      highPrice = 779,
