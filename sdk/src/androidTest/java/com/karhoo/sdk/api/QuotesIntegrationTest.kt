@@ -26,6 +26,8 @@ import com.karhoo.sdk.api.util.ServerRobot.Companion.K3001_ERROR
 import com.karhoo.sdk.api.util.ServerRobot.Companion.NO_BODY
 import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE_ID
 import com.karhoo.sdk.api.util.ServerRobot.Companion.QUOTE
+import com.karhoo.sdk.api.util.ServerRobot.Companion.SOME_OTHER_FLEET_ID
+import com.karhoo.sdk.api.util.ServerRobot.Companion.SOME_OTHER_QUOTE_ID_VALUE
 import com.karhoo.sdk.api.util.ServerRobot.Companion.VEHICLES
 import com.karhoo.sdk.api.util.TestData
 import com.karhoo.sdk.api.util.serverRobot
@@ -111,8 +113,8 @@ class QuotesIntegrationTest {
         assertEquals(QUOTE.fleet, saloonQuotes?.get(0)?.fleet)
         assertEquals(QUOTE.quoteSource, saloonQuotes?.get(0)?.quoteSource)
         assertEquals(QUOTE.quoteType, saloonQuotes?.get(0)?.quoteType)
-        assertEquals("someOtherQuoteId", saloonQuotes?.get(1)?.id)
-        assertEquals("someOtherFleetId", saloonQuotes?.get(1)?.fleet?.fleetId)
+        assertEquals(SOME_OTHER_QUOTE_ID_VALUE, saloonQuotes?.get(1)?.id)
+        assertEquals(SOME_OTHER_FLEET_ID, saloonQuotes?.get(1)?.fleet?.id)
         assertEquals(QuoteSource.FLEET, saloonQuotes?.get(1)?.quoteSource)
         assertEquals(QuoteType.METERED, saloonQuotes?.get(1)?.quoteType)
     }
