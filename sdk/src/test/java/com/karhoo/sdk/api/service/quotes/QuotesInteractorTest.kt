@@ -154,7 +154,6 @@ class QuotesInteractorTest {
      * When:    The request is executed
      * Then:    Only the quotes endpoint should fire
      **/
-    @Ignore("Seems to be flaky")
     @Test
     fun `repeated requests uses the same quote id`() {
         whenever(apiTemplate.quotes(any<QuotesRequest>()))
@@ -178,7 +177,45 @@ class QuotesInteractorTest {
         }
 
         verify(apiTemplate, times(1)).quotes(any<QuotesRequest>())
-        verify(apiTemplate, times(5)).quotes(ArgumentMatchers.anyString())
+        verify(apiTemplate, times(5)).quotes("1234567")
+    }
+
+    /**
+     * Given:   A second request is made
+     * When:    The request is executed
+     * Then:    Only the quotes endpoint should fire
+     **/
+    @Test
+    fun `quote id is cleared when a quote status of completed is returned`() {
+        val progressingQuote = CompletableDeferred(Resource.Success(Vehicles()))
+        val completedQuote = CompletableDeferred(Resource.Success(Vehicles(status = QuoteStatus.COMPLETED)))
+        whenever(apiTemplate.quotes(any<QuotesRequest>()))
+                .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
+                .thenReturn(CompletableDeferred(Resource.Success(QuoteId("7654321"))))
+        whenever(apiTemplate.quotes(ArgumentMatchers.anyString()))
+                .thenReturn(progressingQuote)
+                .thenReturn(progressingQuote)
+                .thenReturn(completedQuote)
+                .thenReturn(progressingQuote)
+
+        interactor = QuotesInteractor(
+                context = context,
+                apiTemplate = apiTemplate,
+                credentialsManager = credentialsManager)
+        interactor.quotesSearch = quotesSearch
+        runBlocking {
+            interactor.execute { }
+            delay(15)
+            interactor.execute { }
+            interactor.execute { }
+            interactor.execute { }
+            interactor.execute { }
+            delay(100)
+        }
+
+        verify(apiTemplate, times(2)).quotes(any<QuotesRequest>())
+        verify(apiTemplate, times(3)).quotes("1234567")
+        verify(apiTemplate, times(2)).quotes("7654321")
     }
 
     /**

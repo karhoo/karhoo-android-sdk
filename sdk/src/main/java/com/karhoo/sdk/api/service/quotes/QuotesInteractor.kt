@@ -80,7 +80,6 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
     }
 
     private fun quoteList(quotesResource: Resource<Vehicles>): Resource<QuoteList> {
-        Log.d("PD36", "quoteList")
         when (quotesResource) {
             is Resource.Success -> this.vehicles = quotesResource.data
             is Resource.Failure -> return Resource.Failure(quotesResource.error)
@@ -123,7 +122,6 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
 
     private fun quotes(quoteId: QuoteId): Deferred<Resource<Vehicles>> {
         this.quoteId = quoteId
-        Log.d("PD36", "quotes: ${quoteId.quoteId}")
         return apiTemplate.quotes(quoteId.quoteId)
     }
 }
