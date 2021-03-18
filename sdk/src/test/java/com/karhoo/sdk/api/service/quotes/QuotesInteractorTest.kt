@@ -209,6 +209,7 @@ class QuotesInteractorTest {
             interactor.execute { }
             interactor.execute { }
             interactor.execute { }
+            delay(15)
             interactor.execute { }
             delay(100)
         }
