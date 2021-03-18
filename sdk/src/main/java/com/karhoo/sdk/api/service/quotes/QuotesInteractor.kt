@@ -1,6 +1,5 @@
 package com.karhoo.sdk.api.service.quotes
 
-import android.util.Log
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.Quote
@@ -36,7 +35,6 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
 
     override fun createRequest(): Deferred<Resource<QuoteList>> {
         quotesSearch?.let { search ->
-            Log.d("PD36", "quoteId: $quoteId")
             quoteId?.let { quote ->
                 return GlobalScope.async {
                     val result = quoteList(quotes(quote).await())
@@ -44,7 +42,6 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
                         quoteId = null
                         createRequest().await()
                     } else {
-                        Log.d("PD36", "createRequest result")
                         result
                     }
                 }
