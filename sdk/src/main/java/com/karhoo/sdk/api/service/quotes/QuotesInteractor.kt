@@ -5,6 +5,7 @@ import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
+import com.karhoo.sdk.api.model.QuoteStatus
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -30,7 +31,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
 
     internal var quotesSearch: QuotesSearch? = null
     private var vehicles: Vehicles? = null
-    private var quoteId: QuoteId? = null
+    internal var quoteId: QuoteId? = null
 
     override fun createRequest(): Deferred<Resource<QuoteList>> {
         quotesSearch?.let { search ->
@@ -87,12 +88,17 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
             val categoryNames = it.availability.vehicles.classes
 
             categoryNames.forEach { category ->
-                val filteredVehicles: List<Quote> = it.quotes.filter {
-                    it.vehicle.vehicleClass ==
+                val filteredVehicles: List<Quote> = it.quotes.filter { quote ->
+                    quote.vehicle.vehicleClass ==
                             category
                 }
                 quotesMap[category] = filteredVehicles
             }
+
+            if (it.status == QuoteStatus.COMPLETED) {
+                quoteId = null
+            }
+
             return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap,
                                               status = it.status, validity = it.validity))
         } ?: return Resource.Failure(error = KarhooError.InternalSDKError)
