@@ -1,10 +1,12 @@
 package com.karhoo.sdk.api.service.quotes
 
+import android.util.Log
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
+import com.karhoo.sdk.api.model.QuoteStatus
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -30,10 +32,11 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
 
     internal var quotesSearch: QuotesSearch? = null
     private var vehicles: Vehicles? = null
-    private var quoteId: QuoteId? = null
+    internal var quoteId: QuoteId? = null
 
     override fun createRequest(): Deferred<Resource<QuoteList>> {
         quotesSearch?.let { search ->
+            Log.d("PD36", "quoteId: $quoteId")
             quoteId?.let { quote ->
                 return GlobalScope.async {
                     val result = quoteList(quotes(quote).await())
@@ -41,6 +44,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
                         quoteId = null
                         createRequest().await()
                     } else {
+                        Log.d("PD36", "createRequest result")
                         result
                     }
                 }
@@ -76,6 +80,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
     }
 
     private fun quoteList(quotesResource: Resource<Vehicles>): Resource<QuoteList> {
+        Log.d("PD36", "quoteList")
         when (quotesResource) {
             is Resource.Success -> this.vehicles = quotesResource.data
             is Resource.Failure -> return Resource.Failure(quotesResource.error)
@@ -87,12 +92,17 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
             val categoryNames = it.availability.vehicles.classes
 
             categoryNames.forEach { category ->
-                val filteredVehicles: List<Quote> = it.quotes.filter {
-                    it.vehicle.vehicleClass ==
+                val filteredVehicles: List<Quote> = it.quotes.filter { quote ->
+                    quote.vehicle.vehicleClass ==
                             category
                 }
                 quotesMap[category] = filteredVehicles
             }
+
+            if (it.status == QuoteStatus.COMPLETED) {
+                quoteId = null
+            }
+
             return Resource.Success(QuoteList(id = quoteId ?: QuoteId(), categories = quotesMap,
                                               status = it.status, validity = it.validity))
         } ?: return Resource.Failure(error = KarhooError.InternalSDKError)
@@ -113,6 +123,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
 
     private fun quotes(quoteId: QuoteId): Deferred<Resource<Vehicles>> {
         this.quoteId = quoteId
+        Log.d("PD36", "quotes: ${quoteId.quoteId}")
         return apiTemplate.quotes(quoteId.quoteId)
     }
 }
