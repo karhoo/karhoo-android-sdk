@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven-publish'
 
 group = 'com.karhoo.sdk'
 version = '1.0'
@@ -75,19 +75,18 @@ android {
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/androidTest/assets/'] } }
 }
 
-publish {
-    def groupProjectID = 'com.karhoo'
-    def artifactProjectID = 'nsdk-canary'
-    def publishVersionID = '1.2.2.18032021-1'
-    def repoNameID = 'Android'
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
 
-    userOrg = 'flit-tech'
-    repoName = repoNameID
-    groupId = groupProjectID
-    artifactId = artifactProjectID
-    publishVersion = publishVersionID
-    desc = 'Karhoo Network SDK'
-    website = 'https://developer.karhoo.com'
+                groupId = 'com.karhoo'
+                artifactId = 'nsdk-canary'
+                version = '1.2.2.18032021-1'
+            }
+        }
+    }
 }
 
 dependencies {
