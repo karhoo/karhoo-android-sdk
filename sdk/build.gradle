@@ -83,7 +83,7 @@ afterEvaluate {
 
                 groupId = 'com.karhoo'
                 artifactId = 'nsdk-canary'
-                version = '1.2.2.23032021-1'
+                version = '1.2.2.25032021-1'
             }
         }
     }
