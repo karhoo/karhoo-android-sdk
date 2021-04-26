@@ -2,6 +2,7 @@
 
 ![](https://github.com/karhoo/karhoo-android-sdk/workflows/Master%20Branch%20CI/badge.svg) 
 ![](https://github.com/karhoo/karhoo-android-sdk/workflows/Develop%20Branch%20CI/badge.svg)
+[![](https://jitpack.io/v/karhoo/karhoo-android-sdk.svg)](https://jitpack.io/#karhoo/karhoo-android-sdk)
 
 Welcome to the Karhoo Network SDK of Android.
 
