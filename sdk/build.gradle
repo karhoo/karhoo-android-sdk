@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven-publish'
 
 group = 'com.karhoo.sdk'
 version = '1.0'
@@ -31,14 +31,14 @@ android {
         if (file("secure.properties").exists()) {
             file("secure.properties")?.withInputStream { secureProps.load(it) }
         }
-        buildConfigField("String", "KARHOO_TRAVELLER_ORGANISATION_ID", (secureProps.getProperty("KARHOO_TRAVELLER_ORGANISATION_ID") ?: ""))
-        buildConfigField("String", "KARHOO_INTERNAL_ORGANISATION_ID", (secureProps.getProperty("KARHOO_INTERNAL_ORGANISATION_ID") ?: ""))
-        buildConfigField("String", "KARHOO_PROD_BRAINTREE_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_PROD_BRAINTREE_DEFAULT_ORGANISATION_ID") ?: ""))
-        buildConfigField("String", "KARHOO_SANDBOX_BRAINTREE_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_SANDBOX_BRAINTREE_DEFAULT_ORGANISATION_ID") ?: ""))
-        buildConfigField("String", "KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID") ?: ""))
-        buildConfigField("String", "KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID") ?: ""))
-        buildConfigField("String", "KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID") ?: ""))
-        buildConfigField("String", "KARHOO_US_ORGANISATION_ID", (secureProps.getProperty("KARHOO_US_ORGANISATION_ID") ?: ""))
+        buildConfigField("String", "KARHOO_TRAVELLER_ORGANISATION_ID", (secureProps.getProperty("KARHOO_TRAVELLER_ORGANISATION_ID") ?: '""'))
+        buildConfigField("String", "KARHOO_INTERNAL_ORGANISATION_ID", (secureProps.getProperty("KARHOO_INTERNAL_ORGANISATION_ID") ?: '""'))
+        buildConfigField("String", "KARHOO_PROD_BRAINTREE_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_PROD_BRAINTREE_DEFAULT_ORGANISATION_ID") ?: '""'))
+        buildConfigField("String", "KARHOO_SANDBOX_BRAINTREE_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_SANDBOX_BRAINTREE_DEFAULT_ORGANISATION_ID") ?: '""'))
+        buildConfigField("String", "KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_SANDBOX_ADYEN_DEFAULT_ORGANISATION_ID") ?: '""'))
+        buildConfigField("String", "KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID") ?: '""'))
+        buildConfigField("String", "KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID", (secureProps.getProperty("KARHOO_STAGING_ADYEN_DEFAULT_ORGANISATION_ID") ?: '""'))
+        buildConfigField("String", "KARHOO_US_ORGANISATION_ID", (secureProps.getProperty("KARHOO_US_ORGANISATION_ID") ?: '""'))
 
         buildConfigField("String", "KARHOO_API_POINT_SANDBOX", '"https://rest.sandbox.karhoo.com"')
         buildConfigField("String", "KARHOO_AUTH_API_POINT_SANDBOX", '"https://sso.sandbox.karhoo.com"')
@@ -75,19 +75,18 @@ android {
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/androidTest/assets/'] } }
 }
 
-publish {
-    def groupProjectID = 'com.karhoo'
-    def artifactProjectID = 'nsdk'
-    def publishVersionID = '1.2.0'
-    def repoNameID = 'Android'
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
 
-    userOrg = 'flit-tech'
-    repoName = repoNameID
-    groupId = groupProjectID
-    artifactId = artifactProjectID
-    publishVersion = publishVersionID
-    desc = 'Karhoo Network SDK'
-    website = 'https://developer.karhoo.com'
+                groupId = 'com.karhoo'
+                artifactId = 'nsdk'
+                version = '1.3.0'
+            }
+        }
+    }
 }
 
 dependencies {

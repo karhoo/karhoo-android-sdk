@@ -1,6 +1,8 @@
 package com.karhoo.sdk.api.datastore.user
 
+import com.karhoo.sdk.analytics.AnalyticsManager.userInfo
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.UserInfo
 import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.doNothing
@@ -8,6 +10,8 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -64,7 +68,21 @@ class UserStoreTest {
         whenever(userManager.user).thenReturn(userInfo)
         val user = userStore.currentUser
         userStore.removeCurrentUser()
-        Assert.assertEquals(user, userInfo)
+        assertEquals(user, userInfo)
+    }
+
+    /**
+     * Given:   SavedPaymentInfo is set
+     * When:    Delete is called to reset the payment info
+     * Then:    The payment info should be null
+     */
+    @Test
+    fun `removing set payment info returns the saved payment info to null`() {
+        doNothing().whenever(userManager).deleteSavedPaymentInfo()
+
+        userStore.clearSavedPaymentInfo()
+
+        verify(userManager).deleteSavedPaymentInfo()
     }
 
     /**

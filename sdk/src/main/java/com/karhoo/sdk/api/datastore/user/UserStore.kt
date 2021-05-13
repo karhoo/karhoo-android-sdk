@@ -13,6 +13,8 @@ interface UserStore {
 
     val isCurrentUserValid: Boolean
 
+    fun clearSavedPaymentInfo()
+
     fun removeCurrentUser()
 
     fun addSavedPaymentObserver(onUserPaymentChangedListener: UserManager.OnUserPaymentChangedListener?)

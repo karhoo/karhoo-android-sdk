@@ -1,6 +1,6 @@
 package com.karhoo.sdk.api.util
 
-import com.karhoo.sdk.test.BuildConfig
+import com.karhoo.sdk.BuildConfig
 import com.karhoo.sdk.api.model.Address
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.CancellationReason

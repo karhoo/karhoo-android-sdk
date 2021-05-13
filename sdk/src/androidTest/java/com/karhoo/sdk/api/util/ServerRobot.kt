@@ -7,7 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import com.karhoo.sdk.test.BuildConfig
+import com.karhoo.sdk.BuildConfig
 import com.karhoo.sdk.api.model.Address
 import com.karhoo.sdk.api.model.Availability
 import com.karhoo.sdk.api.model.AvailabilityVehicle
@@ -23,6 +23,7 @@ import com.karhoo.sdk.api.model.Driver
 import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.FareBreakdown
+import com.karhoo.sdk.api.model.Fleet
 import com.karhoo.sdk.api.model.FleetInfo
 import com.karhoo.sdk.api.model.FleetRating
 import com.karhoo.sdk.api.model.LocationInfo
@@ -458,6 +459,8 @@ class ServerRobot {
         val AVAILABILITIES = Categories(listOf("Saloon", "Taxi", "MPV", "Exec", "Electric", "Moto"))
 
         val QUOTE_ID = QuoteId(quoteId = "129e51a-bc10-11e8-a821-0a580a0414db")
+        val SOME_OTHER_QUOTE_ID_VALUE = "someOtherQuoteId"
+        val SOME_OTHER_FLEET_ID = "someOtherFleetId"
 
         val QUOTE_PRICE = QuotePrice(currencyCode = "GBP",
                                      highPrice = 779,
@@ -465,7 +468,7 @@ class ServerRobot {
 
         val QUOTE_NET_PRICE = QuotePriceNet(highPrice = 779, lowPrice = 778)
 
-        val QUOTE_FLEET = FleetInfo(fleetId = "someFleetId",
+        val QUOTE_FLEET = Fleet(id = "someFleetId",
                                     name = "someFleetName",
                                     logoUrl = "someLogoUrl",
                                     description = "Some fleet description",
@@ -496,7 +499,7 @@ class ServerRobot {
                 types = listOf("Electric", "Standard", "MPV")))
 
         val VEHICLES = Vehicles(
-                status = "PROGRESSING",
+                status = QuoteStatus.PROGRESSING,
                 id = QUOTE_ID.quoteId,
                 availability = AVAILABILITY,
                 quotes = listOf(
@@ -505,7 +508,7 @@ class ServerRobot {
                                 id = "someOtherQuoteId",
                                 quoteSource = QuoteSource.FLEET,
                                 quoteType = QuoteType.METERED,
-                                fleet = QUOTE_FLEET.copy(fleetId = "someOtherFleetId"))
+                                fleet = QUOTE_FLEET.copy(id = "someOtherFleetId"))
                                ))
 
         val QUOTE_LIST_EMPTY = QuoteList(
