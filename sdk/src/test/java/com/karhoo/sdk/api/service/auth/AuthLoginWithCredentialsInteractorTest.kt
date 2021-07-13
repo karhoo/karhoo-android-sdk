@@ -12,7 +12,13 @@ import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.payments.PaymentsService
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doNothing
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.atLeastOnce
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
