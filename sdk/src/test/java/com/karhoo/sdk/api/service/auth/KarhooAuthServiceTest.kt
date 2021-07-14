@@ -3,6 +3,7 @@ package com.karhoo.sdk.api.service.auth
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.datastore.user.UserStore
+import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.service.payments.PaymentsService
 import com.nhaarman.mockitokotlin2.mock
@@ -34,6 +35,16 @@ class KarhooAuthServiceTest {
     fun `create auth service to do a token login`() {
         val tokenLoginCall = service.login(token = "123")
         assertNotNull(tokenLoginCall)
+    }
+
+    /**
+     * When:   A request is made to get user info with credentials
+     * Then:   A call should be returned to the appropriate endpoint
+     */
+    @Test
+    fun `Create an auth service retrieve user info with credentials`() {
+        val credentialsLoginCall = service.login(Credentials(accessToken = "123456", refreshToken = "zxy", expiresIn = 1L))
+        assertNotNull(credentialsLoginCall)
     }
 
     /**

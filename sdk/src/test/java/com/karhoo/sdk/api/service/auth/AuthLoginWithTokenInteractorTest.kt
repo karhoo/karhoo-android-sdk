@@ -36,7 +36,7 @@ import org.mockito.junit.MockitoJUnitRunner
 import kotlin.coroutines.CoroutineContext
 
 @RunWith(MockitoJUnitRunner::class)
-class AuthLoginInteractorTest {
+class AuthLoginWithTokenInteractorTest {
 
     private val credentialsManager: CredentialsManager = mock()
     private val userManager: UserManager = mock()
@@ -57,13 +57,13 @@ class AuthLoginInteractorTest {
     @Captor
     private lateinit var credentialsCaptor: ArgumentCaptor<Credentials>
 
-    private lateinit var interactor: AuthLoginInteractor
+    private lateinit var withTokenInteractor: AuthLoginWithTokenInteractor
 
     @Before
     fun setUp() {
         KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
                                                                                    applicationContext, authenticationMethod = AuthenticationMethod.TokenExchange("clientId", "scope")))
-        interactor = AuthLoginInteractor(credentialsManager, userManager, apiTemplate, paymentsService, context)
+        withTokenInteractor = AuthLoginWithTokenInteractor(credentialsManager, userManager, apiTemplate, paymentsService, context)
     }
 
     @After
@@ -83,10 +83,10 @@ class AuthLoginInteractorTest {
 
         KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
                                                                                    applicationContext, authenticationMethod = AuthenticationMethod.KarhooUser()))
-        interactor = AuthLoginInteractor(credentialsManager, userManager, apiTemplate, paymentsService, context)
+        withTokenInteractor = AuthLoginWithTokenInteractor(credentialsManager, userManager, apiTemplate, paymentsService, context)
 
         runBlocking {
-            interactor.execute { result ->
+            withTokenInteractor.execute { result ->
                 when (result) {
                     is Resource.Success -> shouldBeNull = result.data
                     is Resource.Failure -> error = result.error
@@ -106,7 +106,7 @@ class AuthLoginInteractorTest {
     @Test
     fun `token endpoint is called is called when client id is set on auth config`() {
         runBlocking {
-            interactor.execute {}
+            withTokenInteractor.execute {}
             delay(100)
         }
 
@@ -122,10 +122,10 @@ class AuthLoginInteractorTest {
 
         KarhooSDKConfigurationProvider.setConfig(configuration = UnitTestSDKConfig(context =
                                                                                    applicationContext, authenticationMethod = AuthenticationMethod.TokenExchange("", "scope")))
-        interactor = AuthLoginInteractor(credentialsManager, userManager, apiTemplate, paymentsService, context)
+        withTokenInteractor = AuthLoginWithTokenInteractor(credentialsManager, userManager, apiTemplate, paymentsService, context)
 
         runBlocking {
-            interactor.execute {}
+            withTokenInteractor.execute {}
             delay(100)
         }
 
@@ -147,7 +147,7 @@ class AuthLoginInteractorTest {
         doNothing().whenever(credentialsManager).saveCredentials(any())
 
         runBlocking {
-            interactor.execute {}
+            withTokenInteractor.execute {}
             delay(100)
         }
 
@@ -173,7 +173,7 @@ class AuthLoginInteractorTest {
                 .thenReturn(CompletableDeferred(Resource.Failure(KarhooError.GeneralRequestError)))
 
         runBlocking {
-            interactor.execute { result ->
+            withTokenInteractor.execute { result ->
                 when (result) {
                     is Resource.Success -> shouldBeNull = result.data
                     is Resource.Failure -> error = result.error
@@ -201,7 +201,7 @@ class AuthLoginInteractorTest {
         doNothing().whenever(credentialsManager).saveCredentials(any())
 
         runBlocking {
-            interactor.execute {}
+            withTokenInteractor.execute {}
             delay(100)
         }
 
@@ -225,7 +225,7 @@ class AuthLoginInteractorTest {
         doNothing().whenever(credentialsManager).saveCredentials(any())
 
         runBlocking {
-            interactor.execute { result ->
+            withTokenInteractor.execute { result ->
                 when (result) {
                     is Resource.Success -> shouldBeNull = result.data
                     is Resource.Failure -> error = result.error
