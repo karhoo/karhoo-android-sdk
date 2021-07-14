@@ -8,7 +8,7 @@ interface AuthService {
 
     fun login(token: String): Call<UserInfo>
 
-    fun login(credentials: Credentials): Call<UserInfo>
+    fun login(credentials: Credentials?): Call<UserInfo>
 
     fun revoke(): Call<Void>
 }

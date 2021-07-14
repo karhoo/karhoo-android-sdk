@@ -30,10 +30,12 @@ class KarhooAuthService : AuthService {
                 this.token = token
             }
 
-    override fun login(credentials: Credentials): Call<UserInfo> = AuthLoginWithCredentialsInteractor(credentialsManager = credentialsManager,
+    override fun login(credentials: Credentials?): Call<UserInfo> = AuthLoginWithCredentialsInteractor(credentialsManager = credentialsManager,
             apiTemplate = apiTemplate, userManager = userManager, paymentsService = KarhooApi.paymentsService)
             .apply {
-                this.credentials = credentials
+                credentials?.let {
+                    this.credentials = it
+                }
             }
 
     override fun revoke(): Call<Void> {
