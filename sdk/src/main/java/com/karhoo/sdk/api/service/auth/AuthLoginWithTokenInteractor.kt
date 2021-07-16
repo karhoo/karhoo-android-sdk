@@ -18,11 +18,11 @@ import kotlinx.coroutines.async
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-internal class AuthLoginInteractor @Inject constructor(private val credentialsManager: CredentialsManager,
-                                                       private val userManager: UserManager,
-                                                       private val apiTemplate: APITemplate,
-                                                       private val paymentsService: PaymentsService,
-                                                       private val context: CoroutineContext = Main)
+internal class AuthLoginWithTokenInteractor @Inject constructor(private val credentialsManager: CredentialsManager,
+                                                                private val userManager: UserManager,
+                                                                private val apiTemplate: APITemplate,
+                                                                private val paymentsService: PaymentsService,
+                                                                private val context: CoroutineContext = Main)
     : BaseCallInteractor<UserInfo>(false, credentialsManager, apiTemplate, context) {
 
     internal var token: String? = null
@@ -42,9 +42,9 @@ internal class AuthLoginInteractor @Inject constructor(private val credentialsMa
         val configuration = KarhooSDKConfigurationProvider.configuration.authenticationMethod()
                 as AuthenticationMethod.TokenExchange
         val authTokenParams = mapOf(
-                Pair("client_id", configuration.clientId),
-                Pair("scope", configuration.scope),
-                Pair("token", token.orEmpty()))
+                Pair(CLIENT_ID_KEY, configuration.clientId),
+                Pair(SCOPE_KEY, configuration.scope),
+                Pair(TOKEN_KEY, token.orEmpty()))
         return when (val authToken = apiTemplate.authToken(authTokenParams).await()) {
             is Resource.Success -> {
                 credentialsManager.saveCredentials(authToken.data)
@@ -63,5 +63,11 @@ internal class AuthLoginInteractor @Inject constructor(private val credentialsMa
             }
             is Resource.Failure -> Resource.Failure(user.error)
         }
+    }
+
+    companion object {
+        private const val CLIENT_ID_KEY = "client_id"
+        private const val SCOPE_KEY = "scope"
+        private const val TOKEN_KEY = "token"
     }
 }

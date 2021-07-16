@@ -8,8 +8,8 @@ group = 'com.karhoo.sdk'
 version = '1.0'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.3'
 
     testOptions {
         unitTests.returnDefaultValues = true
@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "com.karhoo.sdk.api.testrunner.SDKTestRunner"
@@ -83,7 +83,7 @@ afterEvaluate {
 
                 groupId = 'com.karhoo'
                 artifactId = 'nsdk'
-                version = '1.4.0'
+                version = '1.4.1'
             }
         }
     }
