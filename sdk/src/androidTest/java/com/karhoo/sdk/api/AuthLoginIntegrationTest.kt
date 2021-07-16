@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.karhoo.sdk.api.model.AuthenticationMethod
+import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.SDKTestConfig
@@ -55,10 +56,32 @@ class AuthLoginIntegrationTest {
      * Then:    The response payload should be valid
      **/
     @Test
-    fun loginSuccess() {
+    fun loginWithTokenSuccess() {
         var result: UserInfo? = null
 
         KarhooApi.authService.login("123").execute {
+            when (it) {
+                is Resource.Success -> {
+                    result = it.data
+                    latch.countDown()
+                }
+            }
+        }
+
+        latch.await(2, TimeUnit.SECONDS)
+        assertThat(result).isNotNull
+    }
+
+    /**
+     * Given:   The user logs in
+     * When:    A successful response has been returned
+     * Then:    The response payload should be valid
+     **/
+    @Test
+    fun loginSuccess() {
+        var result: UserInfo? = null
+
+        KarhooApi.authService.login(Credentials(accessToken = "123456", refreshToken = "zxy", expiresIn = 1L)).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
