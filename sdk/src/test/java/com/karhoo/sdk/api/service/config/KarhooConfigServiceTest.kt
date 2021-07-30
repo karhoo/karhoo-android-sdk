@@ -33,6 +33,4 @@ class KarhooConfigServiceTest {
         val uiConfigCall = service.uiConfig(uiConfigRequest)
         assertNotNull(uiConfigCall)
     }
-
-
 }
