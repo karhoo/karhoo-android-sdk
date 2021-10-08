@@ -125,6 +125,7 @@ interface   APITemplate {
     @POST(PASSWORD_RESET_METHOD)
     fun passwordReset(@Body resetPasswordRequest: ResetPasswordRequest): Deferred<Resource<Void>>
 
+    @NoAuthorisationHeader
     @POST(REGISTER_USER_METHOD)
     fun register(@Body userDetails: UserRegistration): Deferred<Resource<UserInfo>>
 
