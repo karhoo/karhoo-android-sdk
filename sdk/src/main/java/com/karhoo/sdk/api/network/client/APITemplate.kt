@@ -115,6 +115,7 @@ interface   APITemplate {
     @POST(TOKEN_METHOD)
     fun login(@Body userLogin: UserLogin): Deferred<Resource<Credentials>>
 
+    @NoAuthorisationHeader
     @POST(TOKEN_REFRESH_METHOD)
     fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Deferred<Resource<Credentials>>
 
@@ -124,6 +125,7 @@ interface   APITemplate {
     @POST(PASSWORD_RESET_METHOD)
     fun passwordReset(@Body resetPasswordRequest: ResetPasswordRequest): Deferred<Resource<Void>>
 
+    @NoAuthorisationHeader
     @POST(REGISTER_USER_METHOD)
     fun register(@Body userDetails: UserRegistration): Deferred<Resource<UserInfo>>
 
@@ -246,6 +248,7 @@ interface   APITemplate {
     @FormUrlEncoded
     fun authRevoke(@FieldMap(encoded = true) params: Map<String, String>, @Url url: String = authHost() + AUTH_REVOKE_METHOD): Deferred<Resource<Void>>
 
+    @NoAuthorisationHeader
     @POST
     @FormUrlEncoded
     fun authRefresh(@FieldMap(encoded = true) params: Map<String, String>, @Url url: String = authHost() + AUTH_REFRESH_METHOD): Deferred<Resource<Credentials>>
