@@ -38,7 +38,9 @@ class KarhooUserStore : UserStore {
     override var savedPaymentInfo: SavedPaymentInfo?
         get() = userManager.savedPaymentInfo
         set(value) {
-            value?.let { userManager.savedPaymentInfo = value }
+            value?.let { userManager.savedPaymentInfo = value } ?: run {
+                clearSavedPaymentInfo()
+            }
         }
 
     override var paymentProvider: Provider?

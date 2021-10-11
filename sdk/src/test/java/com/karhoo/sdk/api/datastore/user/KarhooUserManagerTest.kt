@@ -3,6 +3,7 @@ package com.karhoo.sdk.api.datastore.user
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.karhoo.sdk.analytics.Analytics
+import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.Organisation
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.service.common.InteractorContants
@@ -14,6 +15,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -117,6 +119,46 @@ class KarhooUserManagerTest {
         karhooUserManager.deleteSavedPaymentInfo()
 
         verify(editor).apply()
+    }
+
+    /**
+     * Given    The payment info is set
+     * When     We try to clear/delete it
+     * Then     The the saved payment info should be deleted from shared preferences and be set
+     * to null in the user manager
+     *
+     */
+    @Test
+    fun `When set the some payment info and then delete it, the saved payment info is null`() {
+        whenever(preferences.edit()).thenReturn(editor)
+        whenever(editor.putString(anyString(), eq(null))).thenReturn(editor)
+        whenever(editor.putString(anyString(), anyString())).thenReturn(editor)
+
+        karhooUserManager.savedPaymentInfo = SavedPaymentInfo("0000", CardType.MASTERCARD)
+        karhooUserManager.deleteSavedPaymentInfo()
+
+        verify(editor).commit()
+
+        assertNull(karhooUserManager.savedPaymentInfo)
+    }
+
+    /**
+     * Given    The payment info is not set
+     * When     We still try to clear/delete it
+     * Then     The the saved payment info should be deleted from shared preferences and be set
+     * to null in the user manager
+     *
+     */
+    @Test
+    fun `When the payment info is null still try to delete it, the saved payment info remains null`() {
+        whenever(preferences.edit()).thenReturn(editor)
+        whenever(editor.putString(anyString(), eq(null))).thenReturn(editor)
+
+        karhooUserManager.deleteSavedPaymentInfo()
+
+        verify(editor).apply()
+
+        assertNull(karhooUserManager.savedPaymentInfo)
     }
 
     /**
