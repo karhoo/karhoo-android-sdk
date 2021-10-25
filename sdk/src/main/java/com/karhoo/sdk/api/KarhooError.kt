@@ -228,6 +228,15 @@ enum class KarhooError(var code: String,
     CouldNotBookTripQuoteNoLongerAvailable("K4018",
                                            "Could not book trip as this Quote is no longer available",
                                            "Could not book trip as this quote is no longer available"),
+    @SerializedName("K4020")
+    CouldNotBookTripWithSelectedDMS("K4020",
+                                    "Could not book trip with the selected DMS",
+                                    "Could not book trip with the selected DMS."),
+
+    @SerializedName("K2025")
+    CouldNotBookTripQuotePriceIncreased("K2025",
+                                        "Quote price increased whilst booking",
+                                        "The quote price increased whilst booking"),
 
     @SerializedName("K5001")
     CouldNotGetEstimatesInternalError("K5001",
