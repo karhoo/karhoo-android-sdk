@@ -34,7 +34,7 @@ class KarhooLoyaltyService : LoyaltyService {
 
     override fun getBurnPointsFromCents(
         loyaltyID: String,
-        currency: String, 
+        currency: String,
         cents: Int): Call<LoyaltyBurnPoints>  = LoyaltyBurnPointsInteractor(credentialsManager, apiTemplate).apply {
         this.loyaltyId = loyaltyID
         this.currency = currency
