@@ -103,7 +103,7 @@ interface   APITemplate {
 
         const val LOYALTY_BALANCE = "/v3/payments/loyalty/programmes/{id}/balance"
         const val LOYALTY_CONVERSION = "/v3/payments/loyalty/programmes/{id}/rates"
-        const val LOYALTY_STATUS = "/loyalty/{id}/status"
+        const val LOYALTY_STATUS = "/accor/status"
         const val LOYALTY_BURNPOINTS = "/loyalty-<id>/exrates/{cur}/burnpoints"
         const val LOYALTY_EARNPOINTS = "/loyalty-<id>/exrates/{cur}/earnpoints"
         const val LOYALTY_PREAUTH = "/loyalty-<id>/pre-auth"
