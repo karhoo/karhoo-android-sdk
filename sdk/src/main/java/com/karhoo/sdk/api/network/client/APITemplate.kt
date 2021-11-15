@@ -35,7 +35,10 @@ import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.model.Coverage
 import com.karhoo.sdk.api.model.LoyaltyBalance
+import com.karhoo.sdk.api.model.LoyaltyBurnPoints
 import com.karhoo.sdk.api.model.LoyaltyConversion
+import com.karhoo.sdk.api.model.LoyaltyPointsToEarn
+import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
@@ -100,6 +103,10 @@ interface   APITemplate {
 
         const val LOYALTY_BALANCE = "/v3/payments/loyalty/programmes/{id}/balance"
         const val LOYALTY_CONVERSION = "/v3/payments/loyalty/programmes/{id}/rates"
+        const val LOYALTY_STATUS = "/loyalty/{id}/status"
+        const val LOYALTY_BURNPOINTS = "/loyalty-<id>/exrates/{cur}/burnpoints"
+        const val LOYALTY_EARNPOINTS = "/loyalty-<id>/exrates/{cur}/earnpoints"
+        const val LOYALTY_PREAUTH = "/loyalty-<id>/pre-auth"
 
         const val IDENTIFIER_ID = "id"
         const val IDENTIFIER_LATITUDE = "latitude"
@@ -234,6 +241,23 @@ interface   APITemplate {
 
     @GET(LOYALTY_CONVERSION)
     fun loyaltyConversionRates(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<LoyaltyConversion>>
+
+    @GET(LOYALTY_STATUS)
+    fun loyaltyStatus(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<LoyaltyStatus>>
+
+    @GET(LOYALTY_BURNPOINTS)
+    fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
+    String, @Query("amount") amount: Int): Deferred<Resource<LoyaltyBurnPoints>>
+
+    @GET(LOYALTY_EARNPOINTS)
+    fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
+    String, @Query("total_amount") totalAmount: Int, @Query("burn_points") burnPoints: Int):
+            Deferred<Resource<LoyaltyPointsToEarn>>
+
+    @Headers("Content-Type: application/json")
+    @POST(LOYALTY_PREAUTH)
+    fun postLoyaltyPreAuth(@Body loyaltyPreAuth: String): Deferred<Resource<ResponseBody>>
+
 
     @POST
     @FormUrlEncoded
