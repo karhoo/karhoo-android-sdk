@@ -243,7 +243,7 @@ interface   APITemplate {
     fun loyaltyConversionRates(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<LoyaltyConversion>>
 
     @GET(LOYALTY_STATUS)
-    fun loyaltyStatus(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<LoyaltyStatus>>
+    fun loyaltyStatus(): Deferred<Resource<LoyaltyStatus>>
 
     @GET(LOYALTY_BURNPOINTS)
     fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
