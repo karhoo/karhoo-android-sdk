@@ -22,7 +22,7 @@ internal class LoyaltyStatusInteractor @Inject constructor(credentialsManager: C
 
     override fun createRequest(): Deferred<Resource<LoyaltyStatus>> {
         loyaltyId?.let { loyaltyId ->
-            return apiTemplate.loyaltyStatus()
+            return apiTemplate.loyaltyStatus(loyaltyId)
         } ?: run {
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }

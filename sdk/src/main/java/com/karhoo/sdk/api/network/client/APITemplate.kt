@@ -103,7 +103,7 @@ interface   APITemplate {
 
         const val LOYALTY_BALANCE = "/v3/payments/loyalty/programmes/{id}/balance"
         const val LOYALTY_CONVERSION = "/v3/payments/loyalty/programmes/{id}/rates"
-        const val LOYALTY_STATUS = "/loyalty-accor/status"
+        const val LOYALTY_STATUS = "/loyalty-{id}/status"
         const val LOYALTY_BURNPOINTS = "/loyalty-<id>/exrates/{cur}/burnpoints"
         const val LOYALTY_EARNPOINTS = "/loyalty-<id>/exrates/{cur}/earnpoints"
         const val LOYALTY_PREAUTH = "/loyalty-<id>/pre-auth"
@@ -243,7 +243,7 @@ interface   APITemplate {
     fun loyaltyConversionRates(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<LoyaltyConversion>>
 
     @GET(LOYALTY_STATUS)
-    fun loyaltyStatus(): Deferred<Resource<LoyaltyStatus>>
+    fun loyaltyStatus(@Path(IDENTIFIER_ID) id : String): Deferred<Resource<LoyaltyStatus>>
 
     @GET(LOYALTY_BURNPOINTS)
     fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
