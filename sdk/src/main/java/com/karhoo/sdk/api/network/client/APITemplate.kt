@@ -247,11 +247,11 @@ interface   APITemplate {
     fun loyaltyStatus(@Path(IDENTIFIER_ID) id : String): Deferred<Resource<LoyaltyStatus>>
 
     @GET(LOYALTY_BURNPOINTS)
-    fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY_SHORT) currency:
+    fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
     String, @Query("amount") amount: Int): Deferred<Resource<LoyaltyBurnPoints>>
 
     @GET(LOYALTY_EARNPOINTS)
-    fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY_SHORT) currency:
+    fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
     String, @Query("total_amount") totalAmount: Int, @Query("burn_points") burnPoints: Int):
             Deferred<Resource<LoyaltyPointsToEarn>>
 
