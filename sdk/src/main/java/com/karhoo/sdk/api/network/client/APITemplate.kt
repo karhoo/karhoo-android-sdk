@@ -35,9 +35,9 @@ import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.model.Coverage
 import com.karhoo.sdk.api.model.LoyaltyBalance
-import com.karhoo.sdk.api.model.LoyaltyBurnPoints
+import com.karhoo.sdk.api.model.LoyaltyPoints
 import com.karhoo.sdk.api.model.LoyaltyConversion
-import com.karhoo.sdk.api.model.LoyaltyPointsToEarn
+import com.karhoo.sdk.api.model.LoyaltyNonce
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.network.response.Resource
@@ -248,16 +248,16 @@ interface   APITemplate {
 
     @GET(LOYALTY_BURNPOINTS)
     fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
-    String, @Query("amount") amount: Int): Deferred<Resource<LoyaltyBurnPoints>>
+    String, @Query("amount") amount: Int): Deferred<Resource<LoyaltyPoints>>
 
     @GET(LOYALTY_EARNPOINTS)
     fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
     String, @Query("total_amount") totalAmount: Int, @Query("burn_points") burnPoints: Int):
-            Deferred<Resource<LoyaltyPointsToEarn>>
+            Deferred<Resource<LoyaltyPoints>>
 
     @Headers("Content-Type: application/json")
     @POST(LOYALTY_PREAUTH)
-    fun postLoyaltyPreAuth(@Body loyaltyPreAuth: String): Deferred<Resource<ResponseBody>>
+    fun postLoyaltyPreAuth(@Body loyaltyPreAuth: String): Deferred<Resource<LoyaltyNonce>>
 
 
     @POST

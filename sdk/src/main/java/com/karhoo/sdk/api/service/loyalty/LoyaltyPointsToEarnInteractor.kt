@@ -2,8 +2,7 @@ package com.karhoo.sdk.api.service.loyalty
 
 import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.LoyaltyBurnPoints
-import com.karhoo.sdk.api.model.LoyaltyPointsToEarn
+import com.karhoo.sdk.api.model.LoyaltyPoints
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BaseCallInteractor
@@ -17,14 +16,14 @@ internal class LoyaltyPointsToEarnInteractor @Inject constructor(credentialsMana
                                                                private val apiTemplate: APITemplate,
                                                                context: CoroutineContext = Dispatchers.Main
                                                               ) :
-    BaseCallInteractor<LoyaltyPointsToEarn>(true, credentialsManager, apiTemplate, context) {
+    BaseCallInteractor<LoyaltyPoints>(true, credentialsManager, apiTemplate, context) {
 
     internal var loyaltyId: String? = null
     internal var currency: String = ""
     internal var totalAmount: Int = 0
     internal var burnPoints: Int = 0
 
-    override fun createRequest(): Deferred<Resource<LoyaltyPointsToEarn>> {
+    override fun createRequest(): Deferred<Resource<LoyaltyPoints>> {
         loyaltyId?.let { loyaltyId ->
             return apiTemplate.loyaltyPointsToEarn(loyaltyId, currency, totalAmount, burnPoints)
         } ?: run {

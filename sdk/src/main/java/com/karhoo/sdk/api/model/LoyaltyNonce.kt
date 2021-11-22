@@ -5,4 +5,4 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class LoyaltyPointsToEarn(@SerializedName("points") var points: Int? = 0) : Parcelable
+data class LoyaltyNonce(@SerializedName("nonce") val nonce: String = "") : Parcelable

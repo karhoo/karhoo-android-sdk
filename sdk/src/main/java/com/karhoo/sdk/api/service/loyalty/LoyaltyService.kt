@@ -1,9 +1,9 @@
 package com.karhoo.sdk.api.service.loyalty
 
 import com.karhoo.sdk.api.model.LoyaltyBalance
-import com.karhoo.sdk.api.model.LoyaltyBurnPoints
+import com.karhoo.sdk.api.model.LoyaltyPoints
 import com.karhoo.sdk.api.model.LoyaltyConversion
-import com.karhoo.sdk.api.model.LoyaltyPointsToEarn
+import com.karhoo.sdk.api.model.LoyaltyNonce
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.call.Call
 import org.json.JSONObject
@@ -14,13 +14,13 @@ interface LoyaltyService {
 
     fun getConversionRates(loyaltyID: String): Call<LoyaltyConversion>
 
-    fun getStatus(loyaltyID: String): Call<LoyaltyStatus>
+    fun getLoyaltyStatus(loyaltyID: String): Call<LoyaltyStatus>
 
-    fun getBurnPointsFromCents(loyaltyID: String, currency: String, cents: Int):
-            Call<LoyaltyBurnPoints>
+    fun getLoyaltyBurn(loyaltyID: String, currency: String, cents: Int):
+            Call<LoyaltyPoints>
 
-    fun getPointsToEarn(loyaltyID: String, currency: String, totalAmount: Int, burnPoints: Int):
-            Call<LoyaltyPointsToEarn>
+    fun getLoyaltyEarn(loyaltyID: String, currency: String, totalAmount: Int, burnPoints: Int):
+            Call<LoyaltyPoints>
 
-    fun preAuthLoyaltyPoints(request: String): Call<JSONObject>
+    fun getLoyaltyPreAuth(request: String): Call<LoyaltyNonce>
 }
