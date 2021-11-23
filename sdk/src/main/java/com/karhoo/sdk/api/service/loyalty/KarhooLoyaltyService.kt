@@ -7,6 +7,7 @@ import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.model.LoyaltyNonce
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.network.client.APITemplate
+import com.karhoo.sdk.api.network.request.LoyaltyPreAuth
 import com.karhoo.sdk.call.Call
 import org.json.JSONObject
 import javax.inject.Inject
@@ -37,7 +38,7 @@ class KarhooLoyaltyService : LoyaltyService {
         cents: Int): Call<LoyaltyPoints>  = LoyaltyBurnPointsInteractor(credentialsManager, apiTemplate).apply {
         this.loyaltyId = loyaltyID
         this.currency = currency
-        this.amount = amount
+        this.amount = cents
     }
 
     override fun getLoyaltyEarn(
@@ -52,7 +53,7 @@ class KarhooLoyaltyService : LoyaltyService {
         this.burnPoints = burnPoints
     }
 
-    override fun getLoyaltyPreAuth(request: String): Call<LoyaltyNonce> =
+    override fun getLoyaltyPreAuth(request: LoyaltyPreAuth): Call<LoyaltyNonce> =
         LoyaltyPreAuthInteractor(credentialsManager, apiTemplate).apply {
             this.loyaltyPreAuth = request
         }

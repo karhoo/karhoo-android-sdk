@@ -4,6 +4,7 @@ import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.LoyaltyNonce
 import com.karhoo.sdk.api.network.client.APITemplate
+import com.karhoo.sdk.api.network.request.LoyaltyPreAuth
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BaseCallInteractor
 import kotlinx.coroutines.CompletableDeferred
@@ -17,7 +18,7 @@ internal class LoyaltyPreAuthInteractor @Inject constructor(private val credenti
                                                                   context: CoroutineContext = Dispatchers.Main)
     : BaseCallInteractor<LoyaltyNonce>(true, credentialsManager, apiTemplate, context) {
 
-    var loyaltyPreAuth: String? = null
+    var loyaltyPreAuth: LoyaltyPreAuth? = null
 
     override fun createRequest(): Deferred<Resource<LoyaltyNonce>> {
         loyaltyPreAuth?.let {

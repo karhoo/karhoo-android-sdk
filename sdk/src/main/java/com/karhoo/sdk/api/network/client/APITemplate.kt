@@ -40,6 +40,7 @@ import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.model.LoyaltyNonce
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.Quote
+import com.karhoo.sdk.api.network.request.LoyaltyPreAuth
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
@@ -261,7 +262,7 @@ interface   APITemplate {
 
     @Headers("Content-Type: application/json")
     @POST(LOYALTY_PREAUTH)
-    fun postLoyaltyPreAuth(@Body loyaltyPreAuth: String): Deferred<Resource<LoyaltyNonce>>
+    fun postLoyaltyPreAuth(@Body loyaltyPreAuth: LoyaltyPreAuth): Deferred<Resource<LoyaltyNonce>>
 
 
     @POST
