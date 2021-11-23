@@ -104,8 +104,8 @@ interface   APITemplate {
         const val LOYALTY_BALANCE = "/v3/payments/loyalty/programmes/{id}/balance"
         const val LOYALTY_CONVERSION = "/v3/payments/loyalty/programmes/{id}/rates"
         const val LOYALTY_STATUS = "/loyalty-{id}/status"
-        const val LOYALTY_BURNPOINTS = "/loyalty-{id}/exrates/{cur}/burnpoints"
-        const val LOYALTY_EARNPOINTS = "/loyalty-{id}/exrates/{cur}/earnpoints"
+        const val LOYALTY_BURNPOINTS = "/loyalty-{id}/exrates/{currency}/burnpoints"
+        const val LOYALTY_EARNPOINTS = "/loyalty-{id}/exrates/{currency}/earnpoints"
         const val LOYALTY_PREAUTH = "/loyalty-{id}/pre-auth"
 
         const val IDENTIFIER_ID = "id"
@@ -113,7 +113,9 @@ interface   APITemplate {
         const val IDENTIFIER_LONGITUDE = "longitude"
         const val IDENTIFIER_ORG = "organisation_id"
         const val IDENTIFIER_CURRENCY = "currency"
-        const val IDENTIFIER_CURRENCY_SHORT = "cur"
+        const val IDENTIFIER_AMOUNT = "amount"
+        const val IDENTIFIER_TOTALAMOUNT = "total_amount"
+        const val IDENTIFIER_BURNPOINTS = "burn_points"
         const val IDENTIFIER_DATE_SCHEDULED = "local_time_of_pickup"
 
         private fun authHost() = KarhooEnvironmentDetails.current().authHost
@@ -248,11 +250,13 @@ interface   APITemplate {
 
     @GET(LOYALTY_BURNPOINTS)
     fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
-    String, @Query("amount") amount: Int): Deferred<Resource<LoyaltyPoints>>
+    String, @Query(IDENTIFIER_AMOUNT) amount: Int): Deferred<Resource<LoyaltyPoints>>
 
     @GET(LOYALTY_EARNPOINTS)
     fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
-    String, @Query("total_amount") totalAmount: Int, @Query("burn_points") burnPoints: Int):
+    String, @Query(IDENTIFIER_TOTALAMOUNT) totalAmount: Int, @Query(IDENTIFIER_BURNPOINTS)
+    burnPoints:
+    Int):
             Deferred<Resource<LoyaltyPoints>>
 
     @Headers("Content-Type: application/json")
