@@ -3,6 +3,7 @@ package com.karhoo.sdk.api.datastore.user
 import com.karhoo.sdk.analytics.AnalyticsManager.userInfo
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.CardType
+import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.UserInfo
 import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.doNothing
@@ -107,6 +108,21 @@ class UserStoreTest {
     fun `validating a user who is not valid`() {
         whenever(userManager.isUserStillValid).thenReturn(false)
         Assert.assertFalse(userStore.isCurrentUserValid)
+    }
+
+    @Test
+    fun `When adding a loyalty program in the user manager, then the user store returns itcorrectly`() {
+        whenever(userManager.loyaltyStatus).thenReturn(LoyaltyStatus(10, burnable = false,
+                                                                     earnable = false))
+        assertEquals(userStore.loyaltyStatus?.burnable, false)
+        assertEquals(userStore.loyaltyStatus?.earnable, false)
+        assertEquals(userStore.loyaltyStatus?.points, 10)
+    }
+
+    @Test
+    fun `When adding a null in the user manager, then the user store returns it correctly`() {
+        whenever(userManager.loyaltyStatus).thenReturn(null)
+        assertNull(userStore.loyaltyStatus)
     }
 
     private fun createUser(firstname: String, lastname: String, email: String, phone: String): UserInfo {

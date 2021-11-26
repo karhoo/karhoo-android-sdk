@@ -1,6 +1,7 @@
 package com.karhoo.sdk.api.datastore.user
 
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
+import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.UserInfo
@@ -49,4 +50,9 @@ class KarhooUserStore : UserStore {
             value?.let { userManager.paymentProvider = value }
         }
 
+    override var loyaltyStatus: LoyaltyStatus?
+        get() = userManager.loyaltyStatus
+        set(value) {
+            userManager.loyaltyStatus = value
+        }
 }
