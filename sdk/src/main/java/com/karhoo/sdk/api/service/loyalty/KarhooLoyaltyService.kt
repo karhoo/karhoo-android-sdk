@@ -7,9 +7,8 @@ import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.model.LoyaltyNonce
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.request.LoyaltyPreAuth
+import com.karhoo.sdk.api.network.request.LoyaltyPreAuthPayload
 import com.karhoo.sdk.call.Call
-import org.json.JSONObject
 import javax.inject.Inject
 
 class KarhooLoyaltyService : LoyaltyService {
@@ -35,10 +34,11 @@ class KarhooLoyaltyService : LoyaltyService {
     override fun getLoyaltyBurn(
         loyaltyID: String,
         currency: String,
-        cents: Int): Call<LoyaltyPoints>  = LoyaltyBurnPointsInteractor(credentialsManager, apiTemplate).apply {
+        cents: Int): Call<LoyaltyPoints>  = LoyaltyPointsInteractor(credentialsManager, apiTemplate).apply {
         this.loyaltyId = loyaltyID
         this.currency = currency
         this.amount = cents
+        this.toEarn = false
     }
 
     override fun getLoyaltyEarn(
@@ -46,15 +46,17 @@ class KarhooLoyaltyService : LoyaltyService {
         currency: String,
         totalAmount: Int,
         burnPoints: Int
-                               ): Call<LoyaltyPoints> = LoyaltyPointsToEarnInteractor(credentialsManager, apiTemplate).apply {
+                               ): Call<LoyaltyPoints> = LoyaltyPointsInteractor(credentialsManager, apiTemplate).apply {
         this.loyaltyId = loyaltyID
         this.currency = currency
         this.totalAmount = totalAmount
         this.burnPoints = burnPoints
+        this.toEarn = true
     }
 
-    override fun getLoyaltyPreAuth(request: LoyaltyPreAuth): Call<LoyaltyNonce> =
+    override fun getLoyaltyPreAuth(loyaltyID: String, request: LoyaltyPreAuthPayload): Call<LoyaltyNonce> =
         LoyaltyPreAuthInteractor(credentialsManager, apiTemplate).apply {
-            this.loyaltyPreAuth = request
+            this.loyaltyId = loyaltyID
+            this.preAuthRequest = request
         }
 }

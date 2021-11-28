@@ -40,7 +40,7 @@ import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.model.LoyaltyNonce
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.Quote
-import com.karhoo.sdk.api.network.request.LoyaltyPreAuth
+import com.karhoo.sdk.api.network.request.LoyaltyPreAuthPayload
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
@@ -250,19 +250,14 @@ interface   APITemplate {
     fun loyaltyStatus(@Path(IDENTIFIER_ID) id : String): Deferred<Resource<LoyaltyStatus>>
 
     @GET(LOYALTY_BURNPOINTS)
-    fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
-    String, @Query(IDENTIFIER_AMOUNT) amount: Int): Deferred<Resource<LoyaltyPoints>>
+    fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency: String, @Query(IDENTIFIER_AMOUNT) amount: Int): Deferred<Resource<LoyaltyPoints>>
 
     @GET(LOYALTY_EARNPOINTS)
-    fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency:
-    String, @Query(IDENTIFIER_TOTALAMOUNT) totalAmount: Int, @Query(IDENTIFIER_BURNPOINTS)
-    burnPoints:
-    Int):
-            Deferred<Resource<LoyaltyPoints>>
+    fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency: String, @Query(IDENTIFIER_TOTALAMOUNT) totalAmount: Int, @Query(IDENTIFIER_BURNPOINTS) burnPoints: Int): Deferred<Resource<LoyaltyPoints>>
 
     @Headers("Content-Type: application/json")
     @POST(LOYALTY_PREAUTH)
-    fun postLoyaltyPreAuth(@Body loyaltyPreAuth: LoyaltyPreAuth): Deferred<Resource<LoyaltyNonce>>
+    fun postLoyaltyPreAuth(@Path(IDENTIFIER_ID) id: String, @Body loyaltyPreAuth: LoyaltyPreAuthPayload): Deferred<Resource<LoyaltyNonce>>
 
 
     @POST
