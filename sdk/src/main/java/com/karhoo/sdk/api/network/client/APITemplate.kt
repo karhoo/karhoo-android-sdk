@@ -253,7 +253,8 @@ interface   APITemplate {
     fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency: String, @Query(IDENTIFIER_AMOUNT) amount: Int): Deferred<Resource<LoyaltyPoints>>
 
     @GET(LOYALTY_EARNPOINTS)
-    fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency: String, @Query(IDENTIFIER_TOTALAMOUNT) totalAmount: Int, @Query(IDENTIFIER_BURNPOINTS) burnPoints: Int): Deferred<Resource<LoyaltyPoints>>
+    fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency: String, @Query(IDENTIFIER_TOTALAMOUNT) totalAmount: Int,
+                            @Query(IDENTIFIER_BURNPOINTS) burnPoints: Int): Deferred<Resource<LoyaltyPoints>>
 
     @Headers("Content-Type: application/json")
     @POST(LOYALTY_PREAUTH)
