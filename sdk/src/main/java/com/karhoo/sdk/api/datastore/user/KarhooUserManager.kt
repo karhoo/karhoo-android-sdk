@@ -132,7 +132,7 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
         return if (id.isNotBlank()) Provider(id = id, loyalty = loyaltyProgrammes) else null
     }
 
-    private fun getLoyaltyProgramForUser(): LoyaltyProgramme {
+    private fun getLoyaltyProgramForUser(): LoyaltyProgramme? {
         val listType = object : TypeToken<LoyaltyProgramme>() {}.type
         return gson.fromJson(sharedPreferences.getString(PROVIDER_LOYALTY_PROGRAMMES, null),
                              listType)
