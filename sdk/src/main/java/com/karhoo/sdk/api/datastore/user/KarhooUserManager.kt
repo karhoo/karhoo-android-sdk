@@ -102,8 +102,7 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
                 if (sharedPreferences.contains(LOYALTY_STATUS)) {
                     gson.fromJson(
                             sharedPreferences.getString(LOYALTY_STATUS, null),
-                            object : TypeToken<LoyaltyStatus>() {}.type
-                                 )
+                            LoyaltyStatus::class.java)
                 } else {
                     null
                 }
