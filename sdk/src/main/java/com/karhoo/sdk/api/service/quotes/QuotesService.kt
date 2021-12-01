@@ -13,6 +13,8 @@ interface QuotesService {
 
     fun quotes(quotesSearch: QuotesSearch): PollCall<QuoteList>
 
+    fun quotes(quotesSearch: QuotesSearch, locale: String): PollCall<QuoteList>
+
     fun checkCoverage(coverageRequest: CoverageRequest): Call<Coverage>
 
     fun verifyQuotes(quoteId: QuoteId): Call<Quote>

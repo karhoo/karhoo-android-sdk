@@ -117,6 +117,7 @@ interface   APITemplate {
         const val IDENTIFIER_AMOUNT = "amount"
         const val IDENTIFIER_TOTALAMOUNT = "total_amount"
         const val IDENTIFIER_BURNPOINTS = "burn_points"
+        const val IDENTIFIER_LOCALE = "locale"
         const val IDENTIFIER_DATE_SCHEDULED = "local_time_of_pickup"
 
         private fun authHost() = KarhooEnvironmentDetails.current().authHost
@@ -157,6 +158,9 @@ interface   APITemplate {
 
     @POST(QUOTES_REQUEST_METHOD)
     fun quotes(@Body quotesRequest: QuotesRequest): Deferred<Resource<QuoteId>>
+
+    @POST(QUOTES_REQUEST_METHOD)
+    fun quotes(@Body quotesRequest: QuotesRequest, @Query(IDENTIFIER_LOCALE) locale: String): Deferred<Resource<QuoteId>>
 
     @GET(QUOTES_METHOD)
     fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>

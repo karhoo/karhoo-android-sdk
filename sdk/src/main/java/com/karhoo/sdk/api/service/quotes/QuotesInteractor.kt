@@ -32,6 +32,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
     internal var quotesSearch: QuotesSearch? = null
     private var vehicles: Vehicles? = null
     internal var quoteId: QuoteId? = null
+    internal var locale : String? = null
 
     override fun createRequest(): Deferred<Resource<QuoteList>> {
         quotesSearch?.let { search ->
@@ -109,7 +110,12 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }
         return runBlocking {
-            val quoteIdResult = apiTemplate.quotes(request).await()
+            val quoteIdResult : Resource<QuoteId>
+            if(locale != null)
+                quoteIdResult = apiTemplate.quotes(request, locale!!).await()
+            else
+                quoteIdResult = apiTemplate.quotes(request).await()
+
             when (quoteIdResult) {
                 is Resource.Success -> quotes(quoteIdResult.data)
                 is Resource.Failure -> async { Resource.Failure<Vehicles>(quoteIdResult.error) }
