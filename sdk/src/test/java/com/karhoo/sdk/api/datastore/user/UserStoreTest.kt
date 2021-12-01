@@ -112,10 +112,10 @@ class UserStoreTest {
 
     @Test
     fun `When adding a loyalty program in the user manager, then the user store returns itcorrectly`() {
-        whenever(userManager.loyaltyStatus).thenReturn(LoyaltyStatus(10, burnable = false,
-                                                                     earnable = false))
-        assertEquals(userStore.loyaltyStatus?.burnable, false)
-        assertEquals(userStore.loyaltyStatus?.earnable, false)
+        whenever(userManager.loyaltyStatus).thenReturn(LoyaltyStatus(10, canBurn = false,
+                                                                     canEarn = false))
+        assertEquals(userStore.loyaltyStatus?.canBurn, false)
+        assertEquals(userStore.loyaltyStatus?.canEarn, false)
         assertEquals(userStore.loyaltyStatus?.points, 10)
     }
 
