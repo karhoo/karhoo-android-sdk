@@ -165,6 +165,9 @@ interface   APITemplate {
     @GET(QUOTES_METHOD)
     fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
 
+    @GET(QUOTES_METHOD)
+    fun quotes(@Path(IDENTIFIER_ID) id: String, @Query(IDENTIFIER_LOCALE) locale: String): Deferred<Resource<Vehicles>>
+
     @GET(VERIFY_QUOTES_METHOD)
     fun verifyQuotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Quote>>
 

@@ -125,6 +125,11 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
 
     private fun quotes(quoteId: QuoteId): Deferred<Resource<Vehicles>> {
         this.quoteId = quoteId
-        return apiTemplate.quotes(quoteId.quoteId)
+
+        if(locale != null)
+            return apiTemplate.quotes(quoteId.quoteId, locale!!)
+        else
+            return apiTemplate.quotes(quoteId.quoteId)
+
     }
 }
