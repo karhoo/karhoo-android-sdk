@@ -44,7 +44,7 @@ class KarhooUserStore : UserStore {
             }
         }
 
-    override var paymentProvider: Provider?
+    override var paymentProvider: PaymentProvider?
         get() = userManager.paymentProvider
         set(value) {
             value?.let { userManager.paymentProvider = value }
