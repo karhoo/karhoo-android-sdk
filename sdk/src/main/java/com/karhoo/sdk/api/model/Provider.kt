@@ -6,5 +6,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Provider(@SerializedName("id") val id: String = "",
-                    @SerializedName("loyalty_programmes") val loyalty: List<LoyaltyProgramme>? = listOf())
+                    @SerializedName("loyalty_programmes") val loyalty:
+                           LoyaltyProgramme? = null)
     : Parcelable

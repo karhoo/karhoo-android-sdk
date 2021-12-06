@@ -267,7 +267,6 @@ interface   APITemplate {
     @POST(LOYALTY_PREAUTH)
     fun postLoyaltyPreAuth(@Path(IDENTIFIER_ID) id: String, @Body loyaltyPreAuth: LoyaltyPreAuthPayload): Deferred<Resource<LoyaltyNonce>>
 
-
     @POST
     @FormUrlEncoded
     @Headers("accept: application/json")
