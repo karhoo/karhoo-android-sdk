@@ -111,7 +111,14 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
         }
         return runBlocking {
             val quoteIdResult : Resource<QuoteId>
-            if(locale != null)
+
+//            locale?.let { locale ->
+//                quoteIdResult = apiTemplate.quotes(request, locale).await()
+//            } ?: run {
+//                quoteIdResult = apiTemplate.quotes(request).await()
+//            }
+
+            if(locale != null && !locale.isNullOrEmpty())
                 quoteIdResult = apiTemplate.quotes(request, locale!!).await()
             else
                 quoteIdResult = apiTemplate.quotes(request).await()
