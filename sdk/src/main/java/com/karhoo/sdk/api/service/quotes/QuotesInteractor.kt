@@ -110,18 +110,12 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }
         return runBlocking {
-            val quoteIdResult : Resource<QuoteId>
-
-//            locale?.let { locale ->
-//                quoteIdResult = apiTemplate.quotes(request, locale).await()
-//            } ?: run {
-//                quoteIdResult = apiTemplate.quotes(request).await()
-//            }
-
-            if(locale != null && !locale.isNullOrEmpty())
-                quoteIdResult = apiTemplate.quotes(request, locale!!).await()
-            else
-                quoteIdResult = apiTemplate.quotes(request).await()
+            val localeVal = if(locale.isNullOrEmpty()) null else locale
+            val quoteIdResult : Resource<QuoteId> = localeVal?.let { locale ->
+                apiTemplate.quotes(request, locale).await()
+            } ?: run {
+                apiTemplate.quotes(request).await()
+            }
 
             when (quoteIdResult) {
                 is Resource.Success -> quotes(quoteIdResult.data)
@@ -133,10 +127,11 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
     private fun quotes(quoteId: QuoteId): Deferred<Resource<Vehicles>> {
         this.quoteId = quoteId
 
-        if(locale != null && !locale.isNullOrEmpty())
-            return apiTemplate.quotes(quoteId.quoteId, locale!!)
-        else
+        val localeVal = if(locale.isNullOrEmpty()) null else locale
+        localeVal?.let { locale ->
+            return apiTemplate.quotes(quoteId.quoteId, locale)
+        } ?: run {
             return apiTemplate.quotes(quoteId.quoteId)
-
+        }
     }
 }
