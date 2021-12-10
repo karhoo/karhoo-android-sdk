@@ -33,9 +33,9 @@ internal class PaymentProviderInteractor @Inject constructor(credentialsManager:
     private suspend fun getPaymentProvider(): Resource<PaymentProvider> {
         return when (val result = apiTemplate.getPaymentProvider().await()) {
             is Resource.Success -> {
-                val paymentProvider = result.data.provider
+                val paymentProvider = result.data
                 userManager.paymentProvider = paymentProvider
-                if (paymentProvider.id.equals("Braintree", true)
+                if (paymentProvider.provider.id.equals("Braintree", true)
                         && userManager.user.organisations.isNotEmpty()) {
                     fetchUserCardDetails(user = userManager.user)
                 }

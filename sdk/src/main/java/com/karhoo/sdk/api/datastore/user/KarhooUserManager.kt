@@ -9,6 +9,7 @@ import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.LoyaltyProgramme
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.Organisation
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.UserInfo
 
@@ -72,12 +73,12 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
             value?.let { storeSavedPaymentInfo(value) }
         }
 
-    override var paymentProvider: Provider?
+    override var paymentProvider: PaymentProvider?
         get() = returnSavedPaymentProvider()
         set(value) {
             value?.let {
                 sharedPreferences.edit()
-                        .putString(PROVIDER_ID, value.id)
+                        .putString(PROVIDER_ID, value.provider.id)
                         .putString(PROVIDER_LOYALTY_PROGRAMMES, gson.toJson(value.loyalty))
                         .commit()
             }
@@ -124,11 +125,11 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
         }
     }
 
-    private fun returnSavedPaymentProvider(): Provider? {
+    private fun returnSavedPaymentProvider(): PaymentProvider? {
         val id = sharedPreferences.getString(PROVIDER_ID, "").orEmpty()
         val loyaltyProgrammes = getLoyaltyProgramForUser()
 
-        return if (id.isNotBlank()) Provider(id = id, loyalty = loyaltyProgrammes) else null
+        return if (id.isNotBlank()) PaymentProvider(provider = Provider(id), loyalty = loyaltyProgrammes) else null
     }
 
     private fun getLoyaltyProgramForUser(): LoyaltyProgramme? {

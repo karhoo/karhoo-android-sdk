@@ -540,12 +540,12 @@ class ServerRobot {
                 token = "njfdeilnvbflinvbiurnceernnvbrgtuverosa")
 
         val LOYALTY_PROGRAMMES = LoyaltyProgramme(
-                loyaltyID = "JA02121981",
-                loyaltyName = "someLoyaltyName"
+                id = "JA02121981",
+                name = "someLoyaltyName"
                                                  )
 
         val PAYMENT_PROVIDER = PaymentProvider(
-                Provider(id = "Provider1234", loyalty = LOYALTY_PROGRAMMES))
+                Provider(id = "Provider1234"), loyalty = LOYALTY_PROGRAMMES)
 
         /**
          *

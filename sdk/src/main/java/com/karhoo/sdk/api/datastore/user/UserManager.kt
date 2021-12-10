@@ -1,7 +1,7 @@
 package com.karhoo.sdk.api.datastore.user
 
 import com.karhoo.sdk.api.model.LoyaltyStatus
-import com.karhoo.sdk.api.model.Provider
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.UserInfo
 
 interface UserManager {
@@ -12,7 +12,7 @@ interface UserManager {
 
     var savedPaymentInfo: SavedPaymentInfo?
 
-    var paymentProvider: Provider?
+    var paymentProvider: PaymentProvider?
 
     var loyaltyStatus: LoyaltyStatus?
 
