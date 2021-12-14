@@ -26,7 +26,7 @@ class KarhooQuotesService : QuotesService {
         this.quotesSearch = quotesSearch
     }
 
-    override fun quotes(quotesSearch: QuotesSearch, locale: String): PollCall<QuoteList> =
+    override fun quotes(quotesSearch: QuotesSearch, locale: String?): PollCall<QuoteList> =
         QuotesInteractor(
             credentialsManager = credentialsManager,
             apiTemplate = apiTemplate).apply {
