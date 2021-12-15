@@ -110,7 +110,7 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
             return CompletableDeferred(Resource.Failure(error = KarhooError.InternalSDKError))
         }
         return runBlocking {
-            val localeVal = if(locale.isNullOrEmpty()) null else locale 
+            val localeVal = if(locale.isNullOrEmpty()) null else locale
             val quoteIdResult : Resource<QuoteId> = localeVal?.let { locale ->
                 apiTemplate.quotes(request, locale).await()
             } ?: run {
