@@ -6,4 +6,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 internal data class KarhooInternalError(@SerializedName("code") val code: String = "",
-                                        @SerializedName("message") val message: String = "") : Parcelable
+                                        @SerializedName("message") val message: String = "",
+                                        @SerializedName("slug") val slug: String? = null) : Parcelable
