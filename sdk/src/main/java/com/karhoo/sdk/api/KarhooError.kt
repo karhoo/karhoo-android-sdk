@@ -12,8 +12,8 @@ enum class KarhooError(var code: String,
                        var userFriendlyMessage: String) {
 
     Custom("KSDK00",
-               "Something went wrong but we don't know what it was",
-               "Something went wrong but we don't know what it was."),
+           "Something went wrong but we don't know what it was",
+           "Something went wrong but we don't know what it was."),
 
     Unexpected("KSDK01",
                "Something went wrong but we don't know what it was",
@@ -355,7 +355,8 @@ private fun parseHttpException(error: HttpException): KarhooError {
     return try {
         val responseBody = error.response()?.errorBody()?.string()
         Gson().fromJson(responseBody, KarhooInternalError::class.java)?.let {
-            return Gson().fromJson(it.code, KarhooError::class.java)
+            return Gson().fromJson(if (it.code.isEmpty()) it.slug else it.code,
+                                   KarhooError::class.java)
         }
         KarhooError.Unexpected.apply {
             code = error.code().toString()
