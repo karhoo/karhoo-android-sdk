@@ -12,8 +12,8 @@ enum class KarhooError(var code: String,
                        var userFriendlyMessage: String) {
 
     Custom("KSDK00",
-               "Something went wrong but we don't know what it was",
-               "Something went wrong but we don't know what it was."),
+           "Something went wrong but we don't know what it was",
+           "Something went wrong but we don't know what it was."),
 
     Unexpected("KSDK01",
                "Something went wrong but we don't know what it was",
@@ -228,6 +228,7 @@ enum class KarhooError(var code: String,
     CouldNotBookTripQuoteNoLongerAvailable("K4018",
                                            "Could not book trip as this Quote is no longer available",
                                            "Could not book trip as this quote is no longer available"),
+
     @SerializedName("K4020")
     CouldNotBookTripWithSelectedDMS("K4020",
                                     "Could not book trip with the selected DMS",
@@ -283,6 +284,31 @@ enum class KarhooError(var code: String,
                           "Failed to generate nonce",
                           "Failed to generate nonce"),
 
+    @SerializedName("customer-not-allowed-to-burn-points")
+    LoyaltyNotAllowedToBurnPoints("KL001",
+                                  "customer-not-allowed-to-burn-points",
+                                  "You are not allowed to burn points"),
+
+    @SerializedName("incoming-customer-points-exceed-balance")
+    LoyaltyIncomingPointsExceedBalance("KL002",
+                                       "incoming-customer-points-exceed-balance",
+                                       "Your points balance is insufficient"),
+
+    @SerializedName("empty-currency")
+    LoyaltyEmptyCurrency("KL003",
+                         "empty-currency",
+                         "The currency is not supported yet"),
+
+    @SerializedName("unknown-currency")
+    LoyaltyUnknownCurrency("KL004",
+                           "unknown-currency",
+                           "The currency is not supported yet"),
+
+    @SerializedName("internal-error")
+    LoyaltyInternalError("KL005",
+                         "internal-error",
+                         "Internal error"),
+
     @SerializedName("Q0001")
     OriginAndDestinationIdentical("Q0001",
                                   "Origin and destination cannot be the same.",
@@ -329,7 +355,8 @@ private fun parseHttpException(error: HttpException): KarhooError {
     return try {
         val responseBody = error.response()?.errorBody()?.string()
         Gson().fromJson(responseBody, KarhooInternalError::class.java)?.let {
-            return Gson().fromJson(it.code, KarhooError::class.java)
+            return Gson().fromJson(if (it.code.isEmpty()) it.slug else it.code,
+                                   KarhooError::class.java)
         }
         KarhooError.Unexpected.apply {
             code = error.code().toString()

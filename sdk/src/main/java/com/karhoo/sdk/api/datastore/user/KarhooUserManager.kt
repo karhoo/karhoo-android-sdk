@@ -7,7 +7,9 @@ import com.google.gson.reflect.TypeToken
 import com.karhoo.sdk.analytics.Analytics
 import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.LoyaltyProgramme
+import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.Organisation
+import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.UserInfo
 
@@ -71,16 +73,43 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
             value?.let { storeSavedPaymentInfo(value) }
         }
 
-    override var paymentProvider: Provider?
+    override var paymentProvider: PaymentProvider?
         get() = returnSavedPaymentProvider()
         set(value) {
             value?.let {
                 sharedPreferences.edit()
-                        .putString(PROVIDER_ID, value.id)
+                        .putString(PROVIDER_ID, value.provider.id)
                         .putString(PROVIDER_LOYALTY_PROGRAMMES, gson.toJson(value.loyalty))
                         .commit()
             }
         }
+
+    override var loyaltyStatus: LoyaltyStatus?
+        get() = retrieveSavedLoyaltyInfo()
+        set(value) {
+            value?.let {
+                sharedPreferences.edit()
+                        .putString(LOYALTY_STATUS, gson.toJson(value))
+                        .commit()
+            } ?: run {
+                sharedPreferences.edit()
+                        .remove(LOYALTY_STATUS)
+                        .commit()
+            }
+        }
+
+    private fun retrieveSavedLoyaltyInfo(): LoyaltyStatus? {
+        val loyaltyStatus =
+                if (sharedPreferences.contains(LOYALTY_STATUS)) {
+                    gson.fromJson(
+                            sharedPreferences.getString(LOYALTY_STATUS, null),
+                            LoyaltyStatus::class.java)
+                } else {
+                    null
+                }
+
+        return loyaltyStatus
+    }
 
     @SuppressLint("ApplySharedPref")
     private fun storeSavedPaymentInfo(savedPaymentInfo: SavedPaymentInfo) {
@@ -96,16 +125,17 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
         }
     }
 
-    private fun returnSavedPaymentProvider(): Provider? {
+    private fun returnSavedPaymentProvider(): PaymentProvider? {
         val id = sharedPreferences.getString(PROVIDER_ID, "").orEmpty()
-        val loyaltyProgrammes = getLoyaltyProgrammesForUser()
+        val loyaltyProgrammes = getLoyaltyProgramForUser()
 
-        return if (id.isNotBlank()) Provider(id = id, loyalty = loyaltyProgrammes) else null
+        return if (id.isNotBlank()) PaymentProvider(provider = Provider(id), loyalty = loyaltyProgrammes) else null
     }
 
-    private fun getLoyaltyProgrammesForUser(): List<LoyaltyProgramme> {
-        val listType = object : TypeToken<ArrayList<LoyaltyProgramme>>() {}.type
-        return gson.fromJson(sharedPreferences.getString(PROVIDER_LOYALTY_PROGRAMMES, "[]"), listType)
+    private fun getLoyaltyProgramForUser(): LoyaltyProgramme? {
+        val listType = object : TypeToken<LoyaltyProgramme>() {}.type
+        return gson.fromJson(sharedPreferences.getString(PROVIDER_LOYALTY_PROGRAMMES, null),
+                             listType)
     }
 
     private fun returnSavedPaymentInfo(): SavedPaymentInfo? {
@@ -154,6 +184,7 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
         private const val LAST_FOUR = "last_four"
         private const val CARD_TYPE = "card_type"
         private const val PROVIDER_ID = "payment_provider_id"
+        private const val LOYALTY_STATUS = "loyalty_status"
         private const val PROVIDER_LOYALTY_PROGRAMMES = "payment_provider_loyalty_programmes"
         const val PREFERENCES_USER_NAME = "user"
     }

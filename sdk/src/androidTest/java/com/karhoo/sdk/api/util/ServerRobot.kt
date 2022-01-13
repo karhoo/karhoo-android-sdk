@@ -393,7 +393,7 @@ class ServerRobot {
                         delayInMillis = delayInMillis,
                         endpoint = APITemplate.PAYMENT_PROVIDERS_METHOD)
     }
-    
+
     fun getCheckCoverageResponse(code: Int, response: Any, delayInMillis: Int = 0) {
         mockGetResponse(code = code,
                         response = response,
@@ -540,21 +540,12 @@ class ServerRobot {
                 token = "njfdeilnvbflinvbiurnceernnvbrgtuverosa")
 
         val LOYALTY_PROGRAMMES = LoyaltyProgramme(
-                loyaltyID = "JA02121981",
-                loyaltyName = "someLoyaltyName"
+                id = "JA02121981",
+                name = "someLoyaltyName"
                                                  )
 
         val PAYMENT_PROVIDER = PaymentProvider(
-                Provider(
-                        id = "Provider1234",
-                        loyalty = listOf(
-                                LOYALTY_PROGRAMMES,
-                                LOYALTY_PROGRAMMES.copy(
-                                        loyaltyID = "CO49501318",
-                                        loyaltyName = "aDifferentLoyaltyName"
-                                                       )
-                                        ))
-                                              )
+                Provider(id = "Provider1234"), loyalty = LOYALTY_PROGRAMMES)
 
         /**
          *
