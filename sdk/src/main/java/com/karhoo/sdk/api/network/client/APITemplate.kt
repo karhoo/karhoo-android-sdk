@@ -35,8 +35,12 @@ import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.model.Coverage
 import com.karhoo.sdk.api.model.LoyaltyBalance
+import com.karhoo.sdk.api.model.LoyaltyPoints
 import com.karhoo.sdk.api.model.LoyaltyConversion
+import com.karhoo.sdk.api.model.LoyaltyNonce
+import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.Quote
+import com.karhoo.sdk.api.network.request.LoyaltyPreAuthPayload
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
@@ -100,12 +104,20 @@ interface   APITemplate {
 
         const val LOYALTY_BALANCE = "/v3/payments/loyalty/programmes/{id}/balance"
         const val LOYALTY_CONVERSION = "/v3/payments/loyalty/programmes/{id}/rates"
+        const val LOYALTY_STATUS = "/loyalty-{id}/status"
+        const val LOYALTY_BURNPOINTS = "/loyalty-{id}/exrates/{currency}/burnpoints"
+        const val LOYALTY_EARNPOINTS = "/loyalty-{id}/exrates/{currency}/earnpoints"
+        const val LOYALTY_PREAUTH = "/loyalty-{id}/pre-auth"
 
         const val IDENTIFIER_ID = "id"
         const val IDENTIFIER_LATITUDE = "latitude"
         const val IDENTIFIER_LONGITUDE = "longitude"
         const val IDENTIFIER_ORG = "organisation_id"
         const val IDENTIFIER_CURRENCY = "currency"
+        const val IDENTIFIER_AMOUNT = "amount"
+        const val IDENTIFIER_TOTALAMOUNT = "total_amount"
+        const val IDENTIFIER_BURNPOINTS = "burn_points"
+        const val IDENTIFIER_LOCALE = "locale"
         const val IDENTIFIER_DATE_SCHEDULED = "local_time_of_pickup"
 
         private fun authHost() = KarhooEnvironmentDetails.current().authHost
@@ -147,8 +159,14 @@ interface   APITemplate {
     @POST(QUOTES_REQUEST_METHOD)
     fun quotes(@Body quotesRequest: QuotesRequest): Deferred<Resource<QuoteId>>
 
+    @POST(QUOTES_REQUEST_METHOD)
+    fun quotes(@Body quotesRequest: QuotesRequest, @Query(IDENTIFIER_LOCALE) locale: String): Deferred<Resource<QuoteId>>
+
     @GET(QUOTES_METHOD)
     fun quotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Vehicles>>
+
+    @GET(QUOTES_METHOD)
+    fun quotes(@Path(IDENTIFIER_ID) id: String, @Query(IDENTIFIER_LOCALE) locale: String): Deferred<Resource<Vehicles>>
 
     @GET(VERIFY_QUOTES_METHOD)
     fun verifyQuotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Quote>>
@@ -234,6 +252,20 @@ interface   APITemplate {
 
     @GET(LOYALTY_CONVERSION)
     fun loyaltyConversionRates(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<LoyaltyConversion>>
+
+    @GET(LOYALTY_STATUS)
+    fun loyaltyStatus(@Path(IDENTIFIER_ID) id : String): Deferred<Resource<LoyaltyStatus>>
+
+    @GET(LOYALTY_BURNPOINTS)
+    fun loyaltyBurnPoints(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency: String, @Query(IDENTIFIER_AMOUNT) amount: Int): Deferred<Resource<LoyaltyPoints>>
+
+    @GET(LOYALTY_EARNPOINTS)
+    fun loyaltyPointsToEarn(@Path(IDENTIFIER_ID) id: String, @Path(IDENTIFIER_CURRENCY) currency: String, @Query(IDENTIFIER_TOTALAMOUNT) totalAmount: Int,
+                            @Query(IDENTIFIER_BURNPOINTS) burnPoints: Int): Deferred<Resource<LoyaltyPoints>>
+
+    @Headers("Content-Type: application/json")
+    @POST(LOYALTY_PREAUTH)
+    fun postLoyaltyPreAuth(@Path(IDENTIFIER_ID) id: String, @Body loyaltyPreAuth: LoyaltyPreAuthPayload): Deferred<Resource<LoyaltyNonce>>
 
     @POST
     @FormUrlEncoded

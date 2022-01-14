@@ -59,6 +59,101 @@ class KarhooErrorTest {
         assertEquals(code, errorResult.code)
     }
 
+
+    /**
+     * Given:   A 400 Http code is thrown for a loyalty request with an empty-currency slug
+     * When:    Parsing the exception
+     * Then:    An LoyaltyEmptyCurrency error is resulted
+     */
+    @Test
+    fun `Getting a empty-currency slug, the outputted karhooError will be `() {
+        val message = "currency cannot be empty."
+        val slug = "empty-currency"
+        val exception = HttpException(Response.error<Any>(400,
+                                                          ResponseBody.create(null,
+                                                                              "{\"slug\":\"$slug\",\"message\":\"$message\"}")))
+
+        val errorResult = KarhooError.fromThrowable(exception)
+
+        assertEquals(errorResult, KarhooError.LoyaltyEmptyCurrency)
+    }
+
+    /**
+     * Given:   A 400 Http code is thrown for a loyalty request with an customer-not-allowed-to-burn-points slug
+     * When:    Parsing the exception
+     * Then:    An LoyaltyNotAllowedToBurnPoints error is resulted
+     */
+    @Test
+    fun `Getting a customer-not-allowed-to-burn-points slug, the outputted karhooError will be LoyaltyNotAllowedToBurnPoints `
+            () {
+        val message = "You are not allowed to burn points"
+        val slug = "customer-not-allowed-to-burn-points"
+        val exception = HttpException(Response.error<Any>(400,
+                                                          ResponseBody.create(null,
+                                                                              "{\"slug\":\"$slug\",\"message\":\"$message\"}")))
+
+        val errorResult = KarhooError.fromThrowable(exception)
+
+        assertEquals(errorResult, KarhooError.LoyaltyNotAllowedToBurnPoints)
+    }
+
+    /**
+     * Given:   A 400 Http code is thrown for a loyalty request with an incoming-customer-points-exceed-balance slug
+     * When:    Parsing the exception
+     * Then:    An LoyaltyIncomingPointsExceedBalance error is resulted
+     */
+    @Test
+    fun `Getting a incoming-customer-points-exceed-balance slug, the outputted karhooError will be LoyaltyIncomingPointsExceedBalance `
+            () {
+        val message = "Your points balance is insufficient"
+        val slug = "incoming-customer-points-exceed-balance"
+        val exception = HttpException(Response.error<Any>(400,
+                                                          ResponseBody.create(null,
+                                                                              "{\"slug\":\"$slug\",\"message\":\"$message\"}")))
+
+        val errorResult = KarhooError.fromThrowable(exception)
+
+        assertEquals(errorResult, KarhooError.LoyaltyIncomingPointsExceedBalance)
+    }
+
+    /**
+     * Given:   A 400 Http code is thrown for a loyalty request with an unknown-currency slug
+     * When:    Parsing the exception
+     * Then:    An LoyaltyUnknownCurrency error is resulted
+     */
+    @Test
+    fun `Getting a incoming-customer-points-exceed-balance slug, the outputted karhooError will be LoyaltyUnknownCurrency `
+            () {
+        val message = "The currency is not supported yet"
+        val slug = "unknown-currency"
+        val exception = HttpException(Response.error<Any>(400,
+                                                          ResponseBody.create(null,
+                                                                              "{\"slug\":\"$slug\",\"message\":\"$message\"}")))
+
+        val errorResult = KarhooError.fromThrowable(exception)
+
+        assertEquals(errorResult, KarhooError.LoyaltyUnknownCurrency)
+    }
+
+    /**
+     * Given:   A 400 Http code is thrown for a loyalty request with an internal-error slug
+     * When:    Parsing the exception
+     * Then:    An LoyaltyInternalError error is resulted
+     */
+    @Test
+    fun `Getting a incoming-customer-points-exceed-balance slug, the outputted karhooError will be LoyaltyInternalError `
+            () {
+        val message = "Internal error"
+        val slug = "internal-error"
+        val exception = HttpException(Response.error<Any>(400,
+                                                          ResponseBody.create(null,
+                                                                              "{\"slug\":\"$slug\",\"message\":\"$message\"}")))
+
+        val errorResult = KarhooError.fromThrowable(exception)
+
+        assertEquals(errorResult, KarhooError.LoyaltyInternalError)
+    }
+
     /**
      * Given:   An unrecognised HTTP error is thrown
      * When:    Parsing the error fails

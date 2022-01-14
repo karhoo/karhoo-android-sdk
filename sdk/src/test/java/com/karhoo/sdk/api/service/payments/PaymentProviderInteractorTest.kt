@@ -100,7 +100,7 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
             interactor.execute {
                 when (it) {
                     is Resource.Success -> {
-                        verify(userManager).paymentProvider = it.data.provider
+                        verify(userManager).paymentProvider = it.data
                         verify(paymentService).getNonce(any())
                         paymentProvider = it.data
                     }
@@ -129,7 +129,7 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
             interactor.execute {
                 when (it) {
                     is Resource.Success -> {
-                        verify(userManager).paymentProvider = it.data.provider
+                        verify(userManager).paymentProvider = it.data
                         verify(paymentService, never()).getNonce(any())
                         paymentProvider = it.data
                     }
@@ -160,7 +160,7 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
             interactor.execute {
                 when (it) {
                     is Resource.Success -> {
-                        verify(userManager).paymentProvider = it.data.provider
+                        verify(userManager).paymentProvider = it.data
                         verify(paymentService, never()).getNonce(any())
                         paymentProvider = it.data
                     }

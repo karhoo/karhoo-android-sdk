@@ -26,6 +26,14 @@ class KarhooQuotesService : QuotesService {
         this.quotesSearch = quotesSearch
     }
 
+    override fun quotes(quotesSearch: QuotesSearch, locale: String?): PollCall<QuoteList> =
+        QuotesInteractor(
+            credentialsManager = credentialsManager,
+            apiTemplate = apiTemplate).apply {
+        this.quotesSearch = quotesSearch
+        this.locale = locale
+    }
+
     override fun checkCoverage(coverageRequest: CoverageRequest): Call<Coverage> =
             CheckCoverageInteractor(
                     credentialsManager = credentialsManager,
