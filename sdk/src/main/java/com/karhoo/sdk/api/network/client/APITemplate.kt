@@ -98,9 +98,12 @@ interface   APITemplate {
 
         const val PAYMENT_PROVIDERS_METHOD = "/v3/payments/providers"
         const val ADYEN_PUBLIC_KEY_METHOD = "/v3/payments/adyen/public-key"
-        const val ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/{version}/payments-methods"
-        const val ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/{version}/payments"
-        const val ADYEN_PAYMENT_DETAILS = "/v3/payments/adyen/{version}/payments-details"
+        const val ADYEN_PAYMENT_METHODS_METHOD_WITH_VERSION = "/v3/payments/adyen/{version}/payments-methods"
+        const val ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
+        const val ADYEN_PAYMENTS_METHOD_WITH_VERSION = "/v3/payments/adyen/{version}/payments"
+        const val ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/payments"
+        const val ADYEN_PAYMENT_DETAILS_WITH_VERSION = "/v3/payments/adyen/{version}/payments-details"
+        const val ADYEN_PAYMENT_DETAILS = "/v3/payments/adyen/payments-details"
 
         const val LOYALTY_BALANCE = "/v3/payments/loyalty/programmes/{id}/balance"
         const val LOYALTY_CONVERSION = "/v3/payments/loyalty/programmes/{id}/rates"
@@ -236,16 +239,28 @@ interface   APITemplate {
     fun getAdyenPublicKey(): Deferred<Resource<AdyenPublicKey>>
 
     @POST(ADYEN_PAYMENT_METHODS_METHOD)
+    fun getAdyenPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
+            Deferred<Resource<ResponseBody>>
+
+    @POST(ADYEN_PAYMENT_METHODS_METHOD_WITH_VERSION)
     fun getAdyenPaymentMethods(@Path(IDENTIFIER_VERSION) version: String, @Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
             Deferred<Resource<ResponseBody>>
 
     @Headers("Content-Type: application/json")
-    @POST(ADYEN_PAYMENTS_METHOD)
+    @POST(ADYEN_PAYMENTS_METHOD_WITH_VERSION)
     fun getAdyenPayments(@Path(IDENTIFIER_VERSION) version: String, @Body adyenPaymentsRequest: String):
             Deferred<Resource<ResponseBody>>
 
     @Headers("Content-Type: application/json")
+    @POST(ADYEN_PAYMENTS_METHOD)
+    fun getAdyenPayments(@Body adyenPaymentsRequest: String): Deferred<Resource<ResponseBody>>
+
+    @Headers("Content-Type: application/json")
     @POST(ADYEN_PAYMENT_DETAILS)
+    fun getAdyenPaymentDetails(@Body adyenPaymentsDetails: String): Deferred<Resource<ResponseBody>>
+
+    @Headers("Content-Type: application/json")
+    @POST(ADYEN_PAYMENT_DETAILS_WITH_VERSION)
     fun getAdyenPaymentDetails(@Path(IDENTIFIER_VERSION) version: String, @Body adyenPaymentsDetails: String): Deferred<Resource<ResponseBody>>
 
     @GET(LOYALTY_BALANCE)

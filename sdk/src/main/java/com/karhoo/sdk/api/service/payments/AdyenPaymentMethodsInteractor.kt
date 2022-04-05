@@ -21,7 +21,7 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
     : BaseCallInteractor<String>(true, credentialsManager, apiTemplate, context) {
 
     var adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest? = null
-    var version: String = "v51"
+    var version: String? = null
 
     override fun createRequest(): Deferred<Resource<String>> {
         adyenPaymentMethodsRequest?.let {
@@ -34,18 +34,34 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
     }
 
     private suspend fun getPaymentMethods(request: AdyenPaymentMethodsRequest): Resource<String> {
-        return when (val result = apiTemplate.getAdyenPaymentMethods(version, request)
+        version?.let {
+            return when (val result = apiTemplate.getAdyenPaymentMethods(it, request)
                 .await()) {
-            is Resource.Success -> {
-                val responseBody = result.data.string()
-                if (responseBody.isNullOrBlank()) {
-                    Resource.Failure(error = KarhooError.InternalSDKError)
-                } else {
-                    Resource.Success(data = responseBody)
+                is Resource.Success -> {
+                    val responseBody = result.data.string()
+                    if (responseBody.isNullOrBlank()) {
+                        Resource.Failure(error = KarhooError.InternalSDKError)
+                    } else {
+                        Resource.Success(data = responseBody)
+                    }
                 }
+                is Resource.Failure -> Resource.Failure(error = result.error)
             }
-            is Resource.Failure -> Resource.Failure(error = result.error)
+        }?: kotlin.run {
+            return when (val result = apiTemplate.getAdyenPaymentMethods(request)
+                .await()) {
+                is Resource.Success -> {
+                    val responseBody = result.data.string()
+                    if (responseBody.isNullOrBlank()) {
+                        Resource.Failure(error = KarhooError.InternalSDKError)
+                    } else {
+                        Resource.Success(data = responseBody)
+                    }
+                }
+                is Resource.Failure -> Resource.Failure(error = result.error)
+            }
         }
+
     }
 
 }
