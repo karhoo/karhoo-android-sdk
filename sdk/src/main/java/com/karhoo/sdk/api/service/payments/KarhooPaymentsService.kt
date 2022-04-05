@@ -45,15 +45,18 @@ class KarhooPaymentsService : PaymentsService {
 
     override fun getAdyenPaymentMethods(request: AdyenPaymentMethodsRequest): Call<String> =
             AdyenPaymentMethodsInteractor(credentialsManager, apiTemplate).apply {
+                userManager.paymentProvider?.provider?.version?.let { this.version = it }
                 this.adyenPaymentMethodsRequest = request
             }
 
     override fun getAdyenPayments(request: String): Call<JSONObject> =
             AdyenPaymentsInteractor(credentialsManager, apiTemplate).apply {
+                userManager.paymentProvider?.provider?.version?.let { this.version = it }
                 this.adyenPaymentsRequest = request
             }
 
     override fun getAdyenPaymentDetails(paymentDetails: String): Call<JSONObject> = AdyenPaymentsDetailsInteractor(credentialsManager, apiTemplate).apply {
+        userManager.paymentProvider?.provider?.version?.let { this.version = it }
         this.adyenPaymentsDetails = paymentDetails
     }
 

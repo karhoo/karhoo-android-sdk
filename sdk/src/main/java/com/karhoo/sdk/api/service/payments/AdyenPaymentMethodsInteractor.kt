@@ -21,6 +21,7 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
     : BaseCallInteractor<String>(true, credentialsManager, apiTemplate, context) {
 
     var adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest? = null
+    var version: String = "v51"
 
     override fun createRequest(): Deferred<Resource<String>> {
         adyenPaymentMethodsRequest?.let {
@@ -33,7 +34,7 @@ internal class AdyenPaymentMethodsInteractor @Inject constructor(credentialsMana
     }
 
     private suspend fun getPaymentMethods(request: AdyenPaymentMethodsRequest): Resource<String> {
-        return when (val result = apiTemplate.getAdyenPaymentMethods(request)
+        return when (val result = apiTemplate.getAdyenPaymentMethods(version, request)
                 .await()) {
             is Resource.Success -> {
                 val responseBody = result.data.string()

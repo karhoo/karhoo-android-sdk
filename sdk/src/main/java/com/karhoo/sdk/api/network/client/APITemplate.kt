@@ -98,9 +98,9 @@ interface   APITemplate {
 
         const val PAYMENT_PROVIDERS_METHOD = "/v3/payments/providers"
         const val ADYEN_PUBLIC_KEY_METHOD = "/v3/payments/adyen/public-key"
-        const val ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
-        const val ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/payments"
-        const val ADYEN_PAYMENT_DETAILS = "/v3/payments/adyen/payments-details"
+        const val ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/{version}/payments-methods"
+        const val ADYEN_PAYMENTS_METHOD = "/v3/payments/adyen/{version}/payments"
+        const val ADYEN_PAYMENT_DETAILS = "/v3/payments/adyen/{version}/payments-details"
 
         const val LOYALTY_BALANCE = "/v3/payments/loyalty/programmes/{id}/balance"
         const val LOYALTY_CONVERSION = "/v3/payments/loyalty/programmes/{id}/rates"
@@ -119,6 +119,7 @@ interface   APITemplate {
         const val IDENTIFIER_BURNPOINTS = "burn_points"
         const val IDENTIFIER_LOCALE = "locale"
         const val IDENTIFIER_DATE_SCHEDULED = "local_time_of_pickup"
+        const val IDENTIFIER_VERSION = "version"
 
         private fun authHost() = KarhooEnvironmentDetails.current().authHost
     }
@@ -235,17 +236,17 @@ interface   APITemplate {
     fun getAdyenPublicKey(): Deferred<Resource<AdyenPublicKey>>
 
     @POST(ADYEN_PAYMENT_METHODS_METHOD)
-    fun getAdyenPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
+    fun getAdyenPaymentMethods(@Path(IDENTIFIER_VERSION) version: String, @Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
             Deferred<Resource<ResponseBody>>
 
     @Headers("Content-Type: application/json")
     @POST(ADYEN_PAYMENTS_METHOD)
-    fun getAdyenPayments(@Body adyenPaymentsRequest: String):
+    fun getAdyenPayments(@Path(IDENTIFIER_VERSION) version: String, @Body adyenPaymentsRequest: String):
             Deferred<Resource<ResponseBody>>
 
     @Headers("Content-Type: application/json")
     @POST(ADYEN_PAYMENT_DETAILS)
-    fun getAdyenPaymentDetails(@Body adyenPaymentsDetails: String): Deferred<Resource<ResponseBody>>
+    fun getAdyenPaymentDetails(@Path(IDENTIFIER_VERSION) version: String, @Body adyenPaymentsDetails: String): Deferred<Resource<ResponseBody>>
 
     @GET(LOYALTY_BALANCE)
     fun getLoyaltyBalance(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<LoyaltyBalance>>
