@@ -6,5 +6,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Provider(@SerializedName("id") val id: String = "",
-                    @SerializedName("version") val version: String = "")
+                    @SerializedName("version") val version: String? = null)
     : Parcelable

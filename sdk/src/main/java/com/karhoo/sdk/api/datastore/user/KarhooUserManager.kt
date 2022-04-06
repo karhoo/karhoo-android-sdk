@@ -128,7 +128,7 @@ class KarhooUserManager(private val sharedPreferences: SharedPreferences,
 
     private fun returnSavedPaymentProvider(): PaymentProvider? {
         val id = sharedPreferences.getString(PROVIDER_ID, "").orEmpty()
-        val version = sharedPreferences.getString(PROVIDER_VERSION, "").orEmpty()
+        val version = sharedPreferences.getString(PROVIDER_VERSION, "")
         val loyaltyProgrammes = getLoyaltyProgramForUser()
 
         return if (id.isNotBlank()) PaymentProvider(provider = Provider(id, version), loyalty = loyaltyProgrammes) else null

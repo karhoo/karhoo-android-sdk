@@ -20,7 +20,7 @@ internal class AdyenPaymentsDetailsInteractor @Inject constructor(private val cr
     : BaseCallInteractor<JSONObject>(true, credentialsManager, apiTemplate, context) {
 
     var adyenPaymentsDetails: String? = null
-    var version: String = ""
+    var version: String? = null
 
     override fun createRequest(): Deferred<Resource<JSONObject>> {
         adyenPaymentsDetails?.let {
@@ -34,32 +34,17 @@ internal class AdyenPaymentsDetailsInteractor @Inject constructor(private val cr
 
     private suspend fun getAdyenPaymentsDetails(adyenPaymentsDetails: String):
             Resource<JSONObject> {
-        if(version.isNotBlank()){
-            return when (val result = apiTemplate.getAdyenPaymentDetails(version, adyenPaymentsDetails).await()) {
-                is Resource.Success -> {
-                    val responseBody = result.data.string()
-                    if (responseBody.isNullOrBlank()) {
-                        Resource.Failure(error = KarhooError.InternalSDKError)
-                    } else {
-                        val response = JSONObject(responseBody)
-                        Resource.Success(data = response)
-                    }
+        return when (val result = version?.let { apiTemplate.getAdyenPaymentDetails(it, adyenPaymentsDetails).await() }?: apiTemplate.getAdyenPaymentDetails(adyenPaymentsDetails).await() ) {
+            is Resource.Success -> {
+                val responseBody = result.data.string()
+                if (responseBody.isNullOrBlank()) {
+                    Resource.Failure(error = KarhooError.InternalSDKError)
+                } else {
+                    val response = JSONObject(responseBody)
+                    Resource.Success(data = response)
                 }
-                is Resource.Failure -> Resource.Failure(error = result.error)
             }
-        }else {
-            return when (val result = apiTemplate.getAdyenPaymentDetails(adyenPaymentsDetails).await()) {
-                is Resource.Success -> {
-                    val responseBody = result.data.string()
-                    if (responseBody.isNullOrBlank()) {
-                        Resource.Failure(error = KarhooError.InternalSDKError)
-                    } else {
-                        val response = JSONObject(responseBody)
-                        Resource.Success(data = response)
-                    }
-                }
-                is Resource.Failure -> Resource.Failure(error = result.error)
-            }
+            is Resource.Failure -> Resource.Failure(error = result.error)
         }
     }
 
