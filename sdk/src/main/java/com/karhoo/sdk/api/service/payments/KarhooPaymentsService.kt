@@ -6,6 +6,7 @@ import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.PaymentsNonce
+import com.karhoo.sdk.api.model.adyen.AdyenClientKey
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
@@ -59,5 +60,7 @@ class KarhooPaymentsService : PaymentsService {
         userManager.paymentProvider?.provider?.version?.let { this.version = it }
         this.adyenPaymentsDetails = paymentDetails
     }
+
+    override fun getAdyenClientKey(): Call<AdyenClientKey> = AdyenClientKeyInteractor(credentialsManager, apiTemplate).apply {}
 
 }

@@ -40,6 +40,7 @@ import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.model.LoyaltyNonce
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.Quote
+import com.karhoo.sdk.api.model.adyen.AdyenClientKey
 import com.karhoo.sdk.api.network.request.LoyaltyPreAuthPayload
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.Deferred
@@ -98,6 +99,7 @@ interface   APITemplate {
 
         const val PAYMENT_PROVIDERS_METHOD = "/v3/payments/providers"
         const val ADYEN_PUBLIC_KEY_METHOD = "/v3/payments/adyen/public-key"
+        const val ADYEN_CLIENT_KEY_METHOD = "/v3/payments/adyen/client-key"
         const val ADYEN_PAYMENT_METHODS_METHOD_WITH_VERSION = "/v3/payments/adyen/{version}/payments-methods"
         const val ADYEN_PAYMENT_METHODS_METHOD = "/v3/payments/adyen/payments-methods"
         const val ADYEN_PAYMENTS_METHOD_WITH_VERSION = "/v3/payments/adyen/{version}/payments"
@@ -237,6 +239,9 @@ interface   APITemplate {
 
     @GET(ADYEN_PUBLIC_KEY_METHOD)
     fun getAdyenPublicKey(): Deferred<Resource<AdyenPublicKey>>
+
+    @GET(ADYEN_CLIENT_KEY_METHOD)
+    fun getAdyenClientKey(): Deferred<Resource<AdyenClientKey>>
 
     @POST(ADYEN_PAYMENT_METHODS_METHOD)
     fun getAdyenPaymentMethods(@Body adyenPaymentMethodsRequest: AdyenPaymentMethodsRequest):
