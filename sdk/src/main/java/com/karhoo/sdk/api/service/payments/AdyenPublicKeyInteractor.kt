@@ -12,7 +12,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
-
+@Deprecated("Use the client-key instead")
 internal class AdyenPublicKeyInteractor @Inject constructor(credentialsManager: CredentialsManager,
                                                            private val apiTemplate: APITemplate,
                                                            private val context:
@@ -24,7 +24,7 @@ internal class AdyenPublicKeyInteractor @Inject constructor(credentialsManager: 
             return@async getPublicKey()
         }
     }
-
+    @Deprecated("Use the client-key instead")
     private suspend fun getPublicKey(): Resource<AdyenPublicKey> {
         return when (val result = apiTemplate.getAdyenPublicKey()
                 .await()) {
