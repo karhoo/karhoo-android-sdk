@@ -98,6 +98,7 @@ interface   APITemplate {
         const val AUTH_REFRESH_METHOD = "/oauth/v2/token"
 
         const val PAYMENT_PROVIDERS_METHOD = "/v3/payments/providers"
+        @Deprecated("Use the client-key instead")
         const val ADYEN_PUBLIC_KEY_METHOD = "/v3/payments/adyen/public-key"
         const val ADYEN_CLIENT_KEY_METHOD = "/v3/payments/adyen/client-key"
         const val ADYEN_PAYMENT_METHODS_METHOD_WITH_VERSION = "/v3/payments/adyen/{version}/payments-methods"
@@ -237,6 +238,7 @@ interface   APITemplate {
     @GET(PAYMENT_PROVIDERS_METHOD)
     fun getPaymentProvider(): Deferred<Resource<PaymentProvider>>
 
+    @Deprecated("Use the client-key instead")
     @GET(ADYEN_PUBLIC_KEY_METHOD)
     fun getAdyenPublicKey(): Deferred<Resource<AdyenPublicKey>>
 

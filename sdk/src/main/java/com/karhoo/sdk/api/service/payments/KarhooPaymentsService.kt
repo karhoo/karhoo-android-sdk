@@ -42,6 +42,11 @@ class KarhooPaymentsService : PaymentsService {
 
     override fun getPaymentProvider(): Call<PaymentProvider> = PaymentProviderInteractor(credentialsManager, userManager, apiTemplate, KarhooApi.paymentsService).apply {}
 
+    @Deprecated("Use the client-key instead", ReplaceWith(
+        "AdyenClientKeyInteractor(credentialsManager, apiTemplate).apply {}",
+        "com.karhoo.sdk.api.service.payments.AdyenClientKeyInteractor"
+    )
+    )
     override fun getAdyenPublicKey(): Call<AdyenPublicKey> = AdyenPublicKeyInteractor(credentialsManager, apiTemplate).apply {}
 
     override fun getAdyenPaymentMethods(request: AdyenPaymentMethodsRequest): Call<String> =
