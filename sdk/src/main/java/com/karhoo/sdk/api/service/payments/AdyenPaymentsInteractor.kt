@@ -20,6 +20,7 @@ internal class AdyenPaymentsInteractor @Inject constructor(private val credentia
     : BaseCallInteractor<JSONObject>(true, credentialsManager, apiTemplate, context) {
 
     var adyenPaymentsRequest: String? = null
+    var version: String? = null
 
     override fun createRequest(): Deferred<Resource<JSONObject>> {
         adyenPaymentsRequest?.let {
@@ -33,7 +34,7 @@ internal class AdyenPaymentsInteractor @Inject constructor(private val credentia
 
     private suspend fun getAdyenPayments(adyenPaymentsRequest: String):
             Resource<JSONObject> {
-        return when (val result = apiTemplate.getAdyenPayments(adyenPaymentsRequest).await()) {
+        return when (val result = version?.let { apiTemplate.getAdyenPayments(it, adyenPaymentsRequest).await() }?: apiTemplate.getAdyenPayments(adyenPaymentsRequest).await() ) {
             is Resource.Success -> {
                 val responseBody = result.data.string()
                 if (responseBody.isNullOrBlank()) {
