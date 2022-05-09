@@ -119,26 +119,21 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    A call is made to get the nonce
      **/
     @Test
-    fun `no nonce call made for Adyen users`() {
+    fun `nonce call made for Adyen users`() {
         whenever(apiTemplate.getPaymentProvider())
                 .thenReturn(CompletableDeferred(Resource.Success(adyenProvider)))
-
-        var paymentProvider: PaymentProvider? = null
 
         runBlocking {
             interactor.execute {
                 when (it) {
                     is Resource.Success -> {
                         verify(userManager).paymentProvider = it.data
-                        verify(paymentService, never()).getNonce(any())
-                        paymentProvider = it.data
+                        verify(paymentService, atLeastOnce()).getNonce(any())
                     }
                 }
             }
             delay(20)
         }
-
-        assertEquals(adyenProvider, paymentProvider)
     }
 
     /**
@@ -148,27 +143,22 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    A call is made to get the nonce
      **/
     @Test
-    fun `no nonce call made for guest Braintree users`() {
+    fun `nonce call made for guest Braintree users`() {
         whenever(apiTemplate.getPaymentProvider())
                 .thenReturn(CompletableDeferred(Resource.Success(braintreeProvider)))
         whenever(userManager.user).thenReturn(userInfo)
         whenever(userInfo.organisations).thenReturn(emptyList())
-
-        var paymentProvider: PaymentProvider? = null
 
         runBlocking {
             interactor.execute {
                 when (it) {
                     is Resource.Success -> {
                         verify(userManager).paymentProvider = it.data
-                        verify(paymentService, never()).getNonce(any())
-                        paymentProvider = it.data
+                        verify(paymentService, atLeastOnce()).getNonce(any())
                     }
                 }
             }
             delay(20)
         }
-
-        assertEquals(braintreeProvider, paymentProvider)
     }
 }
