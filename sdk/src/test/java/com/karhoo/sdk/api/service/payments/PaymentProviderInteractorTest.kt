@@ -147,7 +147,6 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
         whenever(apiTemplate.getPaymentProvider())
                 .thenReturn(CompletableDeferred(Resource.Success(braintreeProvider)))
         whenever(userManager.user).thenReturn(userInfo)
-        whenever(userInfo.organisations).thenReturn(emptyList())
 
         runBlocking {
             interactor.execute {
