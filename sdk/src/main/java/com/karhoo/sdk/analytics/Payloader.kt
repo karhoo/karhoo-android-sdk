@@ -143,6 +143,18 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
+        fun paymentFailed(errorMessage: String,
+                          lastFourDigits: String,
+                          date: Date,
+                          amount: Int,
+                          currency: String) {
+            payload[PAYMENT_ERROR_MESSAGE] = errorMessage
+            payload[PAYMENT_CARD_LAST_FOUR_DIGITS] = lastFourDigits
+            payload[PAYMENT_AMOUNT] = amount
+            payload[PAYMENT_CURRENCY] = currency
+            payload[PAYMENT_DATE] = date.toString()
+        }
+
         fun tripId(tripId: String?): Builder {
             payload[TRIP_ID] = tripId.orEmpty()
             return this
@@ -208,5 +220,10 @@ class Payloader internal constructor(builder: Builder) {
         private const val REQUEST_ERROR = "request_error"
         private const val REQUEST_URL = "request_url"
         private const val GUEST_MODE = "guest_mode"
+        private const val PAYMENT_DATE = "date"
+        private const val PAYMENT_ERROR_MESSAGE = "message"
+        private const val PAYMENT_CARD_LAST_FOUR_DIGITS = "card_last_4_digits"
+        private const val PAYMENT_AMOUNT = "amount"
+        private const val PAYMENT_CURRENCY = "currency"
     }
 }
