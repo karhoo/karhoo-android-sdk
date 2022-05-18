@@ -5,6 +5,7 @@ import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.UserInfo
 import java.util.HashMap
+import java.util.Date
 
 class Payloader internal constructor(builder: Builder) {
 
