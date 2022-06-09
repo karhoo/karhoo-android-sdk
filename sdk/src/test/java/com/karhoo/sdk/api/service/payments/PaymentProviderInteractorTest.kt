@@ -12,9 +12,9 @@ import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.karhoo.sdk.call.Call
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.atLeastOnce
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
 import kotlinx.coroutines.CompletableDeferred
@@ -119,26 +119,21 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    A call is made to get the nonce
      **/
     @Test
-    fun `no nonce call made for Adyen users`() {
+    fun `nonce call made for Adyen users`() {
         whenever(apiTemplate.getPaymentProvider())
                 .thenReturn(CompletableDeferred(Resource.Success(adyenProvider)))
-
-        var paymentProvider: PaymentProvider? = null
 
         runBlocking {
             interactor.execute {
                 when (it) {
                     is Resource.Success -> {
                         verify(userManager).paymentProvider = it.data
-                        verify(paymentService, never()).getNonce(any())
-                        paymentProvider = it.data
+                        verify(paymentService, atLeastOnce()).getNonce(any())
                     }
                 }
             }
             delay(20)
         }
-
-        assertEquals(adyenProvider, paymentProvider)
     }
 
     /**
@@ -148,27 +143,21 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
      * Then:    A call is made to get the nonce
      **/
     @Test
-    fun `no nonce call made for guest Braintree users`() {
+    fun `nonce call made for guest Braintree users`() {
         whenever(apiTemplate.getPaymentProvider())
                 .thenReturn(CompletableDeferred(Resource.Success(braintreeProvider)))
         whenever(userManager.user).thenReturn(userInfo)
-        whenever(userInfo.organisations).thenReturn(emptyList())
-
-        var paymentProvider: PaymentProvider? = null
 
         runBlocking {
             interactor.execute {
                 when (it) {
                     is Resource.Success -> {
                         verify(userManager).paymentProvider = it.data
-                        verify(paymentService, never()).getNonce(any())
-                        paymentProvider = it.data
+                        verify(paymentService, atLeastOnce()).getNonce(any())
                     }
                 }
             }
             delay(20)
         }
-
-        assertEquals(braintreeProvider, paymentProvider)
     }
 }
