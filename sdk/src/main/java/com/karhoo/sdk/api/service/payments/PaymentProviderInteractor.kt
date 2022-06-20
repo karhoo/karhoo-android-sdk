@@ -16,13 +16,14 @@ import kotlinx.coroutines.async
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-internal class PaymentProviderInteractor @Inject constructor(credentialsManager: CredentialsManager,
-                                                             private val userManager: UserManager,
-                                                             private val apiTemplate: APITemplate,
-                                                             private val paymentsService: PaymentsService,
-                                                             context: CoroutineContext
-                                                             = Dispatchers.Main)
-    : BaseCallInteractor<PaymentProvider>(true, credentialsManager, apiTemplate, context) {
+internal class PaymentProviderInteractor @Inject constructor(
+    credentialsManager: CredentialsManager,
+    private val userManager: UserManager,
+    private val apiTemplate: APITemplate,
+    private val paymentsService: PaymentsService,
+    context: CoroutineContext
+    = Dispatchers.Main
+) : BaseCallInteractor<PaymentProvider>(true, credentialsManager, apiTemplate, context) {
 
     override fun createRequest(): Deferred<Resource<PaymentProvider>> {
         return GlobalScope.async {
@@ -43,13 +44,19 @@ internal class PaymentProviderInteractor @Inject constructor(credentialsManager:
     }
 
     private fun fetchUserCardDetails(user: UserInfo) {
+        if(user.userId.isEmpty()) {
+            return
+        }
+
         val nonceRequest = NonceRequest(
-                payer = Payer(
-                        id = user.userId,
-                        email = user.email,
-                        firstName = user.firstName,
-                        lastName = user.lastName),
-                organisationId = user.organisations.first().id)
+            payer = Payer(
+                id = user.userId,
+                email = user.email,
+                firstName = user.firstName,
+                lastName = user.lastName
+            ),
+            organisationId = user.organisations.first().id
+        )
         paymentsService.getNonce(nonceRequest).execute { }
     }
 

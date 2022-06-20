@@ -43,6 +43,7 @@ enum class Event constructor(val value: String) {
     USER_PROFILE_SAVE_PRESSED("user_profile_save_pressed"),
     USER_PROFILE_UPDATE_SUCCESS("user_profile_update_success"),
     USER_PROFILE_UPDATE_FAILED("user_profile_update_failed"),
+    PAYMENT_FAILED("payment_failed"),
     REQUEST_ERROR("request_error")
 
 }
