@@ -148,12 +148,13 @@ class Payloader internal constructor(builder: Builder) {
                           lastFourDigits: String,
                           date: Date,
                           amount: Int,
-                          currency: String) {
+                          currency: String): Builder {
             payload[PAYMENT_ERROR_MESSAGE] = errorMessage
             payload[PAYMENT_CARD_LAST_FOUR_DIGITS] = lastFourDigits
             payload[PAYMENT_AMOUNT] = amount
             payload[PAYMENT_CURRENCY] = currency
             payload[PAYMENT_DATE] = date.toString()
+            return this
         }
 
         fun tripId(tripId: String?): Builder {
