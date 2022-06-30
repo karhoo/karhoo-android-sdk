@@ -157,6 +157,19 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
+        fun payment3DSFailed(errorMessage: String,
+                             lastFourDigits: String,
+                             date: Date,
+                             amount: Int,
+                             currency: String): Builder {
+            payload[PAYMENT_ERROR_MESSAGE] = errorMessage
+            payload[PAYMENT_CARD_LAST_FOUR_DIGITS] = lastFourDigits
+            payload[PAYMENT_AMOUNT] = amount
+            payload[PAYMENT_CURRENCY] = currency
+            payload[PAYMENT_DATE] = date.toString()
+            return this
+        }
+
         fun tripId(tripId: String?): Builder {
             payload[TRIP_ID] = tripId.orEmpty()
             return this

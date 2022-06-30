@@ -44,6 +44,7 @@ enum class Event constructor(val value: String) {
     USER_PROFILE_UPDATE_SUCCESS("user_profile_update_success"),
     USER_PROFILE_UPDATE_FAILED("user_profile_update_failed"),
     PAYMENT_FAILED("payment_failed"),
+    PAYMENT_3DS_FAILED("payment_3DS_failed"),
     REQUEST_ERROR("request_error")
 
 }
