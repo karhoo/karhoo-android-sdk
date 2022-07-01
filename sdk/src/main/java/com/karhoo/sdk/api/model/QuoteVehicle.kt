@@ -9,6 +9,6 @@ import kotlinx.android.parcel.Parcelize
 data class QuoteVehicle(@SerializedName("qta") val vehicleQta: QuoteQTA = QuoteQTA(),
                         @SerializedName("class") val vehicleClass: String? = "",
                         @SerializedName("type") val vehicleType: String? = "",
-                        @SerializedName("passenger_capacity") val passengerCapacity: Int = 0,
-                        @SerializedName("luggage_capacity") val luggageCapacity: Int = 0,
+                        @SerializedName("passenger_capacity") val passengerCapacity: Int? = null,
+                        @SerializedName("luggage_capacity") val luggageCapacity: Int? = null,
                         @SerializedName("tags") val vehicleTags: List<String> = listOf()) : Parcelable
