@@ -157,7 +157,7 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
-        fun payment3DSFailed(errorMessage: String,
+        fun cardAuthorisationFailed(errorMessage: String,
                              lastFourDigits: String,
                              date: Date,
                              amount: Int,

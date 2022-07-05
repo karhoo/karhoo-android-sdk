@@ -57,8 +57,6 @@ class SealedCoroutineCallAdapterFactoryTest {
      */
     @Test
     fun `a call failure for not a Response raw type triggers a request error analytics event`() {
-
-        //Don't set a response to cause a failure
         runBlocking {
             apiTemplate.bookWithNonce(tripBooking).await()
 

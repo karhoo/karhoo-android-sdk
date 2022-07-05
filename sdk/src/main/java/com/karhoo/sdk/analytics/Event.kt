@@ -28,6 +28,7 @@ enum class Event constructor(val value: String) {
     FLEET_LIST_SHOWN("fleet_list_shown"),
     FLEET_SORTED("fleets_sorted"),
     PREBOOK_OPENED("prebook_picker_opened"),
+    PREBOOK_CONFIRMATION("prebook_confirmation"),
     CARD_REGISTERED_SUCCESSFULLY("user_card_registered"),
     CARD_REGISTERED_FAILED("user_card_registration_failed"),
     TERMS_REVIEWED("user_terms_reviewed"),
@@ -44,7 +45,7 @@ enum class Event constructor(val value: String) {
     USER_PROFILE_UPDATE_SUCCESS("user_profile_update_success"),
     USER_PROFILE_UPDATE_FAILED("user_profile_update_failed"),
     PAYMENT_FAILED("payment_failed"),
-    PAYMENT_3DS_FAILED("payment_3DS_failed"),
+    CARD_AUTH_FAIL("card_auth_fail"),
     REQUEST_ERROR("request_error")
 
 }
