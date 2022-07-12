@@ -72,7 +72,7 @@ class Payloader internal constructor(builder: Builder) {
             tripDetails: TripInfo,
             outboundTripId: String?,
             correlationId: String?,
-            quote: Quote?
+            quoteId: String?
         ): Builder {
             payload[BATTERY_LIFE] = battery
             payload[NETWORK_TYPE] = connectionType
@@ -90,7 +90,7 @@ class Payloader internal constructor(builder: Builder) {
             if (outboundTripId != null && outboundTripId.isNotEmpty()) {
                 payload[OUTBOUND_TRIP_ID] = outboundTripId
             }
-            quote?.id?.let {
+            quoteId?.let {
                 payload[QUOTE_ID] = it
             }
             correlationId?.let {
@@ -118,14 +118,14 @@ class Payloader internal constructor(builder: Builder) {
 
         fun paymentFailure(
             correlationId: String?,
-            quote: Quote?,
+            quoteId: String?,
             errorMessage: String,
             lastFourDigits: String,
             date: Date,
             amount: Int,
             currency: String
         ): Builder {
-            quote?.id?.let {
+            quoteId?.let {
                 payload[QUOTE_ID] = it
             }
             correlationId?.let {
@@ -228,16 +228,16 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
-        fun checkoutOpened(quote: Quote?): Builder {
-            quote?.id?.let {
+        fun checkoutOpened(quoteId: String?): Builder {
+            quoteId?.let {
                 payload[QUOTE_ID] = it
             }
 
             return this
         }
 
-        fun cardAuthorisationSuccess(quote: Quote?): Builder {
-            quote?.id?.let {
+        fun cardAuthorisationSuccess(quoteId: String?): Builder {
+            quoteId?.let {
                 payload[QUOTE_ID] = it
             }
 
@@ -245,7 +245,7 @@ class Payloader internal constructor(builder: Builder) {
         }
 
         fun loyaltyStatusRequested(
-            quote: Quote?,
+            quoteId: Quote?,
             loyaltyStatus: LoyaltyStatus?,
             loyaltyBalance: LoyaltyBalance?,
             loyaltyProgramme: LoyaltyProgramme?,
@@ -259,7 +259,7 @@ class Payloader internal constructor(builder: Builder) {
             payload[LOYALTY_STATUS_CAN_EARN] = loyaltyStatus?.canEarn ?: false
             payload[LOYALTY_STATUS_BALANCE] = loyaltyBalance?.points ?: 0
 
-            quote?.id?.let {
+            quoteId?.id?.let {
                 payload[QUOTE_ID] = it
             }
             loyaltyProgramme?.name?.let {
@@ -276,12 +276,12 @@ class Payloader internal constructor(builder: Builder) {
         }
 
         fun loyaltyPreAuthFailure(
-            quote: Quote?,
+            quoteId: String?,
             canBurn: Boolean,
             correlationId: String?,
             slug: String?
         ): Builder {
-            quote?.id?.let {
+            quoteId?.let {
                 payload[QUOTE_ID] = it
             }
             correlationId?.let {
@@ -297,11 +297,11 @@ class Payloader internal constructor(builder: Builder) {
         }
 
         fun loyaltyPreAuthSuccess(
-            quote: Quote?,
+            quoteId: String?,
             canBurn: Boolean,
             correlationId: String?
         ): Builder {
-            quote?.id?.let {
+            quoteId?.let {
                 payload[QUOTE_ID] = it
             }
             correlationId?.let {
