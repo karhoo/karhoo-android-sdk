@@ -47,6 +47,7 @@ enum class Event constructor(val value: String) {
     //PAYMENT
     CARD_AUTHORISATION_SUCCESS("card_auth_success"),
     CARD_AUTHORISATION_FAILURE("card_auth_failure"),
+    PAYMENT_FAILED("payment_failed"),
 
     //LOYALTY
     LOYALTY_STATUS_REQUESTED("loyalty_status_requested"),
