@@ -393,7 +393,5 @@ class Payloader internal constructor(builder: Builder) {
         private const val CORRELATION_ID = "correlation_id"
 
         private const val LOYALTY_PREAUTH_TYPE = "loyalty_preauth_type"
-        private const val LOYALTY_PREAUTH_ERROR_SLUG = "loyalty_preauth_error_slug"
-
     }
 }
