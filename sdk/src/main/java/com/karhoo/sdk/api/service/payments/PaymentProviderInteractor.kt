@@ -36,7 +36,9 @@ internal class PaymentProviderInteractor @Inject constructor(
             is Resource.Success -> {
                 val paymentProvider = result.data
                 userManager.paymentProvider = paymentProvider
-                fetchUserCardDetails(user = userManager.user)
+                if (paymentProvider.provider.id.equals("Braintree", true) && userManager.user.organisations.isNotEmpty()) {
+                    fetchUserCardDetails(user = userManager.user)
+                }
                 Resource.Success(data = result.data)
             }
             is Resource.Failure -> Resource.Failure(error = result.error)
@@ -44,7 +46,7 @@ internal class PaymentProviderInteractor @Inject constructor(
     }
 
     private fun fetchUserCardDetails(user: UserInfo) {
-        if(user.userId.isEmpty()) {
+        if (user.userId.isEmpty()) {
             return
         }
 
