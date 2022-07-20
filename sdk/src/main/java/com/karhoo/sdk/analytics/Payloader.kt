@@ -67,41 +67,16 @@ class Payloader internal constructor(builder: Builder) {
         }
 
         fun bookingRequested(
-            battery: Float,
-            connectionType: String,
-            tripDetails: TripInfo,
-            outboundTripId: String?,
-            correlationId: String?,
             quoteId: String?
         ): Builder {
-            payload[BATTERY_LIFE] = battery
-            payload[NETWORK_TYPE] = connectionType
-            tripDetails.quote?.let {
-                payload[PRICE] = it.total
-            }
-            tripDetails.destination?.position?.let {
-                payload[DESTINATION_LAT] = it.latitude
-                payload[DESTINATION_LNG] = it.longitude
-            }
-            tripDetails.destination?.let {
-                payload[DESTINATION_ADDRESS] = it.displayAddress
-            }
-            payload[IS_PREBOOK] = tripDetails.dateScheduled != null
-            if (outboundTripId != null && outboundTripId.isNotEmpty()) {
-                payload[OUTBOUND_TRIP_ID] = outboundTripId
-            }
             quoteId?.let {
                 payload[QUOTE_ID] = it
             }
-            correlationId?.let {
-                payload[CORRELATION_ID] = it
-            }
-
             return this
         }
 
         fun bookingSuccess(
-            tripDetails: TripInfo,
+            tripId: String,
             correlationId: String?,
             quoteId: String?
         ): Builder {
@@ -111,7 +86,7 @@ class Payloader internal constructor(builder: Builder) {
             correlationId?.let {
                 payload[CORRELATION_ID] = it
             }
-            payload[TRIP_ID] = tripDetails.tripId
+            payload[TRIP_ID] = tripId
 
             return this
         }
@@ -120,6 +95,7 @@ class Payloader internal constructor(builder: Builder) {
             correlationId: String?,
             quoteId: String?,
             errorMessage: String,
+            paymentMethodUsed: String,
             lastFourDigits: String,
             date: Date,
             amount: Int,
@@ -136,26 +112,7 @@ class Payloader internal constructor(builder: Builder) {
             payload[PAYMENT_AMOUNT] = amount
             payload[PAYMENT_CURRENCY] = currency
             payload[PAYMENT_DATE] = date.toString()
-
-            return this
-        }
-
-        fun paymentFailed(
-            quoteId: String?,
-            errorMessage: String,
-            lastFourDigits: String,
-            date: Date,
-            amount: Int,
-            currency: String
-        ): Builder {
-            quoteId?.let {
-                payload[QUOTE_ID] = it
-            }
-            payload[PAYMENT_ERROR_MESSAGE] = errorMessage
-            payload[PAYMENT_CARD_LAST_FOUR_DIGITS] = lastFourDigits
-            payload[PAYMENT_AMOUNT] = amount
-            payload[PAYMENT_CURRENCY] = currency
-            payload[PAYMENT_DATE] = date.toString()
+            payload[PAYMENT_METHOD_USED] = paymentMethodUsed
 
             return this
         }
@@ -218,9 +175,10 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
-        fun cardAuthorisationFailed(
+        fun cardAuthorisationFailure(
             errorMessage: String,
             quoteId: String?,
+            paymentMethodUsed: String,
             lastFourDigits: String,
             date: Date,
             amount: Int,
@@ -234,6 +192,7 @@ class Payloader internal constructor(builder: Builder) {
             payload[PAYMENT_CARD_LAST_FOUR_DIGITS] = lastFourDigits
             payload[PAYMENT_AMOUNT] = amount
             payload[PAYMENT_CURRENCY] = currency
+            payload[PAYMENT_METHOD_USED] = paymentMethodUsed
             payload[PAYMENT_DATE] = date.toString()
             return this
         }
@@ -256,6 +215,7 @@ class Payloader internal constructor(builder: Builder) {
 
         fun loyaltyStatusRequested(
             slug: String?,
+            errorMessage: String?,
             quoteId: String?,
             correlationId: String?,
             loyaltyStatus: LoyaltyStatus?,
@@ -263,11 +223,20 @@ class Payloader internal constructor(builder: Builder) {
             loyaltyProgramme: LoyaltyProgramme?
         ): Builder {
             payload[LOYALTY_ENABLED] =
-                loyaltyStatus?.canBurn == false && loyaltyStatus.canEarn == false
+                loyaltyStatus?.canBurn == true || loyaltyStatus?.canEarn == true
+
             payload[LOYALTY_STATUS_SUCCESS] = loyaltyStatus != null
-            payload[LOYALTY_STATUS_CAN_BURN] = loyaltyStatus?.canBurn ?: false
-            payload[LOYALTY_STATUS_CAN_EARN] = loyaltyStatus?.canEarn ?: false
-            payload[LOYALTY_STATUS_BALANCE] = balance ?: 0
+            loyaltyStatus?.let {
+                it.canBurn?.let { canBurn ->
+                    payload[LOYALTY_STATUS_CAN_BURN] = canBurn
+                }
+                it.canEarn?.let { canEarn ->
+                    payload[LOYALTY_STATUS_CAN_EARN] = canEarn
+                }
+                balance?.let { balance ->
+                    payload[LOYALTY_STATUS_BALANCE] = balance
+                }
+            }
 
             quoteId?.let {
                 payload[QUOTE_ID] = it
@@ -281,12 +250,16 @@ class Payloader internal constructor(builder: Builder) {
             slug?.let {
                 payload[LOYALTY_STATUS_ERROR_SLUG] = it
             }
+            errorMessage?.let {
+                payload[LOYALTY_STATUS_ERROR_MESSAGE] = errorMessage
+            }
 
             return this
         }
 
         fun loyaltyPreAuthFailure(
             slug: String?,
+            errorMessage: String?,
             quoteId: String?,
             correlationId: String?,
             loyaltyMode: String,
@@ -303,6 +276,9 @@ class Payloader internal constructor(builder: Builder) {
             }
             balance?.let {
                 payload[LOYALTY_STATUS_BALANCE] = it
+            }
+            errorMessage?.let {
+                payload[LOYALTY_STATUS_ERROR_MESSAGE] = errorMessage
             }
 
             payload[LOYALTY_PREAUTH_TYPE] = loyaltyMode
@@ -404,6 +380,7 @@ class Payloader internal constructor(builder: Builder) {
         private const val PAYMENT_CARD_LAST_FOUR_DIGITS = "card_last_4_digits"
         private const val PAYMENT_AMOUNT = "amount"
         private const val PAYMENT_CURRENCY = "currency"
+        private const val PAYMENT_METHOD_USED = "paymentMethodUsed"
 
         private const val LOYALTY_ENABLED = "loyalty_enabled"
         private const val LOYALTY_NAME = "loyalty_name"
