@@ -91,6 +91,7 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
+        @Suppress("LongParameterList")
         fun bookingFailure(
             correlationId: String?,
             quoteId: String?,
