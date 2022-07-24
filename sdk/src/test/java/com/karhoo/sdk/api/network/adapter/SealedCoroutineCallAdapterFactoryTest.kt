@@ -50,18 +50,18 @@ class SealedCoroutineCallAdapterFactoryTest {
         wireMockRule.resetAll()
     }
 
-    /**
-     * Given:   a request is made
-     * When:    a failure occurs where the response type is not an instance of Response
-     * Then:    a request error analytics event should be fired
-     */
-    @Test
-    fun `a call failure for not a Response raw type triggers a request error analytics event`() {
-        runBlocking {
-            apiTemplate.bookWithNonce(tripBooking).await()
-
-            val (event, payloader) = pairCaptor<Event, Payloader>()
-
+//    /**
+//     * Given:   a request is made
+//     * When:    a failure occurs where the response type is not an instance of Response
+//     * Then:    a request error analytics event should be fired
+//     */
+//    @Test
+//    fun `a call failure for not a Response raw type triggers a request error analytics event`() {
+//        runBlocking {
+//            apiTemplate.bookWithNonce(tripBooking).await()
+//
+//            val (event, payloader) = pairCaptor<Event, Payloader>()
+//
 //            verify(analytics).fireEvent(event.capture(), payloader.capture())
 //
 //            assertEquals(event.firstValue, Event.REQUEST_ERROR)
@@ -73,6 +73,6 @@ class SealedCoroutineCallAdapterFactoryTest {
 //                payloader.firstValue.payload["request_url"],
 //                "${SDKTestConfig.REST_API_LINK}${BOOKING_WITH_NONCE_METHOD}"
 //            )
-        }
-    }
+//        }
+//    }
 }
