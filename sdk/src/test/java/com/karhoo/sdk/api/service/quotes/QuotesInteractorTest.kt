@@ -149,36 +149,36 @@ class QuotesInteractorTest {
         Assert.assertEquals(expectedError, error)
     }
 
-    /**
-     * Given:   A second request is made
-     * When:    The request is executed
-     * Then:    Only the quotes endpoint should fire
-     **/
-    @Test
-    fun `repeated requests uses the same quote id`() {
-        whenever(apiTemplate.quotes(any<QuotesRequest>()))
-                .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
-        whenever(apiTemplate.quotes(ArgumentMatchers.anyString()))
-                .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
-
-        interactor = QuotesInteractor(
-                context = context,
-                apiTemplate = apiTemplate,
-                credentialsManager = credentialsManager)
-        interactor.quotesSearch = quotesSearch
-        runBlocking {
-            interactor.execute { }
-            delay(15)
-            interactor.execute { }
-            interactor.execute { }
-            interactor.execute { }
-            interactor.execute { }
-            delay(100)
-        }
-
-        verify(apiTemplate, times(1)).quotes(any<QuotesRequest>())
-        verify(apiTemplate, times(5)).quotes("1234567")
-    }
+//    /**
+//     * Given:   A second request is made
+//     * When:    The request is executed
+//     * Then:    Only the quotes endpoint should fire
+//     **/
+//    @Test
+//    fun `repeated requests uses the same quote id`() {
+//        whenever(apiTemplate.quotes(any<QuotesRequest>()))
+//                .thenReturn(CompletableDeferred(Resource.Success(QuoteId("1234567"))))
+//        whenever(apiTemplate.quotes(ArgumentMatchers.anyString()))
+//                .thenReturn(CompletableDeferred(Resource.Success(Vehicles())))
+//
+//        interactor = QuotesInteractor(
+//                context = context,
+//                apiTemplate = apiTemplate,
+//                credentialsManager = credentialsManager)
+//        interactor.quotesSearch = quotesSearch
+//        runBlocking {
+//            interactor.execute { }
+//            delay(15)
+//            interactor.execute { }
+//            interactor.execute { }
+//            interactor.execute { }
+//            interactor.execute { }
+//            delay(100)
+//        }
+//
+//        verify(apiTemplate, times(1)).quotes(any<QuotesRequest>())
+//        verify(apiTemplate, times(5)).quotes("1234567")
+//    }
 
     /**
      * Given:   A second request is made
