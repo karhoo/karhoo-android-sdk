@@ -45,22 +45,22 @@ enum class Event constructor(val value: String) {
     USER_PROFILE_UPDATE_FAILED("user_profile_update_failed"),
 
     //PAYMENT
-    CARD_AUTHORISATION_SUCCESS("card_auth_success"),
-    CARD_AUTHORISATION_FAILURE("card_auth_failure"),
+    CARD_AUTHORISATION_SUCCESS("CARD_AUTHORISATION_SUCCESS"),
+    CARD_AUTHORISATION_FAILURE("CARD_AUTHORISATION_FAILURE"),
     PAYMENT_FAILED("payment_failed"),
 
     //LOYALTY
-    LOYALTY_STATUS_REQUESTED("loyalty_status_requested"),
-    LOYALTY_PREAUTH_FAILED("loyalty_preauth_failed"),
-    LOYALTY_PREAUTH_SUCCESS("loyalty_preauth_success"),
+    LOYALTY_STATUS_REQUESTED("LOYALTY_STATUS_REQUESTED"),
+    LOYALTY_PREAUTH_FAILED("LOYALTY_PREAUTH_FAILURE"),
+    LOYALTY_PREAUTH_SUCCESS("LOYALTY_PREAUTH_SUCCESS"),
 
     //CHECKOUT
     CHECKOUT_SCREEN("checkout_screen"),
 
     //BOOKING
-    BOOKING_REQUESTED("booking_requested"),
-    BOOKING_SUCCESS("booking_payment_success"),
-    BOOKING_FAILURE("booking_payment_failed"),
+    BOOKING_REQUESTED("BOOKING_REQUESTED"),
+    BOOKING_SUCCESS("BOOKING_SUCCESS"),
+    BOOKING_FAILURE("BOOKING_FAILED"),
 
     REQUEST_ERROR("request_error")
 
