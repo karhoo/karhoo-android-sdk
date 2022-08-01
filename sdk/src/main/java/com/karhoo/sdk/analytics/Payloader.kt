@@ -67,11 +67,9 @@ class Payloader internal constructor(builder: Builder) {
         }
 
         fun bookingRequested(
-            quoteId: String?
+            quoteId: String
         ): Builder {
-            quoteId?.let {
-                payload[QUOTE_ID] = it
-            }
+            payload[QUOTE_ID] = quoteId
             return this
         }
 
@@ -82,10 +80,14 @@ class Payloader internal constructor(builder: Builder) {
         ): Builder {
             quoteId?.let {
                 payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
+
             correlationId?.let {
                 payload[CORRELATION_ID] = it
             }
+
             payload[TRIP_ID] = tripId
 
             return this
@@ -104,6 +106,8 @@ class Payloader internal constructor(builder: Builder) {
         ): Builder {
             quoteId?.let {
                 payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
             correlationId?.let {
                 payload[CORRELATION_ID] = it
@@ -187,6 +191,8 @@ class Payloader internal constructor(builder: Builder) {
         ): Builder {
             quoteId?.let {
                 payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
 
             payload[PAYMENT_ERROR_MESSAGE] = errorMessage
@@ -201,6 +207,8 @@ class Payloader internal constructor(builder: Builder) {
         fun checkoutOpened(quoteId: String?): Builder {
             quoteId?.let {
                 payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
 
             return this
@@ -209,6 +217,8 @@ class Payloader internal constructor(builder: Builder) {
         fun cardAuthorisationSuccess(quoteId: String?): Builder {
             quoteId?.let {
                 payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
 
             return this
@@ -218,9 +228,9 @@ class Payloader internal constructor(builder: Builder) {
             slug: String?,
             errorMessage: String?,
             quoteId: String?,
+            loyaltyMode: String,
             correlationId: String?,
             loyaltyStatus: LoyaltyStatus?,
-            balance: Int?,
             loyaltyProgramme: LoyaltyProgramme?
         ): Builder {
             payload[LOYALTY_ENABLED] =
@@ -234,14 +244,21 @@ class Payloader internal constructor(builder: Builder) {
                 it.canEarn?.let { canEarn ->
                     payload[LOYALTY_STATUS_CAN_EARN] = canEarn
                 }
-                balance?.let { balance ->
-                    payload[LOYALTY_STATUS_BALANCE] = balance
+                it.points?.let { points ->
+                    payload[LOYALTY_STATUS_BALANCE] = points
                 }
+            }
+
+            loyaltyMode.let {
+                payload[LOYALTY_PREAUTH_TYPE] = loyaltyMode
             }
 
             quoteId?.let {
                 payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
+
             loyaltyProgramme?.name?.let {
                 payload[LOYALTY_NAME] = it
             }
@@ -263,21 +280,22 @@ class Payloader internal constructor(builder: Builder) {
             errorMessage: String?,
             quoteId: String?,
             correlationId: String?,
-            loyaltyMode: String,
-            balance: Int?
+            loyaltyMode: String
         ): Builder {
             quoteId?.let {
                 payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
+
             correlationId?.let {
                 payload[CORRELATION_ID] = it
             }
+
             slug?.let {
                 payload[LOYALTY_STATUS_ERROR_SLUG] = it
             }
-            balance?.let {
-                payload[LOYALTY_STATUS_BALANCE] = it
-            }
+
             errorMessage?.let {
                 payload[LOYALTY_STATUS_ERROR_MESSAGE] = errorMessage
             }
@@ -290,21 +308,19 @@ class Payloader internal constructor(builder: Builder) {
         fun loyaltyPreAuthSuccess(
             quoteId: String?,
             correlationId: String?,
-            loyaltyMode: String?,
-            balance: Int?
+            loyaltyMode: String?
         ): Builder {
             quoteId?.let {
                 payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
+
             correlationId?.let {
                 payload[CORRELATION_ID] = it
             }
             loyaltyMode?.let {
                 payload[LOYALTY_PREAUTH_TYPE] = loyaltyMode
-            }
-
-            balance?.let {
-                payload[LOYALTY_STATUS_BALANCE] = it
             }
 
             return this
