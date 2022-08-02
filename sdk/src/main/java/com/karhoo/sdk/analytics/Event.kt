@@ -13,7 +13,6 @@ enum class Event constructor(val value: String) {
     APP_CLOSED("app_closed"),
     APP_BACKGROUND("app_backgrounded"),
     BOOKING_WITH_CALLBACK("booking_with_callback"),
-    BOOKING_REQUESTED("booking_requested"),
     TRIP_STATE_CHANGED("state_change_displayed"),
     USER_CANCEL_TRIP("trip_cancellation_attempted_by_user"),
     AMOUNT_ADDRESSES("pickup_address_displayed"),
@@ -28,6 +27,7 @@ enum class Event constructor(val value: String) {
     FLEET_LIST_SHOWN("fleet_list_shown"),
     FLEET_SORTED("fleets_sorted"),
     PREBOOK_OPENED("prebook_picker_opened"),
+    PREBOOK_CONFIRMATION("prebook_confirmation"),
     CARD_REGISTERED_SUCCESSFULLY("user_card_registered"),
     CARD_REGISTERED_FAILED("user_card_registration_failed"),
     TERMS_REVIEWED("user_terms_reviewed"),
@@ -43,7 +43,25 @@ enum class Event constructor(val value: String) {
     USER_PROFILE_SAVE_PRESSED("user_profile_save_pressed"),
     USER_PROFILE_UPDATE_SUCCESS("user_profile_update_success"),
     USER_PROFILE_UPDATE_FAILED("user_profile_update_failed"),
-    PAYMENT_FAILED("payment_failed"),
+
+    //PAYMENT
+    CARD_AUTHORISATION_SUCCESS("CARD_AUTHORISATION_SUCCESS"),
+    CARD_AUTHORISATION_FAILURE("CARD_AUTHORISATION_FAILURE"),
+    PAYMENT_FAILED("PAYMENT_FAILED"),
+
+    //LOYALTY
+    LOYALTY_STATUS_REQUESTED("LOYALTY_STATUS_REQUESTED"),
+    LOYALTY_PREAUTH_FAILURE("LOYALTY_PREAUTH_FAILURE"),
+    LOYALTY_PREAUTH_SUCCESS("LOYALTY_PREAUTH_SUCCESS"),
+
+    //CHECKOUT
+    CHECKOUT_SCREEN("CHECKOUT_SCREEN"),
+
+    //BOOKING
+    BOOKING_REQUESTED("BOOKING_REQUESTED"),
+    BOOKING_SUCCESS("BOOKING_SUCCESS"),
+    BOOKING_FAILURE("BOOKING_FAILURE"),
+
     REQUEST_ERROR("request_error")
 
 }

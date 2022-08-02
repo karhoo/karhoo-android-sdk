@@ -4,6 +4,10 @@ import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.UserInfo
+import com.karhoo.sdk.api.model.Quote
+import com.karhoo.sdk.api.model.LoyaltyProgramme
+import com.karhoo.sdk.api.model.LoyaltyBalance
+import com.karhoo.sdk.api.model.LoyaltyStatus
 import java.util.HashMap
 import java.util.Date
 
@@ -62,26 +66,58 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
-        fun addBookingRequest(battery: Float,
-                              connectionType: String,
-                              tripDetails: TripInfo,
-                              outboundTripId: String?): Builder {
-            payload[BATTERY_LIFE] = battery
-            payload[NETWORK_TYPE] = connectionType
-            tripDetails.quote?.let {
-                payload[PRICE] = it.total
+        fun bookingRequested(
+            quoteId: String
+        ): Builder {
+            payload[QUOTE_ID] = quoteId
+            return this
+        }
+
+        fun bookingSuccess(
+            tripId: String,
+            correlationId: String?,
+            quoteId: String?
+        ): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
-            tripDetails.destination?.position?.let {
-                payload[DESTINATION_LAT] = it.latitude
-                payload[DESTINATION_LNG] = it.longitude
+
+            correlationId?.let {
+                payload[CORRELATION_ID] = it
             }
-            tripDetails.destination?.let {
-                payload[DESTINATION_ADDRESS] = it.displayAddress
+
+            payload[TRIP_ID] = tripId
+
+            return this
+        }
+
+        @Suppress("LongParameterList")
+        fun bookingFailure(
+            correlationId: String?,
+            quoteId: String?,
+            errorMessage: String,
+            paymentMethodUsed: String,
+            lastFourDigits: String,
+            date: Date,
+            amount: Int,
+            currency: String
+        ): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
             }
-            payload[IS_PREBOOK] = tripDetails.dateScheduled != null
-            if (outboundTripId != null && !outboundTripId.isEmpty()) {
-                payload[OUTBOUND_TRIP_ID] = outboundTripId
+            correlationId?.let {
+                payload[CORRELATION_ID] = it
             }
+            payload[PAYMENT_ERROR_MESSAGE] = errorMessage
+            payload[PAYMENT_CARD_LAST_FOUR_DIGITS] = lastFourDigits
+            payload[PAYMENT_AMOUNT] = amount
+            payload[PAYMENT_CURRENCY] = currency
+            payload[PAYMENT_DATE] = date.toString()
+            payload[PAYMENT_METHOD_USED] = paymentMethodUsed
 
             return this
         }
@@ -144,16 +180,149 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
-        fun paymentFailed(errorMessage: String,
-                          lastFourDigits: String,
-                          date: Date,
-                          amount: Int,
-                          currency: String): Builder {
+        fun cardAuthorisationFailure(
+            errorMessage: String,
+            quoteId: String?,
+            paymentMethodUsed: String,
+            lastFourDigits: String,
+            date: Date,
+            amount: Int,
+            currency: String
+        ): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
+            }
+
             payload[PAYMENT_ERROR_MESSAGE] = errorMessage
             payload[PAYMENT_CARD_LAST_FOUR_DIGITS] = lastFourDigits
             payload[PAYMENT_AMOUNT] = amount
             payload[PAYMENT_CURRENCY] = currency
+            payload[PAYMENT_METHOD_USED] = paymentMethodUsed
             payload[PAYMENT_DATE] = date.toString()
+            return this
+        }
+
+        fun checkoutOpened(quoteId: String?): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
+            }
+
+            return this
+        }
+
+        fun cardAuthorisationSuccess(quoteId: String?): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
+            }
+
+            return this
+        }
+
+        fun loyaltyStatusRequested(
+            slug: String?,
+            errorMessage: String?,
+            quoteId: String?,
+            loyaltyMode: String,
+            correlationId: String?,
+            loyaltyStatus: LoyaltyStatus?,
+            loyaltyProgramme: LoyaltyProgramme?
+        ): Builder {
+            payload[LOYALTY_ENABLED] =
+                loyaltyStatus?.canBurn == true || loyaltyStatus?.canEarn == true
+
+            payload[LOYALTY_STATUS_SUCCESS] = loyaltyStatus != null
+            loyaltyStatus?.let {
+                it.canBurn?.let { canBurn ->
+                    payload[LOYALTY_STATUS_CAN_BURN] = canBurn
+                }
+                it.canEarn?.let { canEarn ->
+                    payload[LOYALTY_STATUS_CAN_EARN] = canEarn
+                }
+                it.points?.let { points ->
+                    payload[LOYALTY_STATUS_BALANCE] = points
+                }
+            }
+
+            loyaltyMode.let {
+                payload[LOYALTY_PREAUTH_TYPE] = loyaltyMode
+            }
+
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
+            }
+
+            loyaltyProgramme?.name?.let {
+                payload[LOYALTY_NAME] = it
+            }
+            correlationId?.let {
+                payload[CORRELATION_ID] = it
+            }
+            slug?.let {
+                payload[LOYALTY_STATUS_ERROR_SLUG] = it
+            }
+            errorMessage?.let {
+                payload[LOYALTY_STATUS_ERROR_MESSAGE] = errorMessage
+            }
+
+            return this
+        }
+
+        fun loyaltyPreAuthFailure(
+            slug: String?,
+            errorMessage: String?,
+            quoteId: String?,
+            correlationId: String?,
+            loyaltyMode: String
+        ): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
+            }
+
+            correlationId?.let {
+                payload[CORRELATION_ID] = it
+            }
+
+            slug?.let {
+                payload[LOYALTY_STATUS_ERROR_SLUG] = it
+            }
+
+            errorMessage?.let {
+                payload[LOYALTY_STATUS_ERROR_MESSAGE] = errorMessage
+            }
+
+            payload[LOYALTY_PREAUTH_TYPE] = loyaltyMode
+
+            return this
+        }
+
+        fun loyaltyPreAuthSuccess(
+            quoteId: String?,
+            correlationId: String?,
+            loyaltyMode: String?
+        ): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: run {
+                payload[QUOTE_ID] = ""
+            }
+
+            correlationId?.let {
+                payload[CORRELATION_ID] = it
+            }
+            loyaltyMode?.let {
+                payload[LOYALTY_PREAUTH_TYPE] = loyaltyMode
+            }
+
             return this
         }
 
@@ -211,6 +380,7 @@ class Payloader internal constructor(builder: Builder) {
         private const val PICKUP_ADDRESS = "previous_address_selected_"
         private const val VEHICLE_TYPE = "vehicle_type_selected"
         private const val QUOTE_LIST_ID = "quote_list_id"
+        private const val QUOTE_ID = "quote_id"
         private const val PREBOOK_SET = "prebook_time_set"
         private const val SCREEN_ROWS = "screen_rows_default"
         private const val TEXT_ENTERED_ADDRESS_SEARCH = "text_entered_by_user"
@@ -227,5 +397,18 @@ class Payloader internal constructor(builder: Builder) {
         private const val PAYMENT_CARD_LAST_FOUR_DIGITS = "card_last_4_digits"
         private const val PAYMENT_AMOUNT = "amount"
         private const val PAYMENT_CURRENCY = "currency"
+        private const val PAYMENT_METHOD_USED = "paymentMethodUsed"
+
+        private const val LOYALTY_ENABLED = "loyalty_enabled"
+        private const val LOYALTY_NAME = "loyalty_name"
+        private const val LOYALTY_STATUS_SUCCESS = "loyalty_status_success"
+        private const val LOYALTY_STATUS_CAN_EARN = "loyalty_status_can_earn"
+        private const val LOYALTY_STATUS_CAN_BURN = "loyalty_status_can_burn"
+        private const val LOYALTY_STATUS_BALANCE = "loyalty_status_balance"
+        private const val LOYALTY_STATUS_ERROR_SLUG = "loyalty_status_error_slug"
+        private const val LOYALTY_STATUS_ERROR_MESSAGE = "loyalty_status_error_message"
+        private const val CORRELATION_ID = "correlation_id"
+
+        private const val LOYALTY_PREAUTH_TYPE = "loyalty_preauth_type"
     }
 }
