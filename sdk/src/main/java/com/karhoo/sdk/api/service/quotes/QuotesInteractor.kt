@@ -68,13 +68,24 @@ internal class QuotesInteractor @Inject constructor(credentialsManager: Credenti
         val destinationPosition = quotesSearch.destination.position?.let { it } ?: return null
 
         return QuotesRequest(
-                origin = QuoteRequestPoint(latitude = originPosition.latitude.toString(),
-                                           longitude = originPosition.longitude.toString(),
+                origin = QuoteRequestPoint(latitude = prepareCoordinate(originPosition.latitude),
+                                           longitude = prepareCoordinate(originPosition.longitude),
                                            displayAddress = quotesSearch.origin.displayAddress),
-                destination = QuoteRequestPoint(latitude = destinationPosition.latitude.toString(),
-                                                longitude = destinationPosition.longitude.toString(),
+                destination = QuoteRequestPoint(latitude = prepareCoordinate(destinationPosition.latitude),
+                                                longitude = prepareCoordinate(destinationPosition.longitude),
                                                 displayAddress = quotesSearch.destination.displayAddress),
                 dateScheduled = dateScheduled)
+    }
+
+    private fun prepareCoordinate(coordinate: Double): String{
+        var pos = coordinate.toString()
+        val indexOfDecimal = pos.indexOf(".")
+        var decimals = pos.substring(indexOfDecimal + 1)
+        while(decimals.length < 4){
+            decimals += "0"
+            pos = pos.replaceAfter(".", decimals)
+        }
+        return pos
     }
 
     private fun quoteList(quotesResource: Resource<Vehicles>): Resource<QuoteList> {
