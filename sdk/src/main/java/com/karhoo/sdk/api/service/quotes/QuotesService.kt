@@ -4,6 +4,7 @@ import com.karhoo.sdk.api.model.Coverage
 import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
+import com.karhoo.sdk.api.model.VehicleMappings
 import com.karhoo.sdk.api.model.QuotesSearch
 import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.call.Call
@@ -18,4 +19,6 @@ interface QuotesService {
     fun checkCoverage(coverageRequest: CoverageRequest): Call<Coverage>
 
     fun verifyQuotes(quoteId: QuoteId): Call<Quote>
+
+    fun getVehicleMappings(): Call<VehicleMappings>
 }
