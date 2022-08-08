@@ -2,11 +2,8 @@ package com.karhoo.sdk.analytics
 
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.Position
-import com.karhoo.sdk.api.model.TripInfo
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.LoyaltyProgramme
-import com.karhoo.sdk.api.model.LoyaltyBalance
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import java.util.HashMap
 import java.util.Date
@@ -326,6 +323,24 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
+        fun quoteListOpened(
+            pickup: LocationInfo?,
+            destination: LocationInfo?,
+            date: Date?
+        ): Builder {
+            pickup?.let {
+                payload[PICKUP_PLACE_ID] = pickup.placeId
+            }
+            destination?.let {
+                payload[DESTINATION_PLACE_ID] = destination.placeId
+            }
+            date?.let {
+                payload[PREBOOK_SET] = date
+            }
+
+            return this
+        }
+
         fun tripId(tripId: String?): Builder {
             payload[TRIP_ID] = tripId.orEmpty()
             return this
@@ -410,5 +425,7 @@ class Payloader internal constructor(builder: Builder) {
         private const val CORRELATION_ID = "correlation_id"
 
         private const val LOYALTY_PREAUTH_TYPE = "loyalty_preauth_type"
+        private const val PICKUP_PLACE_ID = "booking_origin_place_id"
+        private const val DESTINATION_PLACE_ID = "booking_destination_place_id"
     }
 }
