@@ -61,8 +61,4 @@ class QuoteImagesRuleListIntegrationTest {
         latch.await()
         Assertions.assertThat(result?.mappings?.size).isGreaterThan(0)
     }
-
-    companion object {
-        private const val IMAGES_CND_URL = "test"
-    }
 }
