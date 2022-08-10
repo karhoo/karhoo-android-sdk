@@ -62,6 +62,9 @@ enum class Event constructor(val value: String) {
     BOOKING_SUCCESS("BOOKING_SUCCESS"),
     BOOKING_FAILURE("BOOKING_FAILURE"),
 
+    //QUOTE LIST
+    QUOTE_LIST_OPENED("QUOTE_LIST_OPENED"),
+
     REQUEST_ERROR("request_error")
 
 }

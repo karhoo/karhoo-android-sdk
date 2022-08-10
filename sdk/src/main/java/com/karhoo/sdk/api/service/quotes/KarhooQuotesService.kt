@@ -6,6 +6,7 @@ import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.QuoteList
 import com.karhoo.sdk.api.model.QuotesSearch
+import com.karhoo.sdk.api.model.VehicleMappings
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.CoverageRequest
 import com.karhoo.sdk.call.Call
@@ -29,22 +30,32 @@ class KarhooQuotesService : QuotesService {
     override fun quotes(quotesSearch: QuotesSearch, locale: String?): PollCall<QuoteList> =
         QuotesInteractor(
             credentialsManager = credentialsManager,
-            apiTemplate = apiTemplate).apply {
-        this.quotesSearch = quotesSearch
-        this.locale = locale
-    }
+            apiTemplate = apiTemplate
+        ).apply {
+            this.quotesSearch = quotesSearch
+            this.locale = locale
+        }
 
     override fun checkCoverage(coverageRequest: CoverageRequest): Call<Coverage> =
-            CheckCoverageInteractor(
-                    credentialsManager = credentialsManager,
-                    apiTemplate = apiTemplate).apply {
-        this.coverageRequest = coverageRequest
-    }
+        CheckCoverageInteractor(
+            credentialsManager = credentialsManager,
+            apiTemplate = apiTemplate
+        ).apply {
+            this.coverageRequest = coverageRequest
+        }
 
     override fun verifyQuotes(quoteId: QuoteId): Call<Quote> =
-            VerifyQuoteInteractor(
-                    credentialsManager = credentialsManager,
-                    apiTemplate = apiTemplate).apply {
-        this.quoteIdRequest = quoteId
+        VerifyQuoteInteractor(
+            credentialsManager = credentialsManager,
+            apiTemplate = apiTemplate
+        ).apply {
+            this.quoteIdRequest = quoteId
         }
+
+    override fun getVehicleMappings(): Call<VehicleMappings> {
+        return VehicleMappingsInteractor(
+            credentialsManager = credentialsManager,
+            apiTemplate = apiTemplate
+        )
+    }
 }
