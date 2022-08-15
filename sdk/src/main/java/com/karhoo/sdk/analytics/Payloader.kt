@@ -72,8 +72,8 @@ class Payloader internal constructor(builder: Builder) {
 
         fun bookingSuccess(
             tripId: String,
-            correlationId: String?,
-            quoteId: String?
+            quoteId: String?,
+            correlationId: String?
         ): Builder {
             quoteId?.let {
                 payload[QUOTE_ID] = it
@@ -92,11 +92,11 @@ class Payloader internal constructor(builder: Builder) {
 
         @Suppress("LongParameterList")
         fun bookingFailure(
-            correlationId: String?,
             quoteId: String?,
+            correlationId: String?,
             errorMessage: String,
-            paymentMethodUsed: String,
             lastFourDigits: String,
+            paymentMethodUsed: String,
             date: Date,
             amount: Int,
             currency: String
@@ -178,10 +178,10 @@ class Payloader internal constructor(builder: Builder) {
         }
 
         fun cardAuthorisationFailure(
-            errorMessage: String,
             quoteId: String?,
-            paymentMethodUsed: String,
+            errorMessage: String,
             lastFourDigits: String,
+            paymentMethodUsed: String,
             date: Date,
             amount: Int,
             currency: String
@@ -222,13 +222,13 @@ class Payloader internal constructor(builder: Builder) {
         }
 
         fun loyaltyStatusRequested(
-            slug: String?,
-            errorMessage: String?,
             quoteId: String?,
-            loyaltyMode: String,
             correlationId: String?,
+            loyaltyName: String?,
+            loyaltyMode: String,
             loyaltyStatus: LoyaltyStatus?,
-            loyaltyProgramme: LoyaltyProgramme?
+            errorSlug: String?,
+            errorMessage: String?
         ): Builder {
             payload[LOYALTY_ENABLED] =
                 loyaltyStatus?.canBurn == true || loyaltyStatus?.canEarn == true
@@ -256,13 +256,13 @@ class Payloader internal constructor(builder: Builder) {
                 payload[QUOTE_ID] = ""
             }
 
-            loyaltyProgramme?.name?.let {
+            loyaltyName?.let {
                 payload[LOYALTY_NAME] = it
             }
             correlationId?.let {
                 payload[CORRELATION_ID] = it
             }
-            slug?.let {
+            errorSlug?.let {
                 payload[LOYALTY_STATUS_ERROR_SLUG] = it
             }
             errorMessage?.let {
@@ -273,11 +273,11 @@ class Payloader internal constructor(builder: Builder) {
         }
 
         fun loyaltyPreAuthFailure(
-            slug: String?,
-            errorMessage: String?,
             quoteId: String?,
             correlationId: String?,
-            loyaltyMode: String
+            loyaltyMode: String,
+            errorSlug: String?,
+            errorMessage: String?
         ): Builder {
             quoteId?.let {
                 payload[QUOTE_ID] = it
@@ -289,12 +289,12 @@ class Payloader internal constructor(builder: Builder) {
                 payload[CORRELATION_ID] = it
             }
 
-            slug?.let {
-                payload[LOYALTY_STATUS_ERROR_SLUG] = it
+            errorSlug?.let {
+                payload[LOYALTY_PREAUTH_ERROR_SLUG] = it
             }
 
             errorMessage?.let {
-                payload[LOYALTY_STATUS_ERROR_MESSAGE] = errorMessage
+                payload[LOYALTY_PREAUTH_ERROR_MESSAGE] = errorMessage
             }
 
             payload[LOYALTY_PREAUTH_TYPE] = loyaltyMode
@@ -425,6 +425,8 @@ class Payloader internal constructor(builder: Builder) {
         private const val CORRELATION_ID = "correlation_id"
 
         private const val LOYALTY_PREAUTH_TYPE = "loyalty_preauth_type"
+        private const val LOYALTY_PREAUTH_ERROR_SLUG = "loyalty_preauth_error_slug"
+        private const val LOYALTY_PREAUTH_ERROR_MESSAGE = "loyalty_preauth_error_message"
         private const val PICKUP_PLACE_ID = "booking_origin_place_id"
         private const val DESTINATION_PLACE_ID = "booking_destination_place_id"
     }
