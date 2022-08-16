@@ -12,6 +12,7 @@ import com.karhoo.sdk.api.network.request.TripBooking
 import com.karhoo.sdk.api.pairCaptor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -21,7 +22,6 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Thread.sleep
 
 @RunWith(MockitoJUnitRunner::class)
 class SealedCoroutineCallAdapterFactoryTest {
@@ -38,10 +38,10 @@ class SealedCoroutineCallAdapterFactoryTest {
     fun setup() {
 
         retrofit = Retrofit.Builder()
-                .baseUrl(SDKTestConfig.REST_API_LINK)
-                .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-                .addCallAdapterFactory(SealedCoroutineCallAdapterFactory(analytics))
-                .build()
+            .baseUrl(SDKTestConfig.REST_API_LINK)
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .addCallAdapterFactory(SealedCoroutineCallAdapterFactory(analytics))
+            .build()
         apiTemplate = retrofit.create(APITemplate::class.java)
     }
 
@@ -57,18 +57,22 @@ class SealedCoroutineCallAdapterFactoryTest {
      */
     @Test
     fun `a call failure for not a Response raw type triggers a request error analytics event`() {
+        runBlocking {
+            apiTemplate.bookWithNonce(tripBooking).await()
 
-        //Don't set a response to cause a failure
-        apiTemplate.bookWithNonce(tripBooking)
+            val (event, payloader) = pairCaptor<Event, Payloader>()
 
-        sleep(200)
+            verify(analytics).fireEvent(event.capture(), payloader.capture())
 
-        val (event, payloader) = pairCaptor<Event, Payloader>()
-
-        verify(analytics).fireEvent(event.capture(), payloader.capture())
-
-        assertEquals(event.firstValue, Event.REQUEST_ERROR)
-        assertEquals(payloader.firstValue.payload[Event.REQUEST_ERROR.value], "Failed to connect to /127.0.0.1:80")
-        assertEquals(payloader.firstValue.payload["request_url"], "${SDKTestConfig.REST_API_LINK}${BOOKING_WITH_NONCE_METHOD}")
+            assertEquals(event.firstValue, Event.REQUEST_ERROR)
+            assertEquals(
+                payloader.firstValue.payload[Event.REQUEST_ERROR.value],
+                "Failed to connect to /127.0.0.1:80"
+            )
+            assertEquals(
+                payloader.firstValue.payload["request_url"],
+                "${SDKTestConfig.REST_API_LINK}${BOOKING_WITH_NONCE_METHOD}"
+            )
+        }
     }
 }

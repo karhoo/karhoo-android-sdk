@@ -8,58 +8,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.karhoo.sdk.BuildConfig
-import com.karhoo.sdk.api.model.Address
-import com.karhoo.sdk.api.model.Availability
-import com.karhoo.sdk.api.model.AvailabilityVehicle
-import com.karhoo.sdk.api.model.BookingFee
-import com.karhoo.sdk.api.model.BookingFeePrice
-import com.karhoo.sdk.api.model.BraintreeSDKToken
-import com.karhoo.sdk.api.model.CardType
-import com.karhoo.sdk.api.model.Categories
-import com.karhoo.sdk.api.model.Coverage
-import com.karhoo.sdk.api.model.Credentials
-import com.karhoo.sdk.api.model.Direction
-import com.karhoo.sdk.api.model.Driver
-import com.karhoo.sdk.api.model.DriverTrackingInfo
-import com.karhoo.sdk.api.model.Fare
-import com.karhoo.sdk.api.model.FareBreakdown
-import com.karhoo.sdk.api.model.Fleet
-import com.karhoo.sdk.api.model.FleetInfo
-import com.karhoo.sdk.api.model.FleetRating
-import com.karhoo.sdk.api.model.LocationInfo
-import com.karhoo.sdk.api.model.LoyaltyBalance
-import com.karhoo.sdk.api.model.LoyaltyConversion
-import com.karhoo.sdk.api.model.LoyaltyProgramme
-import com.karhoo.sdk.api.model.LoyaltyRates
-import com.karhoo.sdk.api.model.MeetingPoint
-import com.karhoo.sdk.api.model.Organisation
-import com.karhoo.sdk.api.model.PaymentProvider
-import com.karhoo.sdk.api.model.PaymentsNonce
-import com.karhoo.sdk.api.model.PickupType
-import com.karhoo.sdk.api.model.Place
-import com.karhoo.sdk.api.model.Places
-import com.karhoo.sdk.api.model.Poi
-import com.karhoo.sdk.api.model.PoiDetails
-import com.karhoo.sdk.api.model.Position
-import com.karhoo.sdk.api.model.Price
-import com.karhoo.sdk.api.model.Provider
-import com.karhoo.sdk.api.model.Quote
-import com.karhoo.sdk.api.model.QuoteId
-import com.karhoo.sdk.api.model.QuoteList
-import com.karhoo.sdk.api.model.QuotePrice
-import com.karhoo.sdk.api.model.QuotePriceNet
-import com.karhoo.sdk.api.model.QuoteSource
-import com.karhoo.sdk.api.model.QuoteStatus
-import com.karhoo.sdk.api.model.QuoteType
-import com.karhoo.sdk.api.model.QuoteVehicle
-import com.karhoo.sdk.api.model.TripInfo
-import com.karhoo.sdk.api.model.TripList
-import com.karhoo.sdk.api.model.TripLocationInfo
-import com.karhoo.sdk.api.model.TripState
-import com.karhoo.sdk.api.model.TripStatus
-import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.model.Vehicle
-import com.karhoo.sdk.api.model.Vehicles
+import com.karhoo.sdk.api.model.*
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.client.APITemplate.Companion.IDENTIFIER_ID
@@ -196,6 +145,18 @@ class ServerRobot {
                 endpoint = endpoint.replace("{$IDENTIFIER_ID}", quoteId),
                 delayInMillis = delayInMillis
                        )
+    }
+
+    fun quoteImagesRuleListResponse(
+        code: Int,
+        response: Any,
+        endpoint: String
+    ) {
+        mockGetResponse(
+            code = code,
+            response = response,
+            endpoint = endpoint
+        )
     }
 
     fun verifyQuotesResponse(code: Int, response: Any, endpoint: String = APITemplate.VERIFY_QUOTES_METHOD, delayInMillis: Int = 0, quoteId: String = QUOTE_ID.quoteId) {
@@ -510,6 +471,8 @@ class ServerRobot {
                                 quoteType = QuoteType.METERED,
                                 fleet = QUOTE_FLEET.copy(id = "someOtherFleetId"))
                                ))
+
+        val QUOTE_IMAGES_RULE_LIST = "{\"rules\":[{\"fleet_country_code\":\"*\",\"vehicle_type\":\"standard\",\"vehicle_tags\":[],\"vehicle_image\":\"https://cdn.karhoo.com/vehicle-image/sedan-regular.jpg\"},{\"fleet_country_code\":\"*\",\"vehicle_type\":\"standard\",\"vehicle_tags\":[\"executive\"],\"vehicle_image\":\"https://cdn.karhoo.com/vehicle-image/sedan-executive.jpg\"}]}"
 
         val QUOTE_LIST_EMPTY = QuoteList(
                 id = QuoteId(QUOTE_ID.quoteId),

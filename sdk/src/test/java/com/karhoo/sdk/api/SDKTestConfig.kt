@@ -9,7 +9,7 @@ object SDKTestConfig {
     const val REST_API_LINK = "http://127.0.0.1"
 
     val wireMockOptions: WireMockConfiguration = WireMockConfiguration.options()
-            .port(PORT_NUMBER)
-            .notifier(ConsoleNotifier(true))
+        .port(PORT_NUMBER)
+        .notifier(ConsoleNotifier(true))
 }
 
