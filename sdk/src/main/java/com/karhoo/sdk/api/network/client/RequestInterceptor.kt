@@ -20,7 +20,7 @@ class RequestInterceptor(private val headers: Headers) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val updatedRequestBuilder = request.newBuilder()
-                .addHeader("correlation_id", headers.generateCorrelationId(request.url().encodedPath()))
+                .addHeader(CORRELATION_ID, headers.generateCorrelationId(request.url().encodedPath()))
                 .addHeader("Content-Type", headers.contentType)
 
         when (val config = KarhooSDKConfigurationProvider.configuration.authenticationMethod()) {
@@ -62,4 +62,7 @@ class RequestInterceptor(private val headers: Headers) : Interceptor {
         }
     }
 
+    companion object {
+        const val CORRELATION_ID = "correlation_id"
+    }
 }

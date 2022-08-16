@@ -17,6 +17,7 @@ import com.karhoo.sdk.api.model.TripList
 import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicles
+import com.karhoo.sdk.api.model.VehicleMappings
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
@@ -308,4 +309,7 @@ interface   APITemplate {
     @FormUrlEncoded
     fun authRefresh(@FieldMap(encoded = true) params: Map<String, String>, @Url url: String = authHost() + AUTH_REFRESH_METHOD): Deferred<Resource<Credentials>>
 
+    @NoAuthorisationHeader
+    @GET
+    fun vehicleMappings(@Url url: String): Deferred<Resource<VehicleMappings>>
 }
