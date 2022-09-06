@@ -5,10 +5,13 @@ import com.karhoo.sdk.analytics.AnalyticProvider
 import com.karhoo.sdk.api.KarhooEnvironment
 import com.karhoo.sdk.api.KarhooSDKConfiguration
 import com.karhoo.sdk.api.model.AuthenticationMethod
+import com.karhoo.sdk.api.model.Credentials
 
 class UnitTestSDKConfig(val context: Context, val authenticationMethod: AuthenticationMethod =
         AuthenticationMethod.KarhooUser()) :
         KarhooSDKConfiguration {
+
+    lateinit var testCredentials: Credentials
 
     override fun environment(): KarhooEnvironment {
         return KarhooEnvironment.Sandbox()
@@ -24,5 +27,9 @@ class UnitTestSDKConfig(val context: Context, val authenticationMethod: Authenti
 
     override fun analyticsProvider(): AnalyticProvider? {
         return null
+    }
+
+    override suspend fun requestNewAuthenticationCredentials(callback: suspend (Credentials) -> Unit) {
+        callback.invoke(testCredentials)
     }
 }

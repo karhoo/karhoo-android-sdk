@@ -5,6 +5,7 @@ import com.karhoo.sdk.analytics.AnalyticProvider
 import com.karhoo.sdk.api.KarhooEnvironment
 import com.karhoo.sdk.api.KarhooSDKConfiguration
 import com.karhoo.sdk.api.model.AuthenticationMethod
+import com.karhoo.sdk.api.model.Credentials
 
 class TestSDKConfig(val context: Context, private val authenticationMethod: AuthenticationMethod =
         AuthenticationMethod.KarhooUser()) :
@@ -24,5 +25,9 @@ class TestSDKConfig(val context: Context, private val authenticationMethod: Auth
 
     override fun analyticsProvider(): AnalyticProvider? {
         return null
+    }
+
+    override suspend fun requestNewAuthenticationCredentials(callback: suspend (Credentials) -> Unit) {
+        //Do nothing
     }
 }

@@ -9,21 +9,24 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
     override val credentials: Credentials
         get() = Credentials(sharedPreferences.getString(ACCESS_TOKEN, "").orEmpty(),
                             sharedPreferences.getString(REFRESH_TOKEN, "").orEmpty(),
-                            sharedPreferences.getLong(EXPIRES_ON, 0L),
-                            sharedPreferences.getLong(REFRESH_EXPIRES_ON, 0L))
+                            sharedPreferences.getLong(EXPIRES_IN, 0L),
+                            sharedPreferences.getLong(REFRESH_EXPIRES_IN, 0L),
+                            sharedPreferences.getLong(RETRIEVAL_DATE, 0L))
 
     override val isValidToken: Boolean
         get() {
             val now = System.currentTimeMillis()
-            val expiresOn = sharedPreferences.getLong(EXPIRES_ON, 0L)
-            return now < expiresOn
+            val expiresIn = sharedPreferences.getLong(EXPIRES_IN, 0L)
+            val retrievalDate = sharedPreferences.getLong(RETRIEVAL_DATE, 0L)
+            return now < retrievalDate + (expiresIn * SECOND_MILLISECONDS)
         }
 
     override val isValidRefreshToken: Boolean
         get() {
             val now = System.currentTimeMillis()
-            val refreshExpiresOn = sharedPreferences.getLong(REFRESH_EXPIRES_ON, 0L)
-            return now < refreshExpiresOn
+            val refreshExpiresIn = sharedPreferences.getLong(REFRESH_EXPIRES_IN, 0L)
+            val retrievalDate = sharedPreferences.getLong(RETRIEVAL_DATE, 0L)
+            return now < retrievalDate + (refreshExpiresIn * SECOND_MILLISECONDS)
         }
 
     override fun saveCredentials(credentials: Credentials) {
@@ -31,8 +34,11 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
             if (!credentials.refreshToken.isEmpty()) {
                 putString(REFRESH_TOKEN, credentials.refreshToken)
             }
-            credentials.expiresIn?.let { putLong(EXPIRES_ON, System.currentTimeMillis() + (it * SECOND_MILLISECONDS)) }
-            credentials.refreshExpiresIn?.let { putLong(REFRESH_EXPIRES_ON, System.currentTimeMillis() + (it * SECOND_MILLISECONDS)) }
+            credentials.expiresIn?.let { putLong(EXPIRES_IN, it) }
+            credentials.refreshExpiresIn?.let { putLong(REFRESH_EXPIRES_IN, it) }
+
+            putLong(RETRIEVAL_DATE, credentials.retrievalDate)
+
             apply()
         }
     }
@@ -41,7 +47,7 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
         sharedPreferences.edit()
                 .putString(REFRESH_TOKEN, null)
                 .putString(ACCESS_TOKEN, null)
-                .putLong(EXPIRES_ON, 0L)
+                .putLong(EXPIRES_IN, 0L)
                 .apply()
     }
 
@@ -50,8 +56,9 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
         const val SECOND_MILLISECONDS = 1000
         private const val REFRESH_TOKEN = "refresh_token"
         private const val ACCESS_TOKEN = "access_token"
-        private const val EXPIRES_ON = "expires_on"
-        private const val REFRESH_EXPIRES_ON = "refresh_expires_on"
+        private const val EXPIRES_IN = "expires_in"
+        private const val RETRIEVAL_DATE = "retrieval_date"
+        private const val REFRESH_EXPIRES_IN = "refresh_expires_in"
     }
 
 }

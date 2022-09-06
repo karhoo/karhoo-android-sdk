@@ -103,8 +103,8 @@ class KarhooCredentialsManagerTest {
      */
     @Test
     fun `valid token returns true`() {
-        whenever(preferences.getLong(EXPIRES_ON, 0L)).thenReturn(System.currentTimeMillis() + 1000)
-        whenever(preferences.getLong(REFRESH_EXPIRES_ON, 0L)).thenReturn(System.currentTimeMillis() + 1000)
+        whenever(preferences.getLong(EXPIRES_IN, 0L)).thenReturn(System.currentTimeMillis() + 1000)
+        whenever(preferences.getLong(REFRESH_EXPIRES_IN, 0L)).thenReturn(System.currentTimeMillis() + 1000)
 
         assertTrue(karhooCredentialsManager.isValidToken)
         assertTrue(karhooCredentialsManager.isValidRefreshToken)
@@ -118,15 +118,15 @@ class KarhooCredentialsManagerTest {
      */
     @Test
     fun `invalid token returns false`() {
-        whenever(preferences.getLong(EXPIRES_ON, 0L)).thenReturn(0L)
-        whenever(preferences.getLong(REFRESH_EXPIRES_ON, 0L)).thenReturn(0L)
+        whenever(preferences.getLong(EXPIRES_IN, 0L)).thenReturn(0L)
+        whenever(preferences.getLong(REFRESH_EXPIRES_IN, 0L)).thenReturn(0L)
 
         assertFalse(karhooCredentialsManager.isValidToken)
         assertFalse(karhooCredentialsManager.isValidRefreshToken)
     }
 
     companion object {
-        private const val EXPIRES_ON = "expires_on"
-        private const val REFRESH_EXPIRES_ON = "refresh_expires_on"
+        private const val EXPIRES_IN = "expires_in"
+        private const val REFRESH_EXPIRES_IN = "refresh_expires_in"
     }
 }

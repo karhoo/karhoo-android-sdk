@@ -11,13 +11,16 @@ import com.karhoo.sdk.call.Call
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import android.util.Log
+import com.karhoo.sdk.api.service.common.InteractorContants.AUTH_TOKEN_REFRESH_NEEEDED
 import kotlin.coroutines.CoroutineContext
 
-internal abstract class BaseCallInteractor<RESPONSE> protected constructor(private val requestRequiresToken: Boolean,
-                                                                           private val credentialsManager: CredentialsManager,
-                                                                           private val apiTemplate: APITemplate,
-                                                                           private val context: CoroutineContext)
-    : Call<RESPONSE> {
+internal abstract class BaseCallInteractor<RESPONSE> protected constructor(
+    private val requestRequiresToken: Boolean,
+    private val credentialsManager: CredentialsManager,
+    private val apiTemplate: APITemplate,
+    private val context: CoroutineContext
+) : Call<RESPONSE> {
 
     internal abstract fun createRequest(): Deferred<Resource<RESPONSE>>
 
@@ -25,9 +28,20 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(priva
         GlobalScope.launch(context) {
             val config = KarhooSDKConfigurationProvider.configuration.authenticationMethod()
             if (shouldRefreshToken(config)) {
-                when (val resource = refreshEndpoint(config).await()) {
-                    is Resource.Success -> successfulCredentials(resource.data, subscriber)
-                    is Resource.Failure -> subscriber(Resource.Failure(resource.error))
+                if (credentialsManager.credentials.refreshToken.isEmpty()) {
+                    /** Request a new access token from an external source if the refresh token
+                     * is not correct and attempt to overwrite the old access token
+                     */
+                    Log.e(TAG, AUTH_TOKEN_REFRESH_NEEEDED)
+
+                    KarhooSDKConfigurationProvider.configuration.requestNewAuthenticationCredentials { newCredentials ->
+                        successfulCredentials(newCredentials, subscriber)
+                    }
+                } else {
+                    when (val resource = refreshEndpoint(config).await()) {
+                        is Resource.Success -> successfulCredentials(resource.data, subscriber)
+                        is Resource.Failure -> subscriber(Resource.Failure(resource.error))
+                    }
                 }
             } else {
                 subscriber(createRequest().await())
@@ -46,9 +60,7 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(priva
             return apiTemplate.authRefresh(authRefreshParams)
         }
 
-        return apiTemplate.refreshToken(RefreshTokenRequest
-                                        (credentialsManager.credentials
-                                                 .refreshToken))
+        return apiTemplate.refreshToken(RefreshTokenRequest(credentialsManager.credentials.refreshToken))
     }
 
     private fun shouldRefreshToken(config: AuthenticationMethod): Boolean {
@@ -56,9 +68,15 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(priva
                 requestRequiresToken && !credentialsManager.isValidToken
     }
 
-    private suspend fun successfulCredentials(credentials: Credentials, subscriber: (Resource<RESPONSE>) -> Unit) {
+    private suspend fun successfulCredentials(
+        credentials: Credentials,
+        subscriber: (Resource<RESPONSE>) -> Unit
+    ) {
         credentialsManager.saveCredentials(credentials)
         subscriber(createRequest().await())
     }
 
+    companion object {
+        private const val TAG = "BaseCallInteractor"
+    }
 }
