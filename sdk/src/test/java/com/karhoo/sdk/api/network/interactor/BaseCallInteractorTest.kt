@@ -9,6 +9,7 @@ import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -55,7 +56,7 @@ class BaseCallInteractorTest {
     @Before
     fun setUp() {
         KarhooSDKConfigurationProvider.setConfig(testConfig)
-        testConfig.calledRequestNewAuthenticationCredentials = false
+        testConfig.calledRequestExternalAuthentication = false
 
         interactorSUT = BaseInteractorMock(
             credentialsManager,
@@ -138,11 +139,7 @@ class BaseCallInteractorTest {
 
         interactorSUT.execute {
             Assert.assertTrue(it is Resource.Success)
-            Assert.assertTrue(testConfig.calledRequestNewAuthenticationCredentials)
-            Assert.assertEquals(((it as Resource.Success).data as Credentials).accessToken, newCredentials.accessToken)
-            Assert.assertEquals((it.data as Credentials).expiresIn, newCredentials.expiresIn)
-            Assert.assertEquals((it.data as Credentials).refreshExpiresIn, newCredentials.refreshExpiresIn)
-            Assert.assertEquals((it.data as Credentials).refreshToken, newCredentials.refreshToken)
+            Assert.assertTrue(testConfig.calledRequestExternalAuthentication)
         }
     }
 
@@ -162,8 +159,7 @@ class BaseCallInteractorTest {
 
         interactorSUT.execute {
             Assert.assertTrue(it is Resource.Success)
-            Assert.assertTrue(testConfig.calledRequestNewAuthenticationCredentials)
-            verify(credentialsManager).saveCredentials(newCredentials)
+            Assert.assertTrue(testConfig.calledRequestExternalAuthentication)
         }
     }
 }

@@ -12,6 +12,7 @@ class UnitTestSDKConfig(val context: Context, val authenticationMethod: Authenti
         KarhooSDKConfiguration {
 
     lateinit var testCredentials: Credentials
+    var calledRequestExternalAuthentication = false
 
     override fun environment(): KarhooEnvironment {
         return KarhooEnvironment.Sandbox()
@@ -29,7 +30,7 @@ class UnitTestSDKConfig(val context: Context, val authenticationMethod: Authenti
         return null
     }
 
-    override suspend fun requestNewAuthenticationCredentials(callback: suspend (Credentials) -> Unit) {
-        callback.invoke(testCredentials)
+    override suspend fun requestExternalAuthentication() {
+        calledRequestExternalAuthentication = true
     }
 }

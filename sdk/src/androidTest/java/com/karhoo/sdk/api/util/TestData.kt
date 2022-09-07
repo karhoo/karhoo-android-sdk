@@ -39,7 +39,7 @@ import com.karhoo.sdk.api.network.request.TripCancellation
 import com.karhoo.sdk.api.network.request.TripSearch
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
-import com.karhoo.sdk.api.service.common.InteractorContants
+import com.karhoo.sdk.api.service.common.InteractorConstants
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
@@ -136,7 +136,7 @@ class TestData {
                 organisations = listOf(Organisation(
                         id = BuildConfig.KARHOO_STAGING_BRAINTREE_DEFAULT_ORGANISATION_ID,
                         name = "Karhoo",
-                        roles = listOf("TRIP_ADMIN", InteractorContants.MOBILE_USER)))
+                        roles = listOf("TRIP_ADMIN", InteractorConstants.MOBILE_USER)))
         )
 
         val USER_INFO_INVALID_ORG = USER_INFO.copy(organisations = listOf(Organisation(
