@@ -57,36 +57,45 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
             /**
              * Schedule an automatic token refresh
              */
-            credentialsRefreshTimer?.cancel()
-            credentialsRefreshTimer = null
 
-            if(config != null && apiTemplate != null) {
-                credentialsRefreshTimer = GlobalScope.launch {
-                    delay(credentials.retrievalTimestamp + (credentials.expiresIn * SECOND_MILLISECONDS) - REFRESH_BUFFER_MILLISECONDS)
 
-                    if (!isValidRefreshToken) {
-                        /** Request an external login in order to refresh the credentials if the refresh token
-                         * is not valid */
-                        Log.i(TAG, InteractorConstants.AUTH_TOKEN_TIMER_REFRESH)
+            launchCredentialsTimer(apiTemplate, config)
+        }
+    }
 
-                        KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication()
-                    } else {
-                        when (val resource = refreshCredentials(config,apiTemplate, this@KarhooCredentialsManager)) {
-                            is Resource.Success -> saveCredentials(resource.data, apiTemplate, config)
-                            is Resource.Failure -> {
-                                /** If refreshing the credentials with a refresh token has failed, then
-                                 * request and external login as a fail-safe
-                                 * */
-                                Log.e(TAG, AUTH_TOKEN_REFRESH_NEEEDED)
-                                KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication()
-                            }
+    private fun launchCredentialsTimer(apiTemplate: APITemplate?, config: AuthenticationMethod?) {
+        credentialsRefreshTimer?.cancel()
+        credentialsRefreshTimer = null
 
+        if (config != null && apiTemplate != null) {
+            credentialsRefreshTimer = GlobalScope.launch {
+                delay(credentials.retrievalTimestamp + (credentials.expiresIn * SECOND_MILLISECONDS) - REFRESH_BUFFER_MILLISECONDS)
+
+                if (!isValidRefreshToken) {
+                    /** Request an external login in order to refresh the credentials if the refresh token
+                     * is not valid */
+                    Log.i(TAG, InteractorConstants.AUTH_TOKEN_TIMER_REFRESH)
+                    requestExternalAuthentication()
+                } else {
+                    when (val resource =
+                        refreshCredentials(config, apiTemplate, this@KarhooCredentialsManager)) {
+                        is Resource.Success -> saveCredentials(resource.data, apiTemplate, config)
+                        is Resource.Failure -> {
+                            /** If refreshing the credentials with a refresh token has failed, then
+                             * request and external login as a fail-safe
+                             * */
+                            Log.e(TAG, AUTH_TOKEN_REFRESH_NEEEDED)
+                            requestExternalAuthentication()
                         }
+
                     }
                 }
-
             }
         }
+    }
+
+    private suspend fun requestExternalAuthentication() {
+        KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {}
     }
 
     override fun deleteCredentials() {

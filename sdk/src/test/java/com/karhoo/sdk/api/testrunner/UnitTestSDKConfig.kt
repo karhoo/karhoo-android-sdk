@@ -30,7 +30,7 @@ class UnitTestSDKConfig(val context: Context, val authenticationMethod: Authenti
         return null
     }
 
-    override suspend fun requestExternalAuthentication() {
+    override suspend fun requestExternalAuthentication(callback: suspend () -> Unit) {
         calledRequestExternalAuthentication = true
     }
 }

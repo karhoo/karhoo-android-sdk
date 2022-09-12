@@ -1,6 +1,7 @@
 package com.karhoo.sdk.api.service.common
 
 import android.util.Log
+import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.model.AuthenticationMethod
@@ -13,6 +14,7 @@ import com.karhoo.sdk.api.service.common.InteractorConstants.AUTH_TOKEN_REFRESH_
 import com.karhoo.sdk.call.PollCall
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
@@ -33,11 +35,11 @@ abstract class BasePollCallInteractor<RESPONSE> protected constructor(private va
                      * is not valid */
                     Log.i(TAG, AUTH_TOKEN_REFRESH_NEEEDED)
 
-                    KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication()
+                    requestExternalAuthentication(subscriber)
                 } else {
                     when (val resource = BaseCallInteractor.refreshCredentials(config, apiTemplate, credentialsManager)) {
                         is Resource.Success -> successfulCredentials(resource.data, subscriber)
-                        is Resource.Failure -> subscriber(Resource.Failure(resource.error))
+                        is Resource.Failure -> requestExternalAuthentication(subscriber)
                     }
                 }
             } else {
@@ -59,6 +61,21 @@ abstract class BasePollCallInteractor<RESPONSE> protected constructor(private va
         val config = KarhooSDKConfigurationProvider.configuration.authenticationMethod()
         credentialsManager.saveCredentials(credentials, apiTemplate, config)
         subscriber(createRequest().await())
+    }
+
+    private suspend fun requestExternalAuthentication(subscriber: (Resource<RESPONSE>) -> Unit) {
+        var refreshTimedOut = false
+        val replyTimer = GlobalScope.launch(context) {
+            delay(BaseCallInteractor.ERROR_DELAY_SECONDS)
+            subscriber(Resource.Failure(KarhooError.AuthenticationRequired))
+            refreshTimedOut = true
+        }
+        KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {
+            replyTimer.cancel()
+            if(!refreshTimedOut) {
+                subscriber(createRequest().await())
+            }
+        }
     }
 
     companion object {
