@@ -3,12 +3,7 @@ package com.karhoo.sdk.api.datastore.user
 import android.content.SharedPreferences
 import com.karhoo.sdk.api.datastore.credentials.KarhooCredentialsManager
 import com.karhoo.sdk.api.model.Credentials
-import com.nhaarman.mockitokotlin2.atLeastOnce
-import com.nhaarman.mockitokotlin2.doNothing
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -103,8 +98,27 @@ class KarhooCredentialsManagerTest {
      */
     @Test
     fun `valid token returns true`() {
-        whenever(preferences.getLong(EXPIRES_IN, 0L)).thenReturn(System.currentTimeMillis() + 1000)
-        whenever(preferences.getLong(REFRESH_EXPIRES_IN, 0L)).thenReturn(System.currentTimeMillis() + 1000)
+        whenever(preferences.getLong(EXPIRES_IN, 0L)).thenReturn(10000)
+        whenever(preferences.getLong(REFRESH_EXPIRES_IN, 0L)).thenReturn(10000)
+        whenever(preferences.getLong(RETRIEVAL_DATE, 0L)).thenReturn(System.currentTimeMillis() + 10000)
+        whenever(preferences.getString(REFRESH_TOKEN, "")).thenReturn(REFRESH_TOKEN)
+
+        assertTrue(karhooCredentialsManager.isValidToken)
+        assertTrue(karhooCredentialsManager.isValidRefreshToken)
+    }
+
+    /**
+     * Given    A request is made to see if the JWT is valid
+     * When     The JWT is valid
+     * Then     A boolean of true should be returned
+     *
+     */
+    @Test
+    fun `When all the credential fields are valid, then the isValidToken and isValidRefreshToken are true`() {
+        whenever(preferences.getLong(EXPIRES_IN, 0L)).thenReturn(10000)
+        whenever(preferences.getLong(REFRESH_EXPIRES_IN, 0L)).thenReturn(10000)
+        whenever(preferences.getLong(RETRIEVAL_DATE, 0L)).thenReturn(System.currentTimeMillis() + 10000)
+        whenever(preferences.getString(REFRESH_TOKEN, "")).thenReturn(REFRESH_TOKEN)
 
         assertTrue(karhooCredentialsManager.isValidToken)
         assertTrue(karhooCredentialsManager.isValidRefreshToken)
@@ -125,8 +139,28 @@ class KarhooCredentialsManagerTest {
         assertFalse(karhooCredentialsManager.isValidRefreshToken)
     }
 
+    @Test
+    fun `When the refresh token is empty, then the check returns false`() {
+        whenever(preferences.getLong(REFRESH_EXPIRES_IN, 0L)).thenReturn(10000)
+        whenever(preferences.getLong(RETRIEVAL_DATE, 0L)).thenReturn(System.currentTimeMillis() + 10000)
+        whenever(preferences.getString(REFRESH_TOKEN, "")).thenReturn("")
+
+        assertFalse(karhooCredentialsManager.isValidRefreshToken)
+    }
+
+    @Test
+    fun `When the refresh token expiry time is 0, then the check returns false`() {
+        whenever(preferences.getLong(REFRESH_EXPIRES_IN, 0L)).thenReturn(0)
+        whenever(preferences.getLong(RETRIEVAL_DATE, 0L)).thenReturn(System.currentTimeMillis() + 10000)
+        whenever(preferences.getString(REFRESH_TOKEN, "")).thenReturn("")
+
+        assertFalse(karhooCredentialsManager.isValidRefreshToken)
+    }
+
     companion object {
         private const val EXPIRES_IN = "expires_in"
         private const val REFRESH_EXPIRES_IN = "refresh_expires_in"
+        private const val REFRESH_TOKEN = "refresh_token"
+        private const val RETRIEVAL_DATE = "retrieval_date"
     }
 }

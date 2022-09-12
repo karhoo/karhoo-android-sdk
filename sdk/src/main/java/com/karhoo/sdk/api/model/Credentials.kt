@@ -11,5 +11,5 @@ data class Credentials(
     @SerializedName("refresh_token") val refreshToken: String = "",
     @SerializedName("expires_in") val expiresIn: Long,
     @SerializedName("refresh_expires_in") val refreshExpiresIn: Long? = null,
-    val retrievalDate: Long = Date().time
+    val retrievalTimestamp: Long = Date().time
 ) : Parcelable

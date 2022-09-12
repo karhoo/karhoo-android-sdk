@@ -8,11 +8,13 @@ import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.RefreshTokenRequest
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.call.Call
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import android.util.Log
-import com.karhoo.sdk.api.service.common.InteractorContants.AUTH_TOKEN_REFRESH_NEEEDED
+import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.service.common.InteractorConstants.AUTH_TOKEN_REFRESH_NEEEDED
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlin.coroutines.CoroutineContext
 
 internal abstract class BaseCallInteractor<RESPONSE> protected constructor(
@@ -28,39 +30,23 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(
         GlobalScope.launch(context) {
             val config = KarhooSDKConfigurationProvider.configuration.authenticationMethod()
             if (shouldRefreshToken(config)) {
-                if (credentialsManager.credentials.refreshToken.isEmpty()) {
-                    /** Request a new access token from an external source if the refresh token
-                     * is not correct and attempt to overwrite the old access token
-                     */
-                    Log.e(TAG, AUTH_TOKEN_REFRESH_NEEEDED)
+                if (!credentialsManager.isValidRefreshToken) {
+                    /** Request an external login in order to refresh the credentials if the refresh token
+                     * is not valid */
+                    Log.i(TAG, AUTH_TOKEN_REFRESH_NEEEDED)
 
-                    KarhooSDKConfigurationProvider.configuration.requestNewAuthenticationCredentials { newCredentials ->
-                        successfulCredentials(newCredentials, subscriber)
-                    }
+                    requestExternalAuthentication(subscriber)
                 } else {
-                    when (val resource = refreshEndpoint(config).await()) {
+                    when (val resource =
+                        refreshCredentials(config, apiTemplate, credentialsManager)) {
                         is Resource.Success -> successfulCredentials(resource.data, subscriber)
-                        is Resource.Failure -> subscriber(Resource.Failure(resource.error))
+                        is Resource.Failure -> requestExternalAuthentication(subscriber)
                     }
                 }
             } else {
                 subscriber(createRequest().await())
             }
         }
-    }
-
-    private fun refreshEndpoint(config: AuthenticationMethod): Deferred<Resource<Credentials>> {
-
-        if (config is AuthenticationMethod.TokenExchange) {
-            val authRefreshParams = mapOf(
-                    Pair("client_id", config.clientId),
-                    Pair("refresh_token", credentialsManager.credentials.refreshToken),
-                    Pair("grant_type", "refresh_token"))
-
-            return apiTemplate.authRefresh(authRefreshParams)
-        }
-
-        return apiTemplate.refreshToken(RefreshTokenRequest(credentialsManager.credentials.refreshToken))
     }
 
     private fun shouldRefreshToken(config: AuthenticationMethod): Boolean {
@@ -72,11 +58,48 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(
         credentials: Credentials,
         subscriber: (Resource<RESPONSE>) -> Unit
     ) {
-        credentialsManager.saveCredentials(credentials)
+        val config = KarhooSDKConfigurationProvider.configuration.authenticationMethod()
+        credentialsManager.saveCredentials(credentials, apiTemplate, config)
         subscriber(createRequest().await())
     }
 
+    private suspend fun requestExternalAuthentication(subscriber: (Resource<RESPONSE>) -> Unit) {
+        var refreshTimedOut = false
+        val replyTimer = GlobalScope.launch(context) {
+            delay(ERROR_DELAY_SECONDS)
+            subscriber(Resource.Failure(KarhooError.AuthenticationRequired))
+            refreshTimedOut = true
+        }
+        KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {
+            replyTimer.cancel()
+            if(!refreshTimedOut) {
+                subscriber(createRequest().await())
+            }
+        }
+    }
     companion object {
         private const val TAG = "BaseCallInteractor"
+        private const val CLIENT_ID = "client_id"
+        private const val REFRESH_TOKEN = "refresh_token"
+        private const val GRANT_TYPE = "grant_type"
+        const val ERROR_DELAY_SECONDS = 60 * 1000L
+
+        suspend fun refreshCredentials(
+            config: AuthenticationMethod,
+            apiTemplate: APITemplate,
+            credentialsManager: CredentialsManager
+        ): Resource<Credentials> {
+            if (config is AuthenticationMethod.TokenExchange) {
+                val authRefreshParams = mapOf(
+                    Pair(CLIENT_ID, config.clientId),
+                    Pair(REFRESH_TOKEN, credentialsManager.credentials.refreshToken),
+                    Pair(GRANT_TYPE, REFRESH_TOKEN)
+                )
+
+                return apiTemplate.authRefresh(authRefreshParams).await()
+            }
+            return apiTemplate.refreshToken(RefreshTokenRequest(credentialsManager.credentials.refreshToken))
+                .await()
+        }
     }
 }

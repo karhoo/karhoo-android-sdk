@@ -15,5 +15,5 @@ interface KarhooSDKConfiguration {
 
     fun analyticsProvider(): AnalyticProvider?
 
-    suspend fun requestNewAuthenticationCredentials(callback: suspend (Credentials) -> Unit)
+    suspend fun requestExternalAuthentication(callback: suspend () -> Unit)
 }
