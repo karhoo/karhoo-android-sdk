@@ -12,7 +12,7 @@ interface CredentialsManager {
 
     val isValidRefreshToken: Boolean
 
-    fun saveCredentials(credentials: Credentials, apiTemplate: APITemplate? = null, config: AuthenticationMethod? =null)
+    fun saveCredentials(credentials: Credentials, apiTemplate: APITemplate? = null, config: AuthenticationMethod? = null)
 
     fun deleteCredentials()
 

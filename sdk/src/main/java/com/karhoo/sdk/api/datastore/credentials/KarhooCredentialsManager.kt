@@ -54,16 +54,15 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
 
             apply()
 
-            /**
-             * Schedule an automatic token refresh
-             */
-
-
             launchCredentialsTimer(apiTemplate, config)
         }
     }
 
     private fun launchCredentialsTimer(apiTemplate: APITemplate?, config: AuthenticationMethod?) {
+        /**
+         * Schedule an automatic token refresh
+         */
+
         credentialsRefreshTimer?.cancel()
         credentialsRefreshTimer = null
 
