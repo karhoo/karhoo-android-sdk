@@ -83,7 +83,7 @@ afterEvaluate {
 
                 groupId = 'com.karhoo'
                 artifactId = 'nsdk'
-                version = '1.5.1-RC4'
+                version = '1.5.1-RC5'
             }
         }
     }

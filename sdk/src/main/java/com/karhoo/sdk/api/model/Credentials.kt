@@ -12,9 +12,12 @@ class Credentials(
     @SerializedName("expires_in") val expiresIn: Long,
     @SerializedName("refresh_expires_in") val refreshExpiresIn: Long? = null,
 ) : Parcelable {
-    var retrievalTimestamp: Long = Date().time
-
-    init {
-        retrievalTimestamp = Date().time
+    var retrievalTimestamp: Date? = Date()
+    get() {
+        return if (field == null) {
+            Date()
+        } else {
+            field
+        }
     }
 }

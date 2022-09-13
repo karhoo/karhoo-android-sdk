@@ -15,6 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences) : CredentialsManager {
     private var credentialsRefreshTimer: Job? = null
@@ -26,7 +27,7 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
                 sharedPreferences.getLong(EXPIRES_IN, 0L),
                 sharedPreferences.getLong(REFRESH_EXPIRES_IN, 0L),
             )
-            credentials.retrievalTimestamp = sharedPreferences.getLong(RETRIEVAL_DATE, 0L)
+            credentials.retrievalTimestamp = Date(sharedPreferences.getLong(RETRIEVAL_DATE, 0L))
 
             return credentials
         }
@@ -56,7 +57,7 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
             putLong(EXPIRES_IN, credentials.expiresIn)
             credentials.refreshExpiresIn?.let { putLong(REFRESH_EXPIRES_IN, it) }
 
-            putLong(RETRIEVAL_DATE, credentials.retrievalTimestamp)
+            putLong(RETRIEVAL_DATE, credentials.retrievalTimestamp?.time ?: 0)
 
             apply()
 
@@ -74,7 +75,7 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
 
         if (config != null && apiTemplate != null) {
             credentialsRefreshTimer = GlobalScope.launch {
-                delay(credentials.retrievalTimestamp + (credentials.expiresIn * SECOND_MILLISECONDS) - REFRESH_BUFFER_MILLISECONDS)
+                delay((credentials.retrievalTimestamp?.time ?: 0) + (credentials.expiresIn * SECOND_MILLISECONDS) - REFRESH_BUFFER_MILLISECONDS)
 
                 if (!isValidRefreshToken) {
                     /** Request an external login in order to refresh the credentials if the refresh token
