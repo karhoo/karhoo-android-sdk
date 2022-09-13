@@ -108,6 +108,8 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
                 .putString(REFRESH_TOKEN, null)
                 .putString(ACCESS_TOKEN, null)
                 .putLong(EXPIRES_IN, 0L)
+                .putLong(REFRESH_EXPIRES_IN, 0L)
+                .putLong(RETRIEVAL_DATE, 0L)
                 .apply()
     }
 
