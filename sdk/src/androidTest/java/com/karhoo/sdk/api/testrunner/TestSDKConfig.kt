@@ -27,7 +27,7 @@ class TestSDKConfig(val context: Context, private val authenticationMethod: Auth
         return null
     }
 
-    override suspend fun requestNewAuthenticationCredentials(callback: suspend (Credentials) -> Unit) {
+    override suspend fun requestExternalAuthentication(callback: suspend () -> Unit) {
         //Do nothing
     }
 }
