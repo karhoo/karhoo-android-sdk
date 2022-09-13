@@ -19,11 +19,17 @@ import kotlinx.coroutines.launch
 class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences) : CredentialsManager {
     private var credentialsRefreshTimer: Job? = null
     override val credentials: Credentials
-        get() = Credentials(sharedPreferences.getString(ACCESS_TOKEN, "").orEmpty(),
-                            sharedPreferences.getString(REFRESH_TOKEN, "").orEmpty(),
-                            sharedPreferences.getLong(EXPIRES_IN, 0L),
-                            sharedPreferences.getLong(REFRESH_EXPIRES_IN, 0L),
-                            sharedPreferences.getLong(RETRIEVAL_DATE, 0L))
+        get() {
+            val credentials = Credentials(
+                sharedPreferences.getString(ACCESS_TOKEN, "").orEmpty(),
+                sharedPreferences.getString(REFRESH_TOKEN, "").orEmpty(),
+                sharedPreferences.getLong(EXPIRES_IN, 0L),
+                sharedPreferences.getLong(REFRESH_EXPIRES_IN, 0L),
+            )
+            credentials.retrievalTimestamp = sharedPreferences.getLong(RETRIEVAL_DATE, 0L)
+
+            return credentials
+        }
 
     override val isValidToken: Boolean
         get() {
