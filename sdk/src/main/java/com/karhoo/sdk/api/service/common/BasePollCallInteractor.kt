@@ -77,7 +77,9 @@ abstract class BasePollCallInteractor<RESPONSE> protected constructor(private va
         KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {
             replyTimer.cancel()
             if(!refreshTimedOut) {
-                RequestsQueue.consumeRequests()
+                GlobalScope.launch {
+                    RequestsQueue.consumeRequests()
+                }
             }
         }
     }

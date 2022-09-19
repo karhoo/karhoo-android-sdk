@@ -76,7 +76,9 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(
         KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {
             replyTimer.cancel()
             if(!refreshTimedOut) {
-                RequestsQueue.consumeRequests()
+                GlobalScope.launch {
+                    RequestsQueue.consumeRequests()
+                }
             }
         }
     }

@@ -37,7 +37,6 @@ internal object RequestsQueue {
             processing.set(true)
 
             queue.map { delayedRequest ->
-
                 delayedRequest.baseInteractor?.let {
                     delayedRequest.subscriber(it.createRequest().await())
                 }
@@ -46,6 +45,7 @@ internal object RequestsQueue {
                 }
             }
 
+            processing.set(false)
             queue.clear()
         }
     }
