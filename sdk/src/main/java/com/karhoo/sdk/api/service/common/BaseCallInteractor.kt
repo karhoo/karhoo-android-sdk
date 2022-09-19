@@ -73,10 +73,10 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(
         val delayedRequest = RequestsQueue.DelayedRequest(subscriber, this)
         RequestsQueue.addRequest(delayedRequest as RequestsQueue.DelayedRequest<Any>)
 
-        KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {
+        KarhooSDKConfigurationProvider.configuration.requireSDKAuthentication {
             replyTimer.cancel()
             if(!refreshTimedOut) {
-                GlobalScope.launch {
+                GlobalScope.launch(context) {
                     RequestsQueue.consumeRequests()
                 }
             }

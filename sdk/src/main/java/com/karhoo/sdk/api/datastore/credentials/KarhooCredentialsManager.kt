@@ -101,7 +101,7 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
     }
 
     private suspend fun requestExternalAuthentication() {
-        KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {}
+        KarhooSDKConfigurationProvider.configuration.requireSDKAuthentication {}
     }
 
     override fun deleteCredentials() {

@@ -74,10 +74,10 @@ abstract class BasePollCallInteractor<RESPONSE> protected constructor(private va
         val delayedRequest = RequestsQueue.DelayedRequest(subscriber, this)
         RequestsQueue.addRequest(delayedRequest as RequestsQueue.DelayedRequest<Any>)
 
-        KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {
+        KarhooSDKConfigurationProvider.configuration.requireSDKAuthentication {
             replyTimer.cancel()
             if(!refreshTimedOut) {
-                GlobalScope.launch {
+                GlobalScope.launch(context) {
                     RequestsQueue.consumeRequests()
                 }
             }
