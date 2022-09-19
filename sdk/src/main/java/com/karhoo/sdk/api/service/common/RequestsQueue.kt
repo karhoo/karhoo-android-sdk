@@ -1,6 +1,8 @@
 package com.karhoo.sdk.api.service.common
 
 import com.karhoo.sdk.api.network.response.Resource
+import com.karhoo.sdk.api.service.common.InteractorConstants.POLLING_DELAYE_REQUEST_PERIOD_MILLIS
+import kotlinx.coroutines.delay
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -41,6 +43,7 @@ internal object RequestsQueue {
                     delayedRequest.subscriber(it.createRequest().await())
                 }
                 delayedRequest.pollInteractor?.let {
+                    delay(POLLING_DELAYE_REQUEST_PERIOD_MILLIS)
                     delayedRequest.subscriber(it.createRequest().await())
                 }
             }
