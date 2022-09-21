@@ -23,7 +23,6 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(
     private val apiTemplate: APITemplate,
     private val context: CoroutineContext
 ) : Call<RESPONSE> {
-
     internal abstract fun createRequest(): Deferred<Resource<RESPONSE>>
 
     override fun execute(subscriber: (Resource<RESPONSE>) -> Unit) {
@@ -70,10 +69,16 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(
             subscriber(Resource.Failure(KarhooError.AuthenticationRequired))
             refreshTimedOut = true
         }
-        KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {
+
+        val delayedRequest = RequestsQueue.DelayedRequest(subscriber, this)
+        RequestsQueue.addRequest(delayedRequest as RequestsQueue.DelayedRequest<Any>)
+
+        KarhooSDKConfigurationProvider.configuration.requireSDKAuthentication {
             replyTimer.cancel()
             if(!refreshTimedOut) {
-                subscriber(createRequest().await())
+                GlobalScope.launch(context) {
+                    RequestsQueue.consumeRequests()
+                }
             }
         }
     }

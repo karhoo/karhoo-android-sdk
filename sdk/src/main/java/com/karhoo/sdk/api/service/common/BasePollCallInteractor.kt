@@ -70,10 +70,16 @@ abstract class BasePollCallInteractor<RESPONSE> protected constructor(private va
             subscriber(Resource.Failure(KarhooError.AuthenticationRequired))
             refreshTimedOut = true
         }
-        KarhooSDKConfigurationProvider.configuration.requestExternalAuthentication {
+
+        val delayedRequest = RequestsQueue.DelayedRequest(subscriber, this)
+        RequestsQueue.addRequest(delayedRequest as RequestsQueue.DelayedRequest<Any>)
+
+        KarhooSDKConfigurationProvider.configuration.requireSDKAuthentication {
             replyTimer.cancel()
             if(!refreshTimedOut) {
-                subscriber(createRequest().await())
+                GlobalScope.launch(context) {
+                    RequestsQueue.consumeRequests()
+                }
             }
         }
     }
