@@ -62,17 +62,14 @@ class SealedCoroutineCallAdapterFactoryTest {
 
             val (event, payloader) = pairCaptor<Event, Payloader>()
 
-//            verify(analytics).fireEvent(event.capture(), payloader.capture())
+            verify(analytics).fireEvent(event.capture(), payloader.capture())
 
-//            assertEquals(event.firstValue, Event.REQUEST_ERROR)
-//            assertEquals(
-//                payloader.firstValue.payload[Event.REQUEST_ERROR.value],
-//                "Failed to connect to /127.0.0.1:80"
-//            )
-//            assertEquals(
-//                payloader.firstValue.payload["request_url"],
-//                "${SDKTestConfig.REST_API_LINK}${BOOKING_WITH_NONCE_METHOD}"
-//            )
+            assertEquals(event.firstValue, Event.REQUEST_ERROR)
+
+            assertEquals(
+                payloader.firstValue.payload["request_url"],
+                "${SDKTestConfig.REST_API_LINK}${BOOKING_WITH_NONCE_METHOD}"
+            )
         }
     }
 }
