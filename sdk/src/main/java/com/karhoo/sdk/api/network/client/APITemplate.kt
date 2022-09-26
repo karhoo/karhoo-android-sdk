@@ -312,5 +312,5 @@ interface   APITemplate {
 
     @NoAuthorisationHeader
     @GET
-    fun vehicleMappings(@Url url: String, @Tag ignoreUrl: String = "IGNORE_URL"): Deferred<Resource<VehicleMappings>>
+    fun vehicleMappings(@Url url: String, @Tag ignoreUrl: String = RequestInterceptor.IGNORE_URL_CHANGE): Deferred<Resource<VehicleMappings>>
 }
