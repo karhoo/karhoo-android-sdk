@@ -51,7 +51,9 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
 
     override fun saveCredentials(credentials: Credentials, apiTemplate: APITemplate?, config: AuthenticationMethod?) {
         with(sharedPreferences.edit().putString(ACCESS_TOKEN, credentials.accessToken)) {
-            if (credentials.refreshToken.isNotEmpty()) {
+            if (credentials.refreshToken.isNullOrEmpty()) {
+                putString(REFRESH_TOKEN, "")
+            } else {
                 putString(REFRESH_TOKEN, credentials.refreshToken)
             }
             putLong(EXPIRES_IN, credentials.expiresIn)
