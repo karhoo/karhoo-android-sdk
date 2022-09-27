@@ -48,8 +48,8 @@ internal object RequestsQueue {
                 }
             }
 
-            processing.set(false)
             queue.clear()
+            processing.set(false)
         }
     }
 }

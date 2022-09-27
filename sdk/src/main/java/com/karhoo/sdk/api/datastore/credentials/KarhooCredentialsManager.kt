@@ -95,7 +95,6 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
                             Log.e(TAG, AUTH_TOKEN_REFRESH_NEEEDED)
                             requestExternalAuthentication()
                         }
-
                     }
                 }
             }
