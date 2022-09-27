@@ -3,11 +3,11 @@ package com.karhoo.sdk.api.service.common
 import com.karhoo.sdk.api.network.observable.Observable.Companion.BASE_POLL_TIME
 import com.karhoo.sdk.api.network.response.Resource
 import kotlinx.coroutines.delay
-import java.util.*
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal object RequestsQueue {
-    private var queue: Queue<DelayedRequest<Any>> = LinkedList()
+    private var queue: ConcurrentLinkedQueue<DelayedRequest<Any>> = ConcurrentLinkedQueue()
     private var processing: AtomicBoolean = AtomicBoolean(false)
 
     class DelayedRequest<RESPONSE> {
@@ -38,17 +38,18 @@ internal object RequestsQueue {
         if(!processing.get()) {
             processing.set(true)
 
-            queue.map { delayedRequest ->
-                delayedRequest.baseInteractor?.let {
+            while(queue.peek() != null) {
+                val delayedRequest = queue.poll()
+
+                delayedRequest?.baseInteractor?.let {
                     delayedRequest.subscriber(it.createRequest().await())
                 }
-                delayedRequest.pollInteractor?.let {
+                delayedRequest?.pollInteractor?.let {
                     delay(BASE_POLL_TIME)
                     delayedRequest.subscriber(it.createRequest().await())
                 }
             }
 
-            queue.clear()
             processing.set(false)
         }
     }
