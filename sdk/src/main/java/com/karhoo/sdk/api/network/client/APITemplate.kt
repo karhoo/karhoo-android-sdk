@@ -57,6 +57,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
+import retrofit2.http.Tag
 
 interface   APITemplate {
 
@@ -311,5 +312,5 @@ interface   APITemplate {
 
     @NoAuthorisationHeader
     @GET
-    fun vehicleMappings(@Url url: String): Deferred<Resource<VehicleMappings>>
+    fun vehicleMappings(@Url url: String, @Tag ignoreUrl: String = RequestInterceptor.IGNORE_URL_CHANGE): Deferred<Resource<VehicleMappings>>
 }

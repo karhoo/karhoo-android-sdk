@@ -29,7 +29,8 @@ class RequestInterceptor(private val headers: Headers) : Interceptor {
             is AuthenticationMethod.Guest -> {
                 updatedRequestBuilder.addHeader("identifier", config.identifier)
                 updatedRequestBuilder.addHeader("referer", config.referer)
-                updateBaseUrl(request, updatedRequestBuilder)
+                if(request.tag(String::class.java).isNullOrEmpty() || (!request.tag(String::class.java).isNullOrEmpty() && request.tag(String::class.java)?.equals(IGNORE_URL_CHANGE) != true))
+                    updateBaseUrl(request, updatedRequestBuilder)
             }
         }
 
@@ -64,5 +65,6 @@ class RequestInterceptor(private val headers: Headers) : Interceptor {
 
     companion object {
         const val CORRELATION_ID = "correlation_id"
+        const val IGNORE_URL_CHANGE = "IGNORE_URL_CHANGE"
     }
 }
