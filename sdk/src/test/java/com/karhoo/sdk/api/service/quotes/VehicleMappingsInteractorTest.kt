@@ -31,7 +31,7 @@ class VehicleMappingsInteractorTest : BaseKarhooUserInteractorTest() {
     fun `When the interactor successfully obtains a Rules List, the request is executed`() {
         val rulesList = arrayListOf<VehicleMapping>()
         rulesList.add(VehicleMapping(VEHICLE_TYPE, VEHICLE_TAGS, VEHICLE_IMAGE_PNG, VEHICLE_IMAGE_SVG))
-        whenever(apiTemplate.vehicleMappings(anyString()))
+        whenever(apiTemplate.vehicleMappings(anyString(), anyString()))
             .thenReturn(CompletableDeferred(Resource.Success(VehicleMappings(rulesList))))
 
         var returnedRuleList: VehicleMappings? = null
@@ -45,7 +45,7 @@ class VehicleMappingsInteractorTest : BaseKarhooUserInteractorTest() {
             delay(5)
         }
 
-        verify(apiTemplate).vehicleMappings(anyString())
+        verify(apiTemplate).vehicleMappings(anyString(), anyString())
     }
 
     /**
@@ -57,7 +57,7 @@ class VehicleMappingsInteractorTest : BaseKarhooUserInteractorTest() {
     fun `When the interactor successfully obtains a Rules List, the information is correctly returned`() {
         val rulesList = arrayListOf<VehicleMapping>()
         rulesList.add(VehicleMapping(VEHICLE_TYPE, VEHICLE_TAGS, VEHICLE_IMAGE_PNG, VEHICLE_IMAGE_SVG))
-        whenever(apiTemplate.vehicleMappings(anyString()))
+        whenever(apiTemplate.vehicleMappings(anyString(), anyString()))
             .thenReturn(CompletableDeferred(Resource.Success(VehicleMappings(rulesList))))
 
         var returnedRuleList: VehicleMappings? = null
@@ -77,7 +77,7 @@ class VehicleMappingsInteractorTest : BaseKarhooUserInteractorTest() {
         Assert.assertEquals(returnedRuleList?.mappings?.get(0)?.vehicleType, VEHICLE_TYPE)
         Assert.assertEquals(returnedRuleList?.mappings?.get(0)?.vehicleTags, VEHICLE_TAGS)
 
-        verify(apiTemplate).vehicleMappings(anyString())
+        verify(apiTemplate).vehicleMappings(anyString(), anyString())
     }
 
     @Test
@@ -85,7 +85,7 @@ class VehicleMappingsInteractorTest : BaseKarhooUserInteractorTest() {
         var shouldBeNull: VehicleMappings? = null
         var error: KarhooError? = null
 
-        whenever(apiTemplate.vehicleMappings(anyString()))
+        whenever(apiTemplate.vehicleMappings(anyString(), anyString()))
             .thenReturn(CompletableDeferred(Resource.Failure(KarhooError.InternalSDKError)))
 
         runBlocking {
