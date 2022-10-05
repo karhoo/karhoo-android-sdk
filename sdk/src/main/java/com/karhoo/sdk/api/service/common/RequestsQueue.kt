@@ -69,8 +69,6 @@ internal object RequestsQueue {
     }
 
     private fun log(text: String) {
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, text)
-        }
+        Log.d(TAG, text)
     }
 }
