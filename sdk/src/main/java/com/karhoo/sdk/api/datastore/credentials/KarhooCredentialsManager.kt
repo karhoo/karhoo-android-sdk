@@ -77,8 +77,14 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
 
         if (config != null && apiTemplate != null) {
             credentialsRefreshTimer = GlobalScope.launch {
-                val refreshBuffer = Math.max(credentials.expiresIn * REFRESH_BUFFER_PERCENTAGE_MODIFIER, MIN_REFRESH_BUFFER_SECONDS) * SECOND_MILLISECONDS
-                delay((credentials.retrievalTimestamp?.time ?: 0) + (credentials.expiresIn * SECOND_MILLISECONDS) - refreshBuffer.toInt())
+                val modifier: Long = if(credentials.expiresIn <= MIN_REFRESH_BUFFER_SECONDS) {
+                    REFRESH_BUFFER_MAX_PERCENTAGE_MODIFIER.toLong()
+                } else {
+                    REFRESH_BUFFER_MIN_PERCENTAGE_MODIFIER.toLong()
+                }
+
+                val refreshBufferMilis = credentials.expiresIn * modifier * SECOND_MILLISECONDS.toLong()
+                delay((credentials.retrievalTimestamp?.time ?: 0) + (credentials.expiresIn * SECOND_MILLISECONDS) - refreshBufferMilis.toInt())
 
                 if (!isValidRefreshToken) {
                     /** Request an external login in order to refresh the credentials if the refresh token
@@ -119,8 +125,9 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
     companion object {
         const val PREFERENCES_CRED_NAME = "credentials"
         const val SECOND_MILLISECONDS = 1000
-        const val MIN_REFRESH_BUFFER_SECONDS = 60f * SECOND_MILLISECONDS
-        const val REFRESH_BUFFER_PERCENTAGE_MODIFIER = 0.20f
+        const val MIN_REFRESH_BUFFER_SECONDS = 60
+        const val REFRESH_BUFFER_MAX_PERCENTAGE_MODIFIER = 0.20f
+        const val REFRESH_BUFFER_MIN_PERCENTAGE_MODIFIER = 0.5f
         private const val REFRESH_TOKEN = "refresh_token"
         private const val ACCESS_TOKEN = "access_token"
         private const val EXPIRES_IN = "expires_in"
