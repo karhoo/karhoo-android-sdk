@@ -51,7 +51,9 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
 
     override fun saveCredentials(credentials: Credentials, apiTemplate: APITemplate?, config: AuthenticationMethod?) {
         with(sharedPreferences.edit().putString(ACCESS_TOKEN, credentials.accessToken)) {
-            if (credentials.refreshToken.isNotEmpty()) {
+            if (credentials.refreshToken.isNullOrEmpty()) {
+                putString(REFRESH_TOKEN, "")
+            } else {
                 putString(REFRESH_TOKEN, credentials.refreshToken)
             }
             putLong(EXPIRES_IN, credentials.expiresIn)
@@ -75,7 +77,14 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
 
         if (config != null && apiTemplate != null) {
             credentialsRefreshTimer = GlobalScope.launch {
-                delay((credentials.retrievalTimestamp?.time ?: 0) + (credentials.expiresIn * SECOND_MILLISECONDS) - REFRESH_BUFFER_MILLISECONDS)
+                val modifier: Long = if(credentials.expiresIn <= MIN_REFRESH_BUFFER_SECONDS) {
+                    REFRESH_BUFFER_MAX_PERCENTAGE_MODIFIER.toLong()
+                } else {
+                    REFRESH_BUFFER_MIN_PERCENTAGE_MODIFIER.toLong()
+                }
+
+                val refreshBufferMilis = credentials.expiresIn * modifier * SECOND_MILLISECONDS.toLong()
+                delay((credentials.retrievalTimestamp?.time ?: 0) + (credentials.expiresIn * SECOND_MILLISECONDS) - refreshBufferMilis.toInt())
 
                 if (!isValidRefreshToken) {
                     /** Request an external login in order to refresh the credentials if the refresh token
@@ -93,7 +102,6 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
                             Log.e(TAG, AUTH_TOKEN_REFRESH_NEEEDED)
                             requestExternalAuthentication()
                         }
-
                     }
                 }
             }
@@ -117,7 +125,9 @@ class KarhooCredentialsManager(private val sharedPreferences: SharedPreferences)
     companion object {
         const val PREFERENCES_CRED_NAME = "credentials"
         const val SECOND_MILLISECONDS = 1000
-        const val REFRESH_BUFFER_MILLISECONDS = 5 * 60 * 1000
+        const val MIN_REFRESH_BUFFER_SECONDS = 60
+        const val REFRESH_BUFFER_MAX_PERCENTAGE_MODIFIER = 0.20f
+        const val REFRESH_BUFFER_MIN_PERCENTAGE_MODIFIER = 0.5f
         private const val REFRESH_TOKEN = "refresh_token"
         private const val ACCESS_TOKEN = "access_token"
         private const val EXPIRES_IN = "expires_in"
