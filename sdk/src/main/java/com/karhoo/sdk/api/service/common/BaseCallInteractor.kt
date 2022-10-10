@@ -66,7 +66,7 @@ internal abstract class BaseCallInteractor<RESPONSE> protected constructor(
         var refreshTimedOut = false
         val replyTimer = GlobalScope.launch(context) {
             delay(ERROR_DELAY_SECONDS)
-            subscriber(Resource.Failure(KarhooError.AuthenticationRequired))
+            subscriber(Resource.Failure(KarhooError.ExtenalAuthenticationRequestExpired))
             refreshTimedOut = true
         }
 

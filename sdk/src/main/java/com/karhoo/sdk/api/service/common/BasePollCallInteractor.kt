@@ -67,7 +67,7 @@ abstract class BasePollCallInteractor<RESPONSE> protected constructor(private va
         var refreshTimedOut = false
         val replyTimer = GlobalScope.launch(context) {
             delay(BaseCallInteractor.ERROR_DELAY_SECONDS)
-            subscriber(Resource.Failure(KarhooError.AuthenticationRequired))
+            subscriber(Resource.Failure(KarhooError.ExtenalAuthenticationRequestExpired))
             refreshTimedOut = true
         }
 
