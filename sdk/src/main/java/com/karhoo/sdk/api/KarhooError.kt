@@ -322,7 +322,14 @@ enum class KarhooError(var code: String,
     @SerializedName("P0002")
     FailedToCallMoneyService("P0002",
                              "Failed calling payment service.",
-                             "Failed calling payment service.");
+                             "Failed calling payment service."),
+
+    @SerializedName("KA0001")
+    ExtenalAuthenticationRequestExpired(
+        "KA0001",
+        "The request for an external authentication expired",
+        "The request for an external authentication expired"
+    );
 
     companion object {
         fun fromThrowable(t: Throwable?): KarhooError {
