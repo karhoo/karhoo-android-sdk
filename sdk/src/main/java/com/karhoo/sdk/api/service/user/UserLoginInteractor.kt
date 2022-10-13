@@ -2,15 +2,17 @@ package com.karhoo.sdk.api.service.user
 
 import com.karhoo.sdk.analytics.Analytics
 import com.karhoo.sdk.api.KarhooError
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.service.common.BaseCallInteractor
-import com.karhoo.sdk.api.service.common.InteractorContants
+import com.karhoo.sdk.api.service.common.InteractorConstants
 import com.karhoo.sdk.api.service.payments.PaymentsService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
@@ -52,7 +54,7 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
     }
 
     private suspend fun userProfile(credentials: Credentials): Resource<UserInfo> {
-        onSuccessfulCredentials(credentials)
+        credentialsManager.saveCredentials(credentials, apiTemplate, KarhooSDKConfigurationProvider.configuration.authenticationMethod())
         return when (val userInfo = apiTemplate.userProfile().await()) {
             is Resource.Success -> checkIfRolesAreValidAndSave(userInfo.data)
             is Resource.Failure -> userInfo
@@ -62,8 +64,8 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
     private fun checkIfRolesAreValidAndSave(userInfo: UserInfo): Resource<UserInfo> {
         userInfo.organisations.forEach {
             it.roles?.let { roles ->
-                if (roles.contains(InteractorContants.MOBILE_USER)
-                        || roles.contains(InteractorContants.REQUIRED_ROLE)) {
+                if (roles.contains(InteractorConstants.MOBILE_USER)
+                        || roles.contains(InteractorConstants.REQUIRED_ROLE)) {
                     onSuccessfulUser(userInfo)
                     return Resource.Success(userInfo)
                 }
@@ -77,9 +79,5 @@ internal class UserLoginInteractor @Inject constructor(private val credentialsMa
         analytics.userInfo = userInfo
         userManager.saveUser(userInfo)
         paymentsService.getPaymentProvider().execute {}
-    }
-
-    private fun onSuccessfulCredentials(credentials: Credentials) {
-        credentialsManager.saveCredentials(credentials)
     }
 }

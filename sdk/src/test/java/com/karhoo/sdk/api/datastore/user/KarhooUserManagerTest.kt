@@ -6,7 +6,7 @@ import com.karhoo.sdk.analytics.Analytics
 import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.Organisation
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.service.common.InteractorContants
+import com.karhoo.sdk.api.service.common.InteractorConstants
 import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.eq
@@ -45,7 +45,7 @@ class KarhooUserManagerTest {
     private val organisations = mutableListOf(Organisation(
             id = "123ABC",
             name = "Karhoo",
-            roles = mutableListOf(InteractorContants.REQUIRED_ROLE)
+            roles = mutableListOf(InteractorConstants.REQUIRED_ROLE)
                                                           ))
 
     @Before

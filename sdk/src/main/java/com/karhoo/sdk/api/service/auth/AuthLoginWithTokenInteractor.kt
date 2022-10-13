@@ -47,7 +47,7 @@ internal class AuthLoginWithTokenInteractor @Inject constructor(private val cred
                 Pair(TOKEN_KEY, token.orEmpty()))
         return when (val authToken = apiTemplate.authToken(authTokenParams).await()) {
             is Resource.Success -> {
-                credentialsManager.saveCredentials(authToken.data)
+                credentialsManager.saveCredentials(authToken.data, apiTemplate, configuration)
                 getUser()
             }
             is Resource.Failure -> Resource.Failure(authToken.error)

@@ -144,14 +144,14 @@ class AuthLoginWithTokenInteractorTest {
                 .thenReturn(CompletableDeferred(Resource.Success(credentials)))
         whenever(apiTemplate.authUserInfo())
                 .thenReturn(CompletableDeferred(Resource.Success(userInfo)))
-        doNothing().whenever(credentialsManager).saveCredentials(any())
+        doNothing().whenever(credentialsManager).saveCredentials(any(), any(), any())
 
         runBlocking {
             withTokenInteractor.execute {}
             delay(100)
         }
 
-        verify(credentialsManager).saveCredentials(capture(credentialsCaptor))
+        verify(credentialsManager).saveCredentials(capture(credentialsCaptor), any(), any())
 
         assertEquals("123456", credentialsCaptor.value.accessToken)
         assertEquals("zxy", credentialsCaptor.value.refreshToken)
@@ -182,7 +182,7 @@ class AuthLoginWithTokenInteractorTest {
             delay(100)
         }
 
-        verify(credentialsManager, never()).saveCredentials(any())
+        verify(credentialsManager, never()).saveCredentials(any(), any(), any())
         verify(userManager, never()).saveUser(any())
         assertEquals(KarhooError.GeneralRequestError, error)
         assertNull(shouldBeNull)
@@ -198,7 +198,7 @@ class AuthLoginWithTokenInteractorTest {
                 .thenReturn(CompletableDeferred(Resource.Success(credentials)))
         whenever(apiTemplate.authUserInfo())
                 .thenReturn(CompletableDeferred(Resource.Success(userInfo)))
-        doNothing().whenever(credentialsManager).saveCredentials(any())
+        doNothing().whenever(credentialsManager).saveCredentials(any(), any(), any())
 
         runBlocking {
             withTokenInteractor.execute {}
@@ -222,7 +222,7 @@ class AuthLoginWithTokenInteractorTest {
                 .thenReturn(CompletableDeferred(Resource.Success(credentials)))
         whenever(apiTemplate.authUserInfo())
                 .thenReturn(CompletableDeferred(Resource.Failure(KarhooError.GeneralRequestError)))
-        doNothing().whenever(credentialsManager).saveCredentials(any())
+        doNothing().whenever(credentialsManager).saveCredentials(any(), any(), any())
 
         runBlocking {
             withTokenInteractor.execute { result ->

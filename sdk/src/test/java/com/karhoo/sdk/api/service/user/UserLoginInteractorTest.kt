@@ -6,11 +6,10 @@ import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.Organisation
 import com.karhoo.sdk.api.model.PaymentProvider
-import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.response.Resource
-import com.karhoo.sdk.api.service.common.InteractorContants
+import com.karhoo.sdk.api.service.common.InteractorConstants
 import com.karhoo.sdk.api.service.payments.PaymentsService
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
 import com.karhoo.sdk.call.Call
@@ -55,7 +54,7 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
                 organisations = mutableListOf(Organisation(
                         id = "123ABC",
                         name = "Karhoo",
-                        roles = mutableListOf(InteractorContants.REQUIRED_ROLE, InteractorContants.MOBILE_USER)
+                        roles = mutableListOf(InteractorConstants.REQUIRED_ROLE, InteractorConstants.MOBILE_USER)
                                                           )))
 
     private val email = "name@email.com"
@@ -138,7 +137,7 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
         whenever(apiTemplate.userProfile())
                 .thenReturn(CompletableDeferred(Resource.Success(userInfo)))
 
-        doNothing().whenever(credentialsManager).saveCredentials(any())
+        doNothing().whenever(credentialsManager).saveCredentials(any(), any(), any())
 
         interactor.userLogin = userLogin
         runBlocking {
@@ -146,7 +145,7 @@ class UserLoginInteractorTest : BaseKarhooUserInteractorTest() {
             delay(100)
         }
 
-        verify(credentialsManager).saveCredentials(capture(credentialsCaptor))
+        verify(credentialsManager).saveCredentials(capture(credentialsCaptor), any(), any())
 
         assertEquals("123456", credentialsCaptor.value.accessToken)
         assertEquals("zxy", credentialsCaptor.value.refreshToken)
