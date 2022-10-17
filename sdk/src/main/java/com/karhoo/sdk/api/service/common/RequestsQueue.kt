@@ -56,7 +56,6 @@ internal object RequestsQueue {
                     delayedRequest.subscriber(it.createRequest().await())
                 }
                 delayedRequest?.pollInteractor?.let {
-                    delay(BASE_POLL_TIME)
                     delayedRequest.subscriber(it.createRequest().await())
                 }
             }
