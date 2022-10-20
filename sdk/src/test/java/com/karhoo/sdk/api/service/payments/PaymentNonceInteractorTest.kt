@@ -45,7 +45,7 @@ class PaymentNonceInteractorTest : BaseKarhooUserInteractorTest() {
         val payer = Payer(id = "id", firstName = "first_name", lastName = "last_name", email = "email@domain.com")
         val request = AddPaymentRequest(payer, "org_id", "nonce")
         whenever(apiTemplate.addPayment(request))
-                .thenReturn(CompletableDeferred(Resource.Success(paymentsNonceExpected)))
+                .thenReturn(`CompletableDeferred`(Resource.Success(paymentsNonceExpected)))
 
         var paymentsNonce: PaymentsNonce? = null
 

@@ -108,7 +108,7 @@ class AuthLoginWithCredentialsInteractorTest {
                 .thenReturn(CompletableDeferred(Resource.Success(credentials)))
         whenever(apiTemplate.authUserInfo())
                 .thenReturn(CompletableDeferred(Resource.Success(userInfo)))
-        doNothing().whenever(credentialsManager).saveCredentials(any())
+        doNothing().whenever(credentialsManager).saveCredentials(any(), any(), any())
 
         runBlocking {
             withCredentialsInteractor.execute {}
@@ -132,7 +132,7 @@ class AuthLoginWithCredentialsInteractorTest {
                 .thenReturn(CompletableDeferred(Resource.Success(credentials)))
         whenever(apiTemplate.authUserInfo())
                 .thenReturn(CompletableDeferred(Resource.Failure(KarhooError.GeneralRequestError)))
-        doNothing().whenever(credentialsManager).saveCredentials(any())
+        doNothing().whenever(credentialsManager).saveCredentials(any(), any(), any())
 
         runBlocking {
             withCredentialsInteractor.execute { result ->

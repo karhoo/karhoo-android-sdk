@@ -1,7 +1,9 @@
 package com.karhoo.sdk.api.service.auth
 
+import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
+import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.client.APITemplate
@@ -24,7 +26,7 @@ internal class AuthLoginWithCredentialsInteractor @Inject constructor(private va
     internal var credentials: Credentials? = null
         set(value) {
             value?.let {
-                credentialsManager.saveCredentials(it)
+                credentialsManager.saveCredentials(it, apiTemplate, KarhooSDKConfigurationProvider.configuration.authenticationMethod())
             }
             field = value
         }
