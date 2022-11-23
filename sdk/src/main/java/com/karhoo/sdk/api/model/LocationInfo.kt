@@ -12,7 +12,7 @@ data class LocationInfo(
         @SerializedName("poi_type") val poiType: Poi = Poi.NOT_SET,
         @SerializedName("details") val details: PoiDetails = PoiDetails(),
         @SerializedName("meeting_point") val meetingPoint: MeetingPoint = MeetingPoint(),
-        @SerializedName("address") private val address: Address = Address())
+        @SerializedName("address") val address: Address = Address())
     : Parcelable {
 
     val displayAddress: String
