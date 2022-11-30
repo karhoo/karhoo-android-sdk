@@ -9,9 +9,7 @@ import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.UnitTestSDKConfig
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers

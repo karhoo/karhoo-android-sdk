@@ -4,7 +4,6 @@ import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.nhaarman.mockitokotlin2.mock
 import junit.framework.Assert.assertNotNull
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
