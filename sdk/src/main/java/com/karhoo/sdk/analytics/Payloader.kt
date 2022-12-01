@@ -3,7 +3,6 @@ package com.karhoo.sdk.analytics
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.model.LoyaltyProgramme
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import java.util.HashMap
 import java.util.Date
