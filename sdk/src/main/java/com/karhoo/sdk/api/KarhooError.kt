@@ -316,53 +316,28 @@ enum class KarhooError(var code: String,
 
     @SerializedName("customer-not-allowed-to-burn-points")
     LoyaltyNotAllowedToBurnPoints("KL001",
-                                  "customer-not-allowed-to-burn-points",
-                                  "You are not allowed to burn points"),
+        "customer-not-allowed-to-burn-points",
+        "You are not allowed to burn points"),
 
     @SerializedName("incoming-customer-points-exceed-balance")
     LoyaltyIncomingPointsExceedBalance("KL002",
-                                       "incoming-customer-points-exceed-balance",
-                                       "Your points balance is insufficient"),
+        "incoming-customer-points-exceed-balance",
+        "Your points balance is insufficient"),
 
     @SerializedName("empty-currency")
     LoyaltyEmptyCurrency("KL003",
-                         "empty-currency",
-                         "The currency is not supported yet"),
+        "empty-currency",
+        "The currency is not supported yet"),
 
     @SerializedName("unknown-currency")
     LoyaltyUnknownCurrency("KL004",
-                           "unknown-currency",
-                           "The currency is not supported yet"),
+        "unknown-currency",
+        "The currency is not supported yet"),
 
     @SerializedName("internal-error")
     LoyaltyInternalError("KL005",
-                         "internal-error",
-                         "Internal error"),
-
-    @SerializedName("customer-not-allowed-to-burn-points")
-    LoyaltyNotAllowedToBurnPoints("KL001",
-                                  "customer-not-allowed-to-burn-points",
-                                  "You are not allowed to burn points"),
-
-    @SerializedName("incoming-customer-points-exceed-balance")
-    LoyaltyIncomingPointsExceedBalance("KL002",
-                                       "incoming-customer-points-exceed-balance",
-                                       "Your points balance is insufficient"),
-
-    @SerializedName("empty-currency")
-    LoyaltyEmptyCurrency("KL003",
-                         "empty-currency",
-                         "The currency is not supported yet"),
-
-    @SerializedName("unknown-currency")
-    LoyaltyUnknownCurrency("KL004",
-                           "unknown-currency",
-                           "The currency is not supported yet"),
-
-    @SerializedName("internal-error")
-    LoyaltyInternalError("KL005",
-                         "internal-error",
-                         "Internal error"),
+        "internal-error",
+        "Internal error"),
 
     @SerializedName("Q0001")
     OriginAndDestinationIdentical("Q0001",
