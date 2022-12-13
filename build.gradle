@@ -8,7 +8,6 @@ buildscript {
             url 'https://maven.google.com/'
             name 'Google'
         }
-        jcenter()
         mavenCentral()
         mavenLocal()
         google()
@@ -36,7 +35,6 @@ allprojects {
             url 'https://maven.google.com/'
             name 'Google'
         }
-        jcenter()
         mavenCentral()
         mavenLocal()
         maven { url 'https://flit-tech.bintray.com/Android' }
