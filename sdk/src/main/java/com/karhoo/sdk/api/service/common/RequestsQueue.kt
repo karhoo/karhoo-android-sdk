@@ -1,8 +1,6 @@
 package com.karhoo.sdk.api.service.common
 
-import com.karhoo.sdk.api.network.observable.Observable.Companion.BASE_POLL_TIME
 import com.karhoo.sdk.api.network.response.Resource
-import kotlinx.coroutines.delay
 import android.util.Log
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean

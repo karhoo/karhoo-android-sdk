@@ -2,7 +2,6 @@ package com.karhoo.sdk.api.datastore.user
 
 import com.karhoo.sdk.analytics.AnalyticsManager.userInfo
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
-import com.karhoo.sdk.api.model.CardType
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.UserInfo
 import com.nhaarman.mockitokotlin2.atLeastOnce

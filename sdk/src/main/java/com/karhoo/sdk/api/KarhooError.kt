@@ -260,29 +260,84 @@ enum class KarhooError(var code: String,
                          "Could not authenticate"),
 
     @SerializedName("KP001")
-    CouldNotFindCustomer("KP001",
-                         "Failed to find customer in braintree",
-                         "Failed to find customer in braintree"),
+    ErrDecodingBody("KP001",
+                         "Unable to decode request body",
+                         "Unable to decode request body"),
 
     @SerializedName("KP002")
-    CouldNotInitailizeClient("KP002",
-                             "Failed to initialise client for organisation",
+    ErrInvalidOrgID("KP002",
+                             "Primary org for user is not UUID",
                              "Failed to initialise client for organisation"),
 
     @SerializedName("KP003")
-    CouldNotFindDefaultPayment("KP003",
-                               "Failed to find default payment method",
-                               "Failed to find default payment method"),
+    ErrMissingSupplyPartnerID("KP003",
+                               "Missing supply partner ID",
+                               "Missing supply partner ID"),
 
     @SerializedName("KP004")
-    CouldNotFindDefaultCard("KP004",
-                            "Failed to find default credit card",
-                            "Failed to find default credit card"),
+    ErrInvalidUserID("KP004",
+                            "UserID is not UUID",
+                            "UserID is not UUID"),
 
     @SerializedName("KP005")
-    FailedToGenerateNonce("KP005",
-                          "Failed to generate nonce",
-                          "Failed to generate nonce"),
+    ErrMissingBrowserInfo("KP005",
+                          "Browser information must be defined to enforce 3DS",
+                          "Browser information must be defined to enforce 3DS"),
+
+    @SerializedName("KP006")
+    MissingReturnURL("KP006",
+        "Return Url must be defined to enforce 3DS",
+        "Return Url must be defined to enforce 3DS"),
+
+    @SerializedName("KP007")
+    MissingTripID("KP007",
+        "Missing trip ID",
+        "Missing trip ID"),
+
+    @SerializedName("KP008")
+    MissingUser("KP008",
+        "Missing user",
+        "Missing user"),
+
+    @SerializedName("KP009")
+    UnknownOrgID("KP009",
+        "Primary org is not registered",
+        "Primary org is not registered"),
+
+    @SerializedName("KP010")
+    BadMoney("KP010",
+        "Bad money amount",
+        "Bad money amount"),
+
+    @SerializedName("KP011")
+    BadMoneySplit("KP011",
+        "Bad money split",
+        "Bad money split"),
+
+    @SerializedName("customer-not-allowed-to-burn-points")
+    LoyaltyNotAllowedToBurnPoints("KL001",
+                                  "customer-not-allowed-to-burn-points",
+                                  "You are not allowed to burn points"),
+
+    @SerializedName("incoming-customer-points-exceed-balance")
+    LoyaltyIncomingPointsExceedBalance("KL002",
+                                       "incoming-customer-points-exceed-balance",
+                                       "Your points balance is insufficient"),
+
+    @SerializedName("empty-currency")
+    LoyaltyEmptyCurrency("KL003",
+                         "empty-currency",
+                         "The currency is not supported yet"),
+
+    @SerializedName("unknown-currency")
+    LoyaltyUnknownCurrency("KL004",
+                           "unknown-currency",
+                           "The currency is not supported yet"),
+
+    @SerializedName("internal-error")
+    LoyaltyInternalError("KL005",
+                         "internal-error",
+                         "Internal error"),
 
     @SerializedName("customer-not-allowed-to-burn-points")
     LoyaltyNotAllowedToBurnPoints("KL001",
