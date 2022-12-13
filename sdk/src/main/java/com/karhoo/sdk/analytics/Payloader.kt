@@ -3,7 +3,6 @@ package com.karhoo.sdk.analytics
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.Position
 import com.karhoo.sdk.api.model.UserInfo
-import com.karhoo.sdk.api.model.LoyaltyProgramme
 import com.karhoo.sdk.api.model.LoyaltyStatus
 import java.util.HashMap
 import java.util.Date
@@ -357,6 +356,66 @@ class Payloader internal constructor(builder: Builder) {
             return this
         }
 
+        fun rideConfirmationScreenOpened(
+            date: Date,
+            tripId: String?,
+            quoteId: String?
+        ): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: let {
+                payload[QUOTE_ID] = ""
+            }
+            payload[PREBOOK_DATE] = date.toString()
+
+            tripId?.let {
+                payload[TRIP_ID] = it
+            } ?: let {
+                payload[TRIP_ID] = ""
+            }
+            return this
+        }
+
+        fun rideConfirmationAddToCalendarSelected(
+            date: Date,
+            tripId: String?,
+            quoteId: String?
+        ): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: let {
+                payload[QUOTE_ID] = ""
+            }
+            payload[PREBOOK_DATE] = date.toString()
+
+            tripId?.let {
+                payload[TRIP_ID] = it
+            } ?: let {
+                payload[TRIP_ID] = ""
+            }
+            return this
+        }
+
+        fun rideConfirmationDetailsSelected(
+            date: Date,
+            tripId: String?,
+            quoteId: String?
+        ): Builder {
+            quoteId?.let {
+                payload[QUOTE_ID] = it
+            } ?: let {
+                payload[QUOTE_ID] = ""
+            }
+            payload[PREBOOK_DATE] = date.toString()
+
+            tripId?.let {
+                payload[TRIP_ID] = it
+            } ?: let {
+                payload[TRIP_ID] = ""
+            }
+            return this
+        }
+
         fun build(): Payloader {
             return Payloader(this)
         }
@@ -407,6 +466,7 @@ class Payloader internal constructor(builder: Builder) {
         private const val REQUEST_ERROR = "request_error"
         private const val REQUEST_URL = "request_url"
         private const val GUEST_MODE = "guest_mode"
+        private const val PREBOOK_DATE = "date"
         private const val PAYMENT_DATE = "date"
         private const val PAYMENT_ERROR_MESSAGE = "message"
         private const val PAYMENT_CARD_LAST_FOUR_DIGITS = "card_last_4_digits"
