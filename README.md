@@ -6,6 +6,10 @@
 
 Welcome to the Karhoo Network SDK of Android.
 
+#Karhoo Android Network SDK
+
+For more general information about the SDKs, checkout [**the karhoo developer portal**](https://developer.karhoo.com/docs/introduction-to-network-sdk)
+
 ## Introduction
 
 The Network SDK provides us with a way of contacting the API of Karhoo and allows us to send and recieve network calls and responses. It is also what provides the Analytics for the App so we know what failures are occuring, how many bookings we have, what requests are succesful and more.
