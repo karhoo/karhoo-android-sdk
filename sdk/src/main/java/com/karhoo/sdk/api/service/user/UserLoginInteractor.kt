@@ -5,7 +5,6 @@ import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.KarhooSDKConfigurationProvider
 import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
-import com.karhoo.sdk.api.model.AuthenticationMethod
 import com.karhoo.sdk.api.model.Credentials
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.client.APITemplate
