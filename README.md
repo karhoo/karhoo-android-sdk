@@ -25,3 +25,5 @@ The base of the Networking SDK is around a service / interactor model. Here we h
 Each SDK endpoint has its own interactor. These are responsible for fetching data and validating requests which may be null or bad. There is also some examples where the Interactor itself manages the data as is responsible for the mapping of multiple endpoints. A good example of this can be seen in the Quotes Interactor.
 
 ![Network SDK](docs/assets/network_sdk.png)
+
+test
