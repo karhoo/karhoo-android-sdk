@@ -11,4 +11,4 @@ data class QuoteVehicle(@SerializedName("qta") val vehicleQta: QuoteQTA = QuoteQ
                         @SerializedName("type") val vehicleType: String? = "",
                         @SerializedName("passenger_capacity") val passengerCapacity: Int? = null,
                         @SerializedName("luggage_capacity") val luggageCapacity: Int? = null,
-                        @SerializedName("tags") val vehicleTags: List<String> = listOf()) : Parcelable
+                        @SerializedName("tags") val vehicleTags: MutableList<String> = mutableListOf()) : Parcelable
