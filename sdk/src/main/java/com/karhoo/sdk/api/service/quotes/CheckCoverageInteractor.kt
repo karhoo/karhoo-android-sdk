@@ -14,10 +14,12 @@ import kotlinx.coroutines.async
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-internal class CheckCoverageInteractor @Inject constructor(credentialsManager: CredentialsManager,
-                                                           private val apiTemplate: APITemplate,
-                                                           context: CoroutineContext = Main) :
-        BaseCallInteractor<Coverage>(true, credentialsManager, apiTemplate, context) {
+internal class CheckCoverageInteractor @Inject constructor(
+    credentialsManager: CredentialsManager,
+    private val apiTemplate: APITemplate,
+    context: CoroutineContext = Main
+) :
+    BaseCallInteractor<Coverage>(true, credentialsManager, apiTemplate, context) {
 
     internal var coverageRequest: CoverageRequest? = null
 
@@ -29,10 +31,11 @@ internal class CheckCoverageInteractor @Inject constructor(credentialsManager: C
 
     private suspend fun checkCoverage(): Resource<Coverage> {
         coverageRequest?.let { request ->
-            return when (val result = apiTemplate.checkCoverage(latitude = request.latitude,
-                                                                longitude = request.longitude, dateScheduled =
-                                                                request.dateScheduled)
-                    .await()) {
+            return when (val result = apiTemplate.checkCoverage(
+                latitude = request.latitude,
+                longitude = request.longitude,
+                dateScheduled = request.dateScheduled
+            ).await()) {
                 is Resource.Success -> Resource.Success(data = result.data)
                 is Resource.Failure -> Resource.Failure(error = result.error)
             }
