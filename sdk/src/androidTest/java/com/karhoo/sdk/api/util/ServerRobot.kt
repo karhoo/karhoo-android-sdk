@@ -359,7 +359,7 @@ class ServerRobot {
         mockGetResponse(code = code,
                         response = response,
                         delayInMillis = delayInMillis,
-                        endpoint = APITemplate.CHECK_COVERAGE)
+                        endpoint = APITemplate.QUOTES_CHECK_COVERAGE)
     }
 
     private fun mockPostResponse(code: Int,

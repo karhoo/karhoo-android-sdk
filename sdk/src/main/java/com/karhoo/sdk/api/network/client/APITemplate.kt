@@ -92,7 +92,7 @@ interface   APITemplate {
         const val ADD_CARD_METHOD = "/v2/payments/payment-methods/braintree/add-payment-details"
         const val NONCE_METHOD = "/v2/payments/payment-methods/braintree/get-payment-method"
         const val FARE_DETAILS = "/v1/fares/trip/{id}"
-        const val CHECK_COVERAGE = "/v2/quotes/coverage"
+        const val QUOTES_CHECK_COVERAGE = "/v2/quotes/coverage"
 
         const val AUTH_TOKEN_METHOD = "/karhoo/anonymous/token-exchange"
         const val AUTH_REVOKE_METHOD = "/oauth/v2/revoke"
@@ -180,10 +180,12 @@ interface   APITemplate {
     @GET(VERIFY_QUOTES_METHOD)
     fun verifyQuotes(@Path(IDENTIFIER_ID) id: String): Deferred<Resource<Quote>>
 
-    @GET(CHECK_COVERAGE)
-    fun checkCoverage(@Query(IDENTIFIER_LATITUDE) latitude: String, @Query(IDENTIFIER_LONGITUDE)
-    longitude: String, @Query(IDENTIFIER_DATE_SCHEDULED) dateScheduled: String?):
-            Deferred<Resource<Coverage>>
+    @GET(QUOTES_CHECK_COVERAGE)
+    fun checkCoverage(
+        @Query(IDENTIFIER_LATITUDE) latitude: String,
+        @Query(IDENTIFIER_LONGITUDE) longitude: String,
+        @Query(IDENTIFIER_DATE_SCHEDULED) dateScheduled: String?
+    ): Deferred<Resource<Coverage>>
 
     @POST(BOOKING_METHOD)
     fun book(): Deferred<Resource<TripInfo>>
