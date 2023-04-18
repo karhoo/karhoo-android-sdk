@@ -6,6 +6,7 @@ import com.karhoo.sdk.api.service.auth.KarhooAuthService
 import com.karhoo.sdk.api.service.config.KarhooConfigService
 import com.karhoo.sdk.api.service.drivertracking.KarhooDriverTrackingService
 import com.karhoo.sdk.api.service.fare.KarhooFareService
+import com.karhoo.sdk.api.service.logging.KarhooEventLoggerService
 import com.karhoo.sdk.api.service.loyalty.KarhooLoyaltyService
 import com.karhoo.sdk.api.service.payments.KarhooPaymentsService
 import com.karhoo.sdk.api.service.quotes.KarhooQuotesService
@@ -40,5 +41,7 @@ interface ApplicationComponent {
     fun inject(authService: KarhooAuthService)
 
     fun inject(loyaltyService: KarhooLoyaltyService)
+
+    fun inject(loggingService: KarhooEventLoggerService)
 
 }

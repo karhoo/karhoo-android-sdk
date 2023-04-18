@@ -35,6 +35,8 @@ import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
 import com.karhoo.sdk.api.model.Coverage
+import com.karhoo.sdk.api.model.LoggingResponse
+import com.karhoo.sdk.api.model.LoggingEvent
 import com.karhoo.sdk.api.model.LoyaltyBalance
 import com.karhoo.sdk.api.model.LoyaltyPoints
 import com.karhoo.sdk.api.model.LoyaltyConversion
@@ -315,4 +317,8 @@ interface   APITemplate {
     @NoAuthorisationHeader
     @GET
     fun vehicleMappings(@Url url: String, @Tag ignoreUrl: String = RequestInterceptor.IGNORE_URL_CHANGE): Deferred<Resource<VehicleMappings>>
+
+    @NoAuthorisationHeader
+    @POST
+    fun sendLogs(@Url url: String, @Body events: List<LoggingEvent>): Deferred<Resource<LoggingResponse>>
 }
