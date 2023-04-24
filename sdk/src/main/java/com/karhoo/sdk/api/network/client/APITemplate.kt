@@ -296,5 +296,5 @@ interface   APITemplate {
 
     @NoAuthorisationHeader
     @GET
-    fun featureFlags(@Url url: String): Deferred<Resource<FeatureFlags>>
+    fun featureFlags(@Url url: String): Deferred<Resource<List<FeatureFlag>>>
 }

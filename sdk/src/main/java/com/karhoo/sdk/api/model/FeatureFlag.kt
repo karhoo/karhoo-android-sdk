@@ -1,7 +1,11 @@
 package com.karhoo.sdk.api.model
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class FeatureFlag(val version: String, val flags: Map<String, Boolean>) : Parcelable
+data class FeatureFlag(
+    @SerializedName("version") val version: String,
+    @SerializedName("flags") val flags: Map<String, Boolean>
+) : Parcelable
