@@ -42,6 +42,8 @@ import com.karhoo.sdk.api.network.request.TripSearch
 import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
+import com.karhoo.sdk.api.model.LoggingResponse
+import com.karhoo.sdk.api.model.LoggingEvent
 import com.karhoo.sdk.api.model.adyen.AdyenClientKey
 import com.karhoo.sdk.api.network.request.LoyaltyPreAuthPayload
 import com.karhoo.sdk.api.network.response.Resource
@@ -320,4 +322,8 @@ interface   APITemplate {
     @NoAuthorisationHeader
     @GET
     fun featureFlags(@Url url: String): Deferred<Resource<List<FeatureFlag>>>
+
+    @NoAuthorisationHeader
+    @POST
+    fun sendLogs(@Url url: String, @Body events: List<LoggingEvent>): Deferred<Resource<LoggingResponse>>
 }

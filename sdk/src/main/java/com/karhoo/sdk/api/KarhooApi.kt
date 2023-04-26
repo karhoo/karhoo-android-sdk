@@ -13,6 +13,8 @@ import com.karhoo.sdk.api.service.drivertracking.DriverTrackingService
 import com.karhoo.sdk.api.service.drivertracking.KarhooDriverTrackingService
 import com.karhoo.sdk.api.service.fare.FareService
 import com.karhoo.sdk.api.service.fare.KarhooFareService
+import com.karhoo.sdk.api.service.logging.EventLoggerService
+import com.karhoo.sdk.api.service.logging.KarhooEventLoggerService
 import com.karhoo.sdk.api.service.loyalty.KarhooLoyaltyService
 import com.karhoo.sdk.api.service.loyalty.LoyaltyService
 import com.karhoo.sdk.api.service.payments.KarhooPaymentsService
@@ -54,6 +56,8 @@ object KarhooApi : KarhooService {
 
     override val authService: AuthService = KarhooAuthService()
 
+    override val loggingService: EventLoggerService = KarhooEventLoggerService()
+
     internal var apiKey: String? = null
 
     internal var customHeaders: CustomHeaders = object : CustomHeaders {
@@ -78,6 +82,7 @@ object KarhooApi : KarhooService {
             inject(fareService as KarhooFareService)
             inject(authService as KarhooAuthService)
             inject(loyaltyService as KarhooLoyaltyService)
+            inject(loggingService as KarhooEventLoggerService)
         }
     }
 
