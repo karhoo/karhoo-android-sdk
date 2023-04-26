@@ -18,6 +18,14 @@ import com.karhoo.sdk.api.model.TripState
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.model.Vehicles
 import com.karhoo.sdk.api.model.VehicleMappings
+import com.karhoo.sdk.api.model.Coverage
+import com.karhoo.sdk.api.model.Quote
+import com.karhoo.sdk.api.model.LoyaltyBalance
+import com.karhoo.sdk.api.model.LoyaltyConversion
+import com.karhoo.sdk.api.model.LoyaltyNonce
+import com.karhoo.sdk.api.model.LoyaltyPoints
+import com.karhoo.sdk.api.model.LoyaltyStatus
+import com.karhoo.sdk.api.model.FeatureFlag
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
@@ -34,13 +42,6 @@ import com.karhoo.sdk.api.network.request.TripSearch
 import com.karhoo.sdk.api.network.request.UserDetailsUpdateRequest
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.request.UserRegistration
-import com.karhoo.sdk.api.model.Coverage
-import com.karhoo.sdk.api.model.LoyaltyBalance
-import com.karhoo.sdk.api.model.LoyaltyPoints
-import com.karhoo.sdk.api.model.LoyaltyConversion
-import com.karhoo.sdk.api.model.LoyaltyNonce
-import com.karhoo.sdk.api.model.LoyaltyStatus
-import com.karhoo.sdk.api.model.Quote
 import com.karhoo.sdk.api.model.adyen.AdyenClientKey
 import com.karhoo.sdk.api.network.request.LoyaltyPreAuthPayload
 import com.karhoo.sdk.api.network.response.Resource
@@ -315,4 +316,8 @@ interface   APITemplate {
     @NoAuthorisationHeader
     @GET
     fun vehicleMappings(@Url url: String, @Tag ignoreUrl: String = RequestInterceptor.IGNORE_URL_CHANGE): Deferred<Resource<VehicleMappings>>
+
+    @NoAuthorisationHeader
+    @GET
+    fun featureFlags(@Url url: String): Deferred<Resource<List<FeatureFlag>>>
 }
