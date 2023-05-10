@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class FeatureFlag(
     @SerializedName("version") val version: String,
-    @SerializedName("flags") val flags: Map<String, Boolean>
+    @SerializedName("flags") var flags: Map<String, Boolean>
 ) : Parcelable
