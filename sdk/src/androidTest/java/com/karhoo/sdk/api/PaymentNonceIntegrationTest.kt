@@ -2,7 +2,6 @@ package com.karhoo.sdk.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.Payer
 import com.karhoo.sdk.api.network.response.Resource

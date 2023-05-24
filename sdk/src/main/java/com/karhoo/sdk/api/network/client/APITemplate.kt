@@ -9,7 +9,6 @@ import com.karhoo.sdk.api.model.DriverTrackingInfo
 import com.karhoo.sdk.api.model.Fare
 import com.karhoo.sdk.api.model.LocationInfo
 import com.karhoo.sdk.api.model.PaymentProvider
-import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.Places
 import com.karhoo.sdk.api.model.QuoteId
 import com.karhoo.sdk.api.model.TripInfo
@@ -32,7 +31,6 @@ import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
-import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.PlaceSearch
 import com.karhoo.sdk.api.network.request.QuotesRequest
 import com.karhoo.sdk.api.network.request.RefreshTokenRequest
@@ -232,12 +230,6 @@ interface   APITemplate {
 
     @POST(SDK_INITIALISER_METHOD)
     fun sdkInitToken(@Query(IDENTIFIER_ORG) organisationId: String, @Query(IDENTIFIER_CURRENCY) currency: String): Deferred<Resource<BraintreeSDKToken>>
-
-    @POST(ADD_CARD_METHOD)
-    fun addPayment(@Body addPaymentRequest: AddPaymentRequest): Deferred<Resource<PaymentsNonce>>
-
-    @POST(NONCE_METHOD)
-    fun nonce(@Body nonceRequest: NonceRequest): Deferred<Resource<PaymentsNonce>>
 
     @GET(FARE_DETAILS)
     fun fareDetails(@Path(IDENTIFIER_ID) tripId: String): Deferred<Resource<Fare>>
