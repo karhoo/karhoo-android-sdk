@@ -5,13 +5,11 @@ import com.karhoo.sdk.api.datastore.credentials.CredentialsManager
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.BraintreeSDKToken
 import com.karhoo.sdk.api.model.PaymentProvider
-import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.adyen.AdyenClientKey
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
-import com.karhoo.sdk.api.network.request.NonceRequest
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.karhoo.sdk.call.Call
 import org.json.JSONObject
@@ -30,14 +28,6 @@ class KarhooPaymentsService : PaymentsService {
 
     override fun initialisePaymentSDK(sdkInitRequest: SDKInitRequest): Call<BraintreeSDKToken> = SDKInitInteractor(credentialsManager, apiTemplate).apply {
         this.sdkInitRequest = sdkInitRequest
-    }
-
-    override fun addPaymentMethod(request: AddPaymentRequest): Call<PaymentsNonce> = PaymentNonceInteractor(credentialsManager, apiTemplate, userManager).apply {
-        this.request = request
-    }
-
-    override fun getNonce(request: NonceRequest): Call<PaymentsNonce> = GetNonceInteractor(credentialsManager, apiTemplate, userManager).apply {
-        this.nonceRequest = request
     }
 
     override fun getPaymentProvider(): Call<PaymentProvider> = PaymentProviderInteractor(credentialsManager, userManager, apiTemplate, KarhooApi.paymentsService).apply {}

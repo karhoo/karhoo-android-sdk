@@ -4,15 +4,11 @@ import com.karhoo.sdk.api.KarhooError
 import com.karhoo.sdk.api.datastore.user.UserManager
 import com.karhoo.sdk.api.model.Organisation
 import com.karhoo.sdk.api.model.PaymentProvider
-import com.karhoo.sdk.api.model.PaymentsNonce
 import com.karhoo.sdk.api.model.Provider
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.response.Resource
 import com.karhoo.sdk.api.testrunner.base.BaseKarhooUserInteractorTest
-import com.karhoo.sdk.call.Call
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
@@ -32,8 +28,6 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
 
     private val adyenProvider = PaymentProvider(Provider(id = "Adyen"))
     private val braintreeProvider = PaymentProvider(Provider(id = "Braintree"))
-
-    private var paymentsCall: Call<PaymentsNonce> = mock()
 
     private lateinit var interactor: PaymentProviderInteractor
 
@@ -85,14 +79,6 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
     fun `successful selection of payment provider returns Payment provider methods`() {
         whenever(apiTemplate.getPaymentProvider())
                 .thenReturn(CompletableDeferred(Resource.Success(braintreeProvider)))
-        whenever(paymentService.getNonce(any())).thenReturn(paymentsCall)
-        whenever(userManager.user).thenReturn(userInfo)
-        whenever(userInfo.userId).thenReturn("1234")
-        whenever(userInfo.firstName).thenReturn("Joe")
-        whenever(userInfo.lastName).thenReturn("Bloggs")
-        whenever(userInfo.email).thenReturn("test@test.test")
-        whenever(userInfo.organisations).thenReturn(listOf(organisation))
-        whenever(organisation.id).thenReturn("1111")
 
         var paymentProvider: PaymentProvider? = null
 
@@ -101,7 +87,6 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
                 when (it) {
                     is Resource.Success -> {
                         verify(userManager).paymentProvider = it.data
-                        verify(paymentService).getNonce(any())
                         paymentProvider = it.data
                     }
                 }
@@ -130,7 +115,6 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
                 when (it) {
                     is Resource.Success -> {
                         verify(userManager).paymentProvider = it.data
-                        verify(paymentService, never()).getNonce(any())
                         paymentProvider = it.data
                     }
                 }
@@ -151,8 +135,6 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
     fun `no nonce call made for guest Braintree users`() {
         whenever(apiTemplate.getPaymentProvider())
                 .thenReturn(CompletableDeferred(Resource.Success(braintreeProvider)))
-        whenever(userManager.user).thenReturn(userInfo)
-        whenever(userInfo.organisations).thenReturn(emptyList())
 
         var paymentProvider: PaymentProvider? = null
 
@@ -161,7 +143,6 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
                 when (it) {
                     is Resource.Success -> {
                         verify(userManager).paymentProvider = it.data
-                        verify(paymentService, never()).getNonce(any())
                         paymentProvider = it.data
                     }
                 }
