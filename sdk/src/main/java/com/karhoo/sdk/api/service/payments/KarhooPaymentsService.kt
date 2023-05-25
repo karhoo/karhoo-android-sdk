@@ -8,7 +8,6 @@ import com.karhoo.sdk.api.model.PaymentProvider
 import com.karhoo.sdk.api.model.adyen.AdyenClientKey
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.client.APITemplate
-import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.SDKInitRequest
 import com.karhoo.sdk.call.Call
