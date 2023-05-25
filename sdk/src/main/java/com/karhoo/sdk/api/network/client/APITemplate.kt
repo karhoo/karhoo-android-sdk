@@ -27,7 +27,6 @@ import com.karhoo.sdk.api.model.LoyaltyStatus
 import com.karhoo.sdk.api.model.FeatureFlag
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
-import com.karhoo.sdk.api.network.request.AddPaymentRequest
 import com.karhoo.sdk.api.network.request.CancellationRequest
 import com.karhoo.sdk.api.network.request.AdyenPaymentMethodsRequest
 import com.karhoo.sdk.api.network.request.LocationInfoRequest
