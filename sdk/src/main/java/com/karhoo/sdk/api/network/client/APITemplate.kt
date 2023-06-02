@@ -25,7 +25,6 @@ import com.karhoo.sdk.api.model.LoyaltyConversion
 import com.karhoo.sdk.api.model.LoyaltyNonce
 import com.karhoo.sdk.api.model.LoyaltyPoints
 import com.karhoo.sdk.api.model.LoyaltyStatus
-import com.karhoo.sdk.api.model.FeatureFlag
 import com.karhoo.sdk.api.model.adyen.AdyenPublicKey
 import com.karhoo.sdk.api.network.annotation.NoAuthorisationHeader
 import com.karhoo.sdk.api.network.request.AddPaymentRequest
@@ -318,10 +317,6 @@ interface   APITemplate {
     @NoAuthorisationHeader
     @GET
     fun vehicleMappings(@Url url: String, @Tag ignoreUrl: String = RequestInterceptor.IGNORE_URL_CHANGE): Deferred<Resource<VehicleMappings>>
-
-    @NoAuthorisationHeader
-    @GET
-    fun featureFlags(@Url url: String): Deferred<Resource<List<FeatureFlag>>>
 
     @NoAuthorisationHeader
     @POST
