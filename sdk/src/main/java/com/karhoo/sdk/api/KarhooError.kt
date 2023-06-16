@@ -392,8 +392,13 @@ private fun parseHttpException(error: HttpException): KarhooError {
     return try {
         val responseBody = error.response()?.errorBody()?.string()
         Gson().fromJson(responseBody, KarhooInternalError::class.java)?.let {
-            return Gson().fromJson(if (it.code.isEmpty()) it.slug else it.code,
+            val decoded = Gson().fromJson(if (it.code.isEmpty()) it.slug else it.code,
                                    KarhooError::class.java)
+            if(decoded.internalMessage != it.message && it.message.isNotEmpty()){
+                decoded.internalMessage = it.message
+                decoded.userFriendlyMessage = it.message
+            }
+            return decoded
         }
         KarhooError.Unexpected.apply {
             code = error.code().toString()
