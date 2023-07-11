@@ -44,8 +44,7 @@ class KarhooPaymentsServiceTest {
      */
     @Test
     fun createPaymentMethodCallWhenSettingPaymentMethod() {
-        val payer = Payer(id = "id", firstName = "first_name", lastName = "last_name", email = "email@domain.com")
-        val addPaymentRequest = AddPaymentRequest(payer, "org_id", "nonce")
+        val addPaymentRequest = AddPaymentRequest("org_id", "nonce")
         val call = service.addPaymentMethod(addPaymentRequest)
         assertNotNull(call)
     }

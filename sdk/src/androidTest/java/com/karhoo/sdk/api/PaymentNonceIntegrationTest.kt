@@ -63,7 +63,7 @@ class PaymentNonceIntegrationTest {
 
         var result: PaymentsNonce? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Success -> {
                     result = it.data
@@ -89,7 +89,7 @@ class PaymentNonceIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -115,7 +115,7 @@ class PaymentNonceIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -141,7 +141,7 @@ class PaymentNonceIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -168,7 +168,7 @@ class PaymentNonceIntegrationTest {
         var expected = KarhooError.GeneralRequestError
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -194,7 +194,7 @@ class PaymentNonceIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -220,7 +220,7 @@ class PaymentNonceIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -246,7 +246,7 @@ class PaymentNonceIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -272,7 +272,7 @@ class PaymentNonceIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error
@@ -298,7 +298,7 @@ class PaymentNonceIntegrationTest {
 
         var result: KarhooError? = null
 
-        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(payer, org, nonce)).execute {
+        KarhooApi.paymentsService.addPaymentMethod(AddPaymentRequest(org, nonce)).execute {
             when (it) {
                 is Resource.Failure -> {
                     result = it.error

@@ -43,7 +43,7 @@ class PaymentNonceInteractorTest : BaseKarhooUserInteractorTest() {
     @Test
     fun `creating Payment Method Sends Values To BE`() {
         val payer = Payer(id = "id", firstName = "first_name", lastName = "last_name", email = "email@domain.com")
-        val request = AddPaymentRequest(payer, "org_id", "nonce")
+        val request = AddPaymentRequest("org_id", "nonce")
         whenever(apiTemplate.addPayment(request))
                 .thenReturn(`CompletableDeferred`(Resource.Success(paymentsNonceExpected)))
 
