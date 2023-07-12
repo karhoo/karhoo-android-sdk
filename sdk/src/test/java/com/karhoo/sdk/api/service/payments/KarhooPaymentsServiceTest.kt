@@ -57,7 +57,7 @@ class KarhooPaymentsServiceTest {
     @Test
     fun getNonceCallWhenGettingPaymentMethod() {
         val payer = Payer(id = "id", firstName = "first_name", lastName = "last_name", email = "email@domain.com")
-        val addPaymentRequest = NonceRequest(payer, "org_id")
+        val addPaymentRequest = NonceRequest("org_id")
         val call = service.getNonce(addPaymentRequest)
         assertNotNull(call)
     }

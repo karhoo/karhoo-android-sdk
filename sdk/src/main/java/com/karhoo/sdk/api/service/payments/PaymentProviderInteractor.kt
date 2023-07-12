@@ -51,12 +51,6 @@ internal class PaymentProviderInteractor @Inject constructor(
         }
 
         val nonceRequest = NonceRequest(
-            payer = Payer(
-                id = user.userId,
-                email = user.email,
-                firstName = user.firstName,
-                lastName = user.lastName
-            ),
             organisationId = user.organisations.first().id
         )
         paymentsService.getNonce(nonceRequest).execute { }

@@ -5,5 +5,4 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class NonceRequest(@SerializedName("payer") val payer: Payer,
-                        @SerializedName("organisation_id") val organisationId: String) : Parcelable
+data class NonceRequest(@SerializedName("organisation_id") val organisationId: String) : Parcelable
