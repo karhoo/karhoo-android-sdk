@@ -70,6 +70,7 @@ class AdyenPublicKeyInteractorTest : BaseKarhooUserInteractorTest() {
             interactor.execute {
                 when (it) {
                     is Resource.Success -> adyenKey = it.data
+                    else -> {}
                 }
             }
             delay(20)
