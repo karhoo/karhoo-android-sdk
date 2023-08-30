@@ -66,6 +66,8 @@ class TripStateIntegrationTest {
                         result = value.data
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
 
@@ -105,6 +107,8 @@ class TripStateIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -143,6 +147,8 @@ class TripStateIntegrationTest {
                         result = value.data
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
 
@@ -182,6 +188,8 @@ class TripStateIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -220,6 +228,8 @@ class TripStateIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -258,6 +268,8 @@ class TripStateIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -296,6 +308,8 @@ class TripStateIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -333,6 +347,8 @@ class TripStateIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }

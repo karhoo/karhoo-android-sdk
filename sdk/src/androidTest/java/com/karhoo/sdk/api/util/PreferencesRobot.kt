@@ -4,7 +4,7 @@ import com.karhoo.sdk.api.KarhooApi
 import com.karhoo.sdk.api.model.UserInfo
 import com.karhoo.sdk.api.network.request.UserLogin
 import com.karhoo.sdk.api.network.response.Resource
-import com.karhoo.sdk.api.util.ServerRobot.Companion.PAYMENTS_TOKEN
+//import com.karhoo.sdk.api.util.ServerRobot.Companion.PAYMENTS_TOKEN
 import com.karhoo.sdk.api.util.TestData.Companion.USER_INFO
 import java.net.HttpURLConnection
 
@@ -16,7 +16,7 @@ class PreferencesRobot {
         serverRobot {
             successfulToken()
             userProfileResponse(HttpURLConnection.HTTP_OK, USER_INFO)
-            paymentsNonceResponse(HttpURLConnection.HTTP_OK, PAYMENTS_TOKEN)
+//            paymentsNonceResponse(HttpURLConnection.HTTP_OK, PAYMENTS_TOKEN)
         }
         loginUser(userInfo)
     }

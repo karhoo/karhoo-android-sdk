@@ -143,6 +143,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -183,6 +185,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
 
@@ -224,6 +228,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -264,6 +270,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -304,6 +312,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -344,6 +354,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -384,6 +396,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -424,6 +438,8 @@ class QuotesIntegrationTest {
                         result = value.data
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
 
@@ -464,6 +480,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -504,6 +522,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -544,6 +564,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -584,6 +606,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -641,6 +665,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -681,6 +707,8 @@ class QuotesIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }

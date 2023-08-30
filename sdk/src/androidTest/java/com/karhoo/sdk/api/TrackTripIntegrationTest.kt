@@ -67,6 +67,8 @@ class TrackTripIntegrationTest {
                         result = value.data
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
 
@@ -114,6 +116,8 @@ class TrackTripIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -152,6 +156,8 @@ class TrackTripIntegrationTest {
                         result = value.data
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
 
@@ -191,6 +197,8 @@ class TrackTripIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -229,6 +237,8 @@ class TrackTripIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -267,6 +277,8 @@ class TrackTripIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -305,6 +317,8 @@ class TrackTripIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -342,6 +356,8 @@ class TrackTripIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }

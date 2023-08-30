@@ -441,7 +441,7 @@ class ServerRobot {
 
         val QUOTE_VEHICLE = QuoteVehicle(vehicleType = "Electric",
                                         vehicleClass = "Saloon",
-                                        vehicleTags = listOf("Electric", "Taxi"),
+//                                        vehicleTags = listOf("Electric", "Taxi"),
                                         vehicleQta = QuoteQTA(highMinutes = 10, lowMinutes = 1),
                                         passengerCapacity = 4,
                                         luggageCapacity = 2)
@@ -494,10 +494,10 @@ class ServerRobot {
          * Payments
          *
          */
-        val PAYMENTS_TOKEN = PaymentsNonce(
-                nonce = "njfdeilnvbflinvbiurnceernnvbrgtuverosa",
-                lastFour = "1234",
-                cardType = CardType.VISA)
+//        val PAYMENTS_TOKEN = PaymentsNonce(
+//                nonce = "njfdeilnvbflinvbiurnceernnvbrgtuverosa",
+//                lastFour = "1234",
+//                cardType = CardType.VISA)
 
         val PAYMENT_TOKEN = BraintreeSDKToken(
                 token = "njfdeilnvbflinvbiurnceernnvbrgtuverosa")

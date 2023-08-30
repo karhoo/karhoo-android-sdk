@@ -64,6 +64,8 @@ class AuthRevokeIntegrationTest {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
