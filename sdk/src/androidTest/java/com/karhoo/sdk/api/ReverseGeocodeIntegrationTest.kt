@@ -54,6 +54,8 @@ class ReverseGeocodeIntegrationTest {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -81,6 +83,8 @@ class ReverseGeocodeIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -108,6 +112,8 @@ class ReverseGeocodeIntegrationTest {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -135,6 +141,8 @@ class ReverseGeocodeIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -162,6 +170,8 @@ class ReverseGeocodeIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -189,6 +199,8 @@ class ReverseGeocodeIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -217,6 +229,8 @@ class ReverseGeocodeIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -245,6 +259,8 @@ class ReverseGeocodeIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 

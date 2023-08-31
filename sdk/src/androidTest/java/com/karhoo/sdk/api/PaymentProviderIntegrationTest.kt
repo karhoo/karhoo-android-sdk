@@ -61,6 +61,8 @@ class PaymentProviderIntegrationTest {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -87,6 +89,8 @@ class PaymentProviderIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -113,6 +117,8 @@ class PaymentProviderIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -139,6 +145,8 @@ class PaymentProviderIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -166,6 +174,8 @@ class PaymentProviderIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -192,6 +202,8 @@ class PaymentProviderIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -218,6 +230,8 @@ class PaymentProviderIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -244,6 +258,8 @@ class PaymentProviderIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -270,6 +286,8 @@ class PaymentProviderIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 

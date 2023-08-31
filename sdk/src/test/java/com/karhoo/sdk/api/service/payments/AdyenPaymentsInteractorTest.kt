@@ -103,6 +103,7 @@ class AdyenPaymentsInteractorTest : BaseKarhooUserInteractorTest() {
             interactor.execute {
                 when (it) {
                     is Resource.Success -> adyenPaymentsResponse = it.data
+                    else -> {}
                 }
             }
             delay(20)

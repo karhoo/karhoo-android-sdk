@@ -89,6 +89,8 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
                         verify(userManager).paymentProvider = it.data
                         paymentProvider = it.data
                     }
+
+                    else -> {}
                 }
             }
             delay(20)
@@ -117,6 +119,8 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
                         verify(userManager).paymentProvider = it.data
                         paymentProvider = it.data
                     }
+
+                    else -> {}
                 }
             }
             delay(20)
@@ -145,6 +149,8 @@ class PaymentProviderInteractorTest : BaseKarhooUserInteractorTest() {
                         verify(userManager).paymentProvider = it.data
                         paymentProvider = it.data
                     }
+
+                    else -> {}
                 }
             }
             delay(20)

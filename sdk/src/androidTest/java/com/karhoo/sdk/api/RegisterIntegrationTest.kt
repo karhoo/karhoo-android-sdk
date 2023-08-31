@@ -64,6 +64,8 @@ class RegisterIntegrationTest {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -117,6 +119,8 @@ class RegisterIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -143,6 +147,8 @@ class RegisterIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -169,6 +175,8 @@ class RegisterIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -195,6 +203,8 @@ class RegisterIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -221,6 +231,8 @@ class RegisterIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -247,6 +259,8 @@ class RegisterIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -273,6 +287,8 @@ class RegisterIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -299,6 +315,8 @@ class RegisterIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 

@@ -64,6 +64,8 @@ class LoyaltyIntegrationTest {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -90,6 +92,8 @@ class LoyaltyIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -116,6 +120,8 @@ class LoyaltyIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -142,6 +148,8 @@ class LoyaltyIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -168,6 +176,8 @@ class LoyaltyIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -194,6 +204,8 @@ class LoyaltyIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -220,6 +232,8 @@ class LoyaltyIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 

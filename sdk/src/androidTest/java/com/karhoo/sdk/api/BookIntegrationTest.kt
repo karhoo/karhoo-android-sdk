@@ -63,6 +63,8 @@ class BookIntegrationTest {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
     }
@@ -86,6 +88,8 @@ class BookIntegrationTest {
                         result = it.data
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
 
@@ -112,6 +116,8 @@ class BookIntegrationTest {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -138,6 +144,8 @@ class BookIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -164,6 +172,8 @@ class BookIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -190,6 +200,8 @@ class BookIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -216,6 +228,8 @@ class BookIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -242,6 +256,8 @@ class BookIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -268,6 +284,8 @@ class BookIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -294,6 +312,8 @@ class BookIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -320,6 +340,8 @@ class BookIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 

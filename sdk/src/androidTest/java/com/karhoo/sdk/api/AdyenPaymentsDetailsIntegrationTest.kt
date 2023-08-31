@@ -67,6 +67,8 @@ class AdyenPaymentsDetailsIntegrationTest {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -93,6 +95,8 @@ class AdyenPaymentsDetailsIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -119,6 +123,8 @@ class AdyenPaymentsDetailsIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -146,6 +152,8 @@ class AdyenPaymentsDetailsIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -172,6 +180,8 @@ class AdyenPaymentsDetailsIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -198,6 +208,8 @@ class AdyenPaymentsDetailsIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -224,6 +236,8 @@ class AdyenPaymentsDetailsIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -250,6 +264,8 @@ class AdyenPaymentsDetailsIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -276,6 +292,8 @@ class AdyenPaymentsDetailsIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 

@@ -60,6 +60,8 @@ class ConfigIntegrationTests {
                     result = it.data
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 
@@ -82,6 +84,8 @@ class ConfigIntegrationTests {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 

@@ -75,6 +75,8 @@ class DriverTrackingIntegrationTest {
                         result = value.data
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -113,6 +115,8 @@ class DriverTrackingIntegrationTest {
                         result = value.data
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
 
@@ -152,6 +156,8 @@ class DriverTrackingIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -233,6 +239,8 @@ class DriverTrackingIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -271,6 +279,8 @@ class DriverTrackingIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -309,6 +319,8 @@ class DriverTrackingIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -347,6 +359,8 @@ class DriverTrackingIntegrationTest {
                         result = value.error
                         latch.countDown()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -383,6 +397,8 @@ class DriverTrackingIntegrationTest {
                     result = it.error
                     latch.countDown()
                 }
+
+                else -> {}
             }
         }
 

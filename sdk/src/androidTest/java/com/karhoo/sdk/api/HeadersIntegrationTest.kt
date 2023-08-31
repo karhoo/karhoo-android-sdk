@@ -55,6 +55,7 @@ class HeadersIntegrationTest {
         KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Success -> latch.countDown()
+                else -> {}
             }
         }
 
@@ -78,6 +79,7 @@ class HeadersIntegrationTest {
         KarhooApi.tripService.book(TestData.BOOK_TRIP_WITH_NONCE).execute {
             when (it) {
                 is Resource.Success -> latch.countDown()
+                else -> {}
             }
         }
 
