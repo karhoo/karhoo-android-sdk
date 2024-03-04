@@ -8,7 +8,7 @@ group = 'com.karhoo.sdk'
 version = '1.0'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     buildToolsVersion '34.0.0'
 
     testOptions {
@@ -21,8 +21,8 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 33
+        minSdkVersion 24
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "com.karhoo.sdk.api.testrunner.SDKTestRunner"
@@ -90,7 +90,7 @@ afterEvaluate {
 }
 
 dependencies {
-    kapt "com.google.dagger:dagger-compiler:2.43.2"
+    kapt "com.google.dagger:dagger-compiler:2.48"
     androidTestImplementation  'com.google.dagger:hilt-android-testing:2.47'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.47'
 
@@ -99,9 +99,9 @@ dependencies {
 
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation "com.google.dagger:dagger:2.43"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
+    implementation "com.google.dagger:dagger:2.48"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0"
     implementation "com.squareup.retrofit2:converter-scalars:2.4.0"
 
